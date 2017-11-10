@@ -29,5 +29,7 @@ namespace ExamRoomAllocation.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<ExamRoomAllocation.Models.Stream> Streams { get; set; }
     }
 }
