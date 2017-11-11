@@ -1,0 +1,25 @@
+version: 1.0.{build}
+before_build:
+- ps: nuget restore
+build:
+  publish_wap_xcopy: true
+  verbosity: minimal
+deploy:
+- provider: FTP
+  host: roomallotment.somee.com
+  protocol: ftp
+  username: lalitadithya
+  password:
+    secure: dUztoyebBFOGxDWq4Wsdtg==
+  folder: /www.roomallotment.somee.com
+  type: WebDeployPackage
+  application: 
+  beta: true
+  debug: true
+notifications:
+- provider: Slack
+  incoming_webhook: https://hooks.slack.com/services/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
+  channel: room_allotment
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true
