@@ -13,7 +13,7 @@ deploy:
     secure: dUztoyebBFOGxDWq4Wsdtg==
   folder: /www.roomallotment.somee.com
   type: WebDeployPackage
-  application: 
+  application: ExamRoomAllocation
   beta: true
   debug: true
 notifications:
