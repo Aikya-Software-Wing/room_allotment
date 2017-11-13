@@ -95,7 +95,7 @@ namespace ExamRoomAllocation.Controllers
             {
                 ModelState.AddModelError("", "unable to update, contact admin");
             }
-            return View();
+            return View(teacher);
         }
 
         // GET: Teacher/Delete/5
