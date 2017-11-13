@@ -25,6 +25,8 @@ namespace ExamRoomAllocation.Models
 
         public int? Capacity { get; set; }
 
+        public virtual Department Department { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Exam> Exams { get; set; }
     }

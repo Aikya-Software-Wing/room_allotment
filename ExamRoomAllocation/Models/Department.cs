@@ -15,6 +15,7 @@ namespace ExamRoomAllocation.Models
             Exams = new HashSet<Exam>();
             Students = new HashSet<Student>();
             Teachers = new HashSet<Teacher>();
+            Rooms = new HashSet<Room>();
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -35,5 +36,7 @@ namespace ExamRoomAllocation.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Teacher> Teachers { get; set; }
+
+        public virtual ICollection<Room> Rooms { get; set; }
     }
 }
