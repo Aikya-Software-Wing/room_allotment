@@ -92,20 +92,4 @@ CREATE TABLE ExamInRoom (
 CREATE TABLE TeacherSupervisesExam (
    Id NVARCHAR(255) NOT NULL REFERENCES Teacher(Id),
    Code NVARCHAR(255) NOT NULL REFERENCES Exam(Code),
-   CONSTRAINT tse_composite_pk PRIMARY KEY (Id , Code));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+CONSTRAINT tse_composite_pk PRIMARY KEY (Id , Code));

@@ -14,5 +14,7 @@ namespace ExamRoomAllocation.Models
 
         [StringLength(255)]
         public string Type { get; set; }
+
+        public virtual ICollection<Exam> Exams { get; set; }
     }
 }

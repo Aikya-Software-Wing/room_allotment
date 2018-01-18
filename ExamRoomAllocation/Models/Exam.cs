@@ -15,6 +15,7 @@ namespace ExamRoomAllocation.Models
             Rooms = new HashSet<Room>();
             Students = new HashSet<Student>();
             Teachers = new HashSet<Teacher>();
+            Sessions = new HashSet<Session>();
         }
 
         [Key]
@@ -30,6 +31,8 @@ namespace ExamRoomAllocation.Models
         [Column(TypeName = "date")]
         public DateTime? Date { get; set; }
 
+        public int? SessionId { get; set; }
+
         public int? Id { get; set; }
 
         public virtual Department Department { get; set; }
@@ -42,5 +45,7 @@ namespace ExamRoomAllocation.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Teacher> Teachers { get; set; }
+
+        public virtual ICollection<Session> Sessions { get; set; }
     }
 }
