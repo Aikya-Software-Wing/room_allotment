@@ -12,7 +12,8 @@ namespace ExamRoomAllocation.Controllers
 {
     public class DepartmentController : Controller
     {
-        private ExamRoomAllocationDb db  = new ExamRoomAllocationDb();
+        private ExamRoomAllocationEntities db  = new ExamRoomAllocationEntities();
+        
         // GET: Department
         public ActionResult Index()
         {

@@ -12,11 +12,12 @@ namespace ExamRoomAllocation.Controllers
 {
     public class ExamController : Controller
     {
-        private ExamRoomAllocationDb db = new ExamRoomAllocationDb();
+        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
         // GET: Exam
         public ActionResult Index()
         {
-            return View(db.Exams.ToList());
+            var session = db.Exams;
+            return View(session.ToList());
         }
 
         // GET: Exam/Details/5
@@ -42,21 +43,14 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Exam/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Code,Name,Date,ExamTime")] Exam exam)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                if (ModelState.IsValid)
-                {
-                    db.Exams.Add(exam);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-            }
-            catch (DataException)
-            {
-                ModelState.AddModelError("", "Unable to save changes, contact admin.");
+                db.Exams.Add(exam);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(exam);
         }
@@ -78,6 +72,7 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Exam/Edit/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Code,Name,Date,ExamTime")] Exam exam)
         {
             if (ModelState.IsValid)

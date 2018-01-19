@@ -12,7 +12,7 @@ namespace ExamRoomAllocation.Controllers
 {
     public class DesignationController : Controller
     {
-        private ExamRoomAllocationDb db = new ExamRoomAllocationDb();
+        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
         // GET: Designation
         public ActionResult Index()
         {

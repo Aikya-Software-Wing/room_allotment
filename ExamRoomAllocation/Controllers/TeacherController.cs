@@ -12,7 +12,7 @@ namespace ExamRoomAllocation.Controllers
 {
     public class TeacherController : Controller
     {
-        private ExamRoomAllocationDb db = new ExamRoomAllocationDb();
+        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
         // GET: Teacher
         public ActionResult Index()

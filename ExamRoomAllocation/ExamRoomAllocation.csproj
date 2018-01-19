@@ -177,30 +177,54 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
-    <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StreamsController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201711111543288_InitialMigration.cs" />
-    <Compile Include="Migrations\201711111543288_InitialMigration.Designer.cs">
-      <DependentUpon>201711111543288_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Department.cs" />
-    <Compile Include="Models\Designation.cs" />
-    <Compile Include="Models\Exam.cs" />
-    <Compile Include="Models\ExamRoomAllocationDb.cs" />
+    <Compile Include="Models\Department.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Designation.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Exam.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExamRoomAllocationDb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExamRoomAllocationDb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExamRoomAllocationDb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExamRoomAllocationDb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExamRoomAllocationDb.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Room.cs" />
-    <Compile Include="Models\Session.cs" />
-    <Compile Include="Models\Stream.cs" />
-    <Compile Include="Models\Student.cs" />
-    <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\Room.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Session.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Stream.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Student.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Teacher.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -211,8 +235,25 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\ExamRoomAllocationDb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ExamRoomAllocationDb.edmx</DependentUpon>
+      <LastGenOutput>ExamRoomAllocationDb.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\ExamRoomAllocationDb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ExamRoomAllocationDb.edmx</DependentUpon>
+      <LastGenOutput>ExamRoomAllocationDb.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="Models\ExamRoomAllocationDb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ExamRoomAllocationDb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ExamRoomAllocationDb.edmx.diagram">
+      <DependentUpon>ExamRoomAllocationDb.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -266,14 +307,13 @@
     <Content Include="Views\Streams\Details.cshtml" />
     <Content Include="Views\Streams\Edit.cshtml" />
     <Content Include="Views\Streams\Index.cshtml" />
+    <Content Include="Views\Exam\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Department\" />
     <Folder Include="Views\Designation\" />
-    <Folder Include="Views\Exam\" />
     <Folder Include="Views\Room\" />
-    <Folder Include="Views\Session\" />
     <Folder Include="Views\Students\" />
     <Folder Include="Views\Teacher\" />
   </ItemGroup>
@@ -286,9 +326,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201711111543288_InitialMigration.resx">
-      <DependentUpon>201711111543288_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
