@@ -20,10 +20,11 @@ namespace ExamRoomAllocation.Models
 
         [Key]
         [StringLength(255)]
+        [Required]
         public string Code { get; set; }
 
-        [StringLength(255)]
-        public string Type { get; set; }
+        [Column(TypeName ="time")]
+        public DateTime ExamTime { get; set; }
 
         [StringLength(255)]
         public string Name { get; set; }

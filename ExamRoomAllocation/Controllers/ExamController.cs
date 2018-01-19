@@ -42,7 +42,7 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Exam/Create
         [HttpPost]
-        public ActionResult Create([Bind(Include = "Code,Name,Date,Type")] Exam exam)
+        public ActionResult Create([Bind(Include = "Code,Name,Date,ExamTime")] Exam exam)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Exam/Edit/5
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "Code,Name,Date,Type")] Exam exam)
+        public ActionResult Edit([Bind(Include = "Code,Name,Date,ExamTime")] Exam exam)
         {
             if (ModelState.IsValid)
             {
