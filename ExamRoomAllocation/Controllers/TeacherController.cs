@@ -43,21 +43,14 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Teacher/Create
         [HttpPost]
-        public ActionResult Create([Bind(Include ="Name, Experience, Department_Id, Designation_Id")]Teacher teacher)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Name, Experience, Department_Id, Designation_Id")]Teacher teacher)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                if(ModelState.IsValid)
-                {
-                    db.Teachers.Add(teacher);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("", "Creation not possible, contact admin");
+                db.Teachers.Add(teacher);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(teacher);
         }
@@ -79,35 +72,24 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Teacher/Edit/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Name,Experience,Designation_Id,Department_Id")]Teacher teacher)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-                if(ModelState.IsValid)
-                {
-                    db.Entry(teacher).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
+                db.Entry(teacher).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                ModelState.AddModelError("", "unable to update, contact admin");
             }
             return View(teacher);
         }
 
         // GET: Teacher/Delete/5
-        public ActionResult Delete(int? id, bool? SaveChangesError = false)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if(SaveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
             }
             Teacher teacher = db.Teachers.Find(id);
             if (teacher == null)
@@ -121,18 +103,9 @@ namespace ExamRoomAllocation.Controllers
         [HttpPost]
         public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Teacher teacher = db.Teachers.Find(id);
-                db.Teachers.Remove(teacher);
-                db.SaveChanges();
-                
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
-            }
+            Teacher teacher = db.Teachers.Find(id);
+            db.Teachers.Remove(teacher);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

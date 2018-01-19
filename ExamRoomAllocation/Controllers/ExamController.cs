@@ -16,7 +16,7 @@ namespace ExamRoomAllocation.Controllers
         // GET: Exam
         public ActionResult Index()
         {
-            var session = db.Exams;
+            var session = db.Exams.Include(s => s.Session);
             return View(session.ToList());
         }
 
@@ -78,30 +78,19 @@ namespace ExamRoomAllocation.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(exam).State = EntityState.Modified;
-            }
-            try
-            {
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            catch (DataException)
-            {
-                ModelState.AddModelError("", "unable to update, contact admin");
             }
             return View(exam);
         }
 
         // GET: Exam/Delete/5
         [HttpGet]
-        public ActionResult Delete(string Code, bool? SaveChangesError = false)
+        public ActionResult Delete(string Code)
         {
             if (Code == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (SaveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
             }
             Exam exam = db.Exams.Find(Code);
             if (exam == null)
@@ -114,17 +103,9 @@ namespace ExamRoomAllocation.Controllers
         [HttpPost]
         public ActionResult DeleteConfirmed(string Code)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Exam exam = db.Exams.Find(Code);
-                db.Exams.Remove(exam);
-                db.SaveChanges();
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { Code = Code, SaveChangesError = true });
-            }
+            Exam exam = db.Exams.Find(Code);
+            db.Exams.Remove(exam);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

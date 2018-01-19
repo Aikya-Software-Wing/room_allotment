@@ -42,21 +42,14 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Room/Create
         [HttpPost]
-        public ActionResult Create([Bind(Include ="id,No,Block,Department,Capacity")]Room room)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "id,No,Block,Department,Capacity")]Room room)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                if(ModelState.IsValid)
-                {
-                    db.Rooms.Add(room);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("","Creation not possible, contact admin");
+                db.Rooms.Add(room);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(room);
         }
@@ -78,6 +71,7 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Room/Edit/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "No,Block,Department,Capacity")]Room room)
         {
             if (ModelState.IsValid)
@@ -98,15 +92,11 @@ namespace ExamRoomAllocation.Controllers
 
         // GET: Room/Delete/5
         [HttpGet]
-        public ActionResult Delete(int? id, bool? SaveChangesError = false)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (SaveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
             }
             Room room = db.Rooms.Find(id);
             if (room == null)
@@ -120,17 +110,9 @@ namespace ExamRoomAllocation.Controllers
         [HttpPost]
         public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Room room = db.Rooms.Find(id);
-                db.Rooms.Remove(room);
-                db.SaveChanges();
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
-            }
+            Room room = db.Rooms.Find(id);
+            db.Rooms.Remove(room);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

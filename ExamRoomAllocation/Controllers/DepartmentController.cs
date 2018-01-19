@@ -43,21 +43,13 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Department/Create
         [HttpPost]
-        public ActionResult Create([Bind(Include ="id,Name")]Department department)
+        public ActionResult Create([Bind(Include = "id,Name")]Department department)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                if(ModelState.IsValid)
-                {
-                    db.Departments.Add(department);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }                
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("", "Unable to create , contact sys admin");
+                db.Departments.Add(department);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(department);
         }
@@ -79,35 +71,23 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Department/Edit/5
         [HttpPost]
-        public ActionResult Edit([Bind(Include ="id, Name")] Department department)
+        public ActionResult Edit([Bind(Include = "id, Name")] Department department)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-                if(ModelState.IsValid)
-                {
-                    db.Entry(department).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
+                db.Entry(department).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("","Updation Failed, contact admin");
             }
             return View(department);
         }
 
         // GET: Department/Delete/5
-        public ActionResult Delete(int? id, bool? SaveChangesError = false)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (SaveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
             }
             Department department = db.Departments.Find(id);
             if (department == null)
@@ -121,17 +101,9 @@ namespace ExamRoomAllocation.Controllers
         [HttpPost]
         public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Department department = db.Departments.Find(id);
-                db.Departments.Remove(department);
-                db.SaveChanges();
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
-            }
+            Department department = db.Departments.Find(id);
+            db.Departments.Remove(department);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

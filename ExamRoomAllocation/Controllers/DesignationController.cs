@@ -42,21 +42,14 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Designation/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id, Name")] Designation designation)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                if(ModelState.IsValid)
-                {
-                    db.Designations.Add(designation);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("", "Unable to Create, contact sys admin");
+                db.Designations.Add(designation);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(designation);
         }
@@ -78,35 +71,24 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Designation/Edit/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id, Name")] Designation designation)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-                if(ModelState.IsValid)
-                {
-                    db.Entry(designation).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
+                db.Entry(designation).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("", "Updation Failed, contact admin");
             }
             return View(designation);
         }
 
         // GET: Designation/Delete/5
-        public ActionResult Delete(int? id, bool? SaveChangesError = false)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (SaveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
             }
             Designation designation = db.Designations.Find(id);
             if (designation == null)
@@ -120,17 +102,9 @@ namespace ExamRoomAllocation.Controllers
         [HttpPost]
         public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Designation designation = db.Designations.Find(id);
-                db.Designations.Remove(designation);
-                db.SaveChanges();
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
-            }
+            Designation designation = db.Designations.Find(id);
+            db.Designations.Remove(designation);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

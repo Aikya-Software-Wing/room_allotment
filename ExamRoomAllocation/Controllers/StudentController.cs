@@ -45,19 +45,11 @@ namespace ExamRoomAllocation.Controllers
         [HttpPost]
         public ActionResult Create([Bind(Include = "USN,Name,Sem")] Student student)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                if (ModelState.IsValid)
-                {
-                    db.Students.Add(student);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-            }
-            catch(DataException )
-            {
-                ModelState.AddModelError("", "Unable to save changes, contact admin.");
+                db.Students.Add(student);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(student);
         }
@@ -79,35 +71,25 @@ namespace ExamRoomAllocation.Controllers
 
         // POST: Students/Edit/5
         [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "USN,Name,Sem")] Student student)
         {
             if(ModelState.IsValid)
             {
                 db.Entry(student).State = EntityState.Modified;
-            }            
-            try
-            {
                 db.SaveChanges();
                 return RedirectToAction("Index");                
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("", "unable to update, contact admin");
             }
             return View(student);
         }
 
         // GET: Students/Delete/5
         [HttpGet]
-        public ActionResult Delete(string USN, bool? SaveChangesError = false)
+        public ActionResult Delete(string USN)
         {
             if(USN == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if(SaveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
             }
             Student student = db.Students.Find(USN);
             if(student==null)
@@ -121,17 +103,9 @@ namespace ExamRoomAllocation.Controllers
         [HttpPost]
         public ActionResult DeleteConfirmed(string USN)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Student student = db.Students.Find(USN);
-                db.Students.Remove(student);
-                db.SaveChanges();                
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { USN = USN, SaveChangesError = true});
-            }
+            Student student = db.Students.Find(USN);
+            db.Students.Remove(student);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)
