@@ -210,6 +210,8 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Models\PartialClasses.cs" />
     <Compile Include="Models\Room.cs">
       <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
     </Compile>
@@ -307,6 +309,7 @@
     <Content Include="Views\Streams\Details.cshtml" />
     <Content Include="Views\Streams\Edit.cshtml" />
     <Content Include="Views\Streams\Index.cshtml" />
+    <Content Include="Views\Exam\Create.cshtml" />
     <Content Include="Views\Exam\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
