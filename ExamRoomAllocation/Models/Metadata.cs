@@ -26,9 +26,22 @@ namespace ExamRoomAllocation.Models
 
         [Required]
         [Display(Name = "Department To be Held in")]
-        public Nullable<int> Id;
+        public int Id;
 
         [Display(Name = "Session Code")]
         public int SessionId;
+    }
+
+    public class DepartmentMetadata
+    {
+        public int Id;
+
+        [Required]
+        [Display(Name = "Department Name")]
+        public string Name;
+
+        [Required]
+        [Display(Name = "Stream Name")]
+        public Nullable<int> StreamId;
     }
 }

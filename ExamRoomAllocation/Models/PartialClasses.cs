@@ -10,4 +10,9 @@ namespace ExamRoomAllocation.Models
     public partial class Exam
     {
     }
+
+    [MetadataType(typeof(Department))]
+    public partial class Department
+    {
+    }
 }

@@ -16,8 +16,8 @@ namespace ExamRoomAllocation.Controllers
         // GET: Exam
         public ActionResult Index()
         {
-            var session = db.Exams.Include(s => s.Session);
-            return View(session.ToList());
+            var departments = db.Exams.Include(d => d.Department);
+            return View(departments.ToList());
         }
 
         // GET: Exam/Details/5
@@ -38,13 +38,14 @@ namespace ExamRoomAllocation.Controllers
         // GET: Exam/Create
         public ActionResult Create()
         {
+            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name");
             return View();
         }
 
         // POST: Exam/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Code,Name,Date,ExamTime")] Exam exam)
+        public ActionResult Create([Bind(Include = "Code,Name,Date,ExamTime,DepartmentId")] Exam exam)
         {
             if (ModelState.IsValid)
             {
@@ -52,6 +53,7 @@ namespace ExamRoomAllocation.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", exam.Id);
             return View(exam);
         }
 
@@ -67,13 +69,14 @@ namespace ExamRoomAllocation.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", exam.Id);
             return View(exam);
         }
 
         // POST: Exam/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Code,Name,Date,ExamTime")] Exam exam)
+        public ActionResult Edit([Bind(Include = "Code,Name,Date,ExamTime,DepartmentId")] Exam exam)
         {
             if (ModelState.IsValid)
             {
@@ -81,6 +84,7 @@ namespace ExamRoomAllocation.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", exam.Id);
             return View(exam);
         }
 

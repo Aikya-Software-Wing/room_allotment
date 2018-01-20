@@ -309,8 +309,8 @@
     <Content Include="Views\Streams\Details.cshtml" />
     <Content Include="Views\Streams\Edit.cshtml" />
     <Content Include="Views\Streams\Index.cshtml" />
-    <Content Include="Views\Exam\Create.cshtml" />
     <Content Include="Views\Exam\Index.cshtml" />
+    <Content Include="Views\Exam\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
