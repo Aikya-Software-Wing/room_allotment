@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExamRoomAllocation.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,13 +7,12 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using ExamRoomAllocation.Models;
 
 namespace ExamRoomAllocation.Controllers
 {
-    public class StreamsController : Controller
+    public class StreamController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
         // GET: Streams
         public ActionResult Index()
@@ -46,7 +46,7 @@ namespace ExamRoomAllocation.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Stream stream)
+        public ActionResult Create([Bind(Include = "Name")] Stream stream)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace ExamRoomAllocation.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Stream stream)
+        public ActionResult Edit([Bind(Include = "Name")] Stream stream)
         {
             if (ModelState.IsValid)
             {

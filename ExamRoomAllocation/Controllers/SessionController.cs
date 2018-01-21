@@ -42,8 +42,10 @@ namespace ExamRoomAllocation.Controllers
         // POST: Session/Create/SessionName
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Session session)
+        public ActionResult Create(string Name)
         {
+            Session session = new Session();
+            session.Name = Name;
             if (ModelState.IsValid)
             {
                 db.Sessions.Add(session);

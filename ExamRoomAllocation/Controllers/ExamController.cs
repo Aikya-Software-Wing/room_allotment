@@ -1,4 +1,5 @@
-﻿using ExamRoomAllocation.Models;
+﻿using ExamRoomAllocation.Helpers;
+using ExamRoomAllocation.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +13,7 @@ namespace ExamRoomAllocation.Controllers
 {
     public class ExamController : Controller
     {
-        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();        
         // GET: Exam
         public ActionResult Index()
         {
@@ -49,6 +50,19 @@ namespace ExamRoomAllocation.Controllers
         {
             if (ModelState.IsValid)
             {
+                Session session = new Session();
+                string sessionNew = SessionHelper.CreateSession(exam);
+                string query = "SELECT * FROM session where Name = '@name'";
+                session = db.Sessions.SqlQuery(query, sessionNew).SingleOrDefault();
+                if ( session == null)
+                {
+                    var createSession = new SessionController();
+                    createSession.Create(sessionNew);
+                }
+                else
+                {
+                    exam.SessionId = session.Id;
+                }
                 db.Exams.Add(exam);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -112,6 +126,7 @@ namespace ExamRoomAllocation.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

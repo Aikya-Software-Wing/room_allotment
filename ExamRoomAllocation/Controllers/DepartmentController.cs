@@ -17,6 +17,7 @@ namespace ExamRoomAllocation.Controllers
         // GET: Department
         public ActionResult Index()
         {
+            var stream = db.Departments.Include(d => d.Stream);
             return View(db.Departments.ToList());
         }
 
@@ -38,12 +39,14 @@ namespace ExamRoomAllocation.Controllers
         // GET: Department/Create
         public ActionResult Create()
         {
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name");
             return View();
         }
 
         // POST: Department/Create
         [HttpPost]
-        public ActionResult Create([Bind(Include = "id,Name")]Department department)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Name")]Department department)
         {
             if (ModelState.IsValid)
             {
@@ -51,6 +54,7 @@ namespace ExamRoomAllocation.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name",department.StreamId);
             return View(department);
         }
 
@@ -66,12 +70,14 @@ namespace ExamRoomAllocation.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name", department.StreamId);
             return View(department);
         }
 
         // POST: Department/Edit/5
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "id, Name")] Department department)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Name")] Department department)
         {
             if (ModelState.IsValid)
             {
@@ -79,6 +85,7 @@ namespace ExamRoomAllocation.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name",department.StreamId);
             return View(department);
         }
 
