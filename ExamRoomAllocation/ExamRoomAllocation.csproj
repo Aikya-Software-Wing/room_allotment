@@ -177,12 +177,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
+    <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StreamsController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\SessionHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Department.cs">
       <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
@@ -304,17 +306,17 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Streams\Create.cshtml" />
-    <Content Include="Views\Streams\Delete.cshtml" />
-    <Content Include="Views\Streams\Details.cshtml" />
-    <Content Include="Views\Streams\Edit.cshtml" />
-    <Content Include="Views\Streams\Index.cshtml" />
     <Content Include="Views\Exam\Index.cshtml" />
     <Content Include="Views\Exam\Create.cshtml" />
+    <Content Include="Views\Session\Index.cshtml" />
+    <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Department\Create.cshtml" />
+    <Content Include="Views\Stream\Index.cshtml" />
+    <Content Include="Views\Stream\Create.cshtml" />
+    <Content Include="Views\Session\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Department\" />
     <Folder Include="Views\Designation\" />
     <Folder Include="Views\Room\" />
     <Folder Include="Views\Students\" />
