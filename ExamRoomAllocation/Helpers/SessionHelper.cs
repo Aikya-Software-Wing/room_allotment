@@ -1,4 +1,5 @@
 ﻿using ExamRoomAllocation.Models;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -8,20 +9,55 @@ namespace ExamRoomAllocation.Helpers
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
         private Session session = new Session();
-        public static string CreateSession()
+
+        public static string CreateSession(Exam exam)
         {
             StringBuilder s = new StringBuilder();
-            Exam exam = new Exam();
-            int examHour, examDay;
-            string examMonth;
+            int examHour, examDay, examMonth;            
 
             examHour = exam.ExamTime.Value.Hour;
             examDay = exam.Date.Value.Day;
-            examMonth = exam.Date.Value.Month.ToString("MMM");
+            examMonth = exam.Date.Value.Month;
 
             s.Append(examDay.ToString());
-            s.Append(examMonth.ToString());
-            s.Append(examMonth);
+            switch(examMonth)
+            {
+                case 1: s.Append("JAN");
+                    break;
+                case 2:
+                    s.Append("FEB");
+                    break;
+                case 3:
+                    s.Append("MAR");
+                    break;
+                case 4:
+                    s.Append("APR");
+                    break;
+                case 5:
+                    s.Append("MAY");
+                    break;
+                case 6:
+                    s.Append("JUN");
+                    break;
+                case 7:
+                    s.Append("JUL");
+                    break;
+                case 8:
+                    s.Append("AUG");
+                    break;
+                case 9:
+                    s.Append("SEP");
+                    break;
+                case 10:
+                    s.Append("OCT");
+                    break;
+                case 11:
+                    s.Append("NOV");
+                    break;
+                case 12:
+                    s.Append("DEC");
+                    break;
+            }
             if (examHour < 12)
             {
                 s.Append("1");

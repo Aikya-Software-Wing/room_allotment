@@ -6,13 +6,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExamRoomAllocation.Models
 {
-    [MetadataType(typeof(Exam))]
+    [MetadataType(typeof(ExamMetadata))]
     public partial class Exam
     {
     }
 
-    [MetadataType(typeof(Department))]
+    [MetadataType(typeof(DepartmentMetadata))]
     public partial class Department
+    {
+    }
+
+    [MetadataType(typeof(StreamMetadata))]
+    public partial class Stream
     {
     }
 }

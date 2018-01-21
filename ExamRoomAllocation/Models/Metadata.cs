@@ -13,18 +13,21 @@ namespace ExamRoomAllocation.Models
         public string Code;
 
         [Required]
-        [Display(Name = "Exam Start Time")]
-        public Nullable<System.DateTime> ExamTime;
+        [DataType(DataType.Time)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:HH-mm}")]
+        [Display(Name = "Session start time")]
+        public DateTime ExamTime;
 
         [Required]
         [Display(Name = "Exam Name")]
         public string Name;
 
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MMM}")]
         [Display(Name = "Exam Date")]
-        public Nullable<System.DateTime> Date;
+        public DateTime Date;
 
-        [Required]
         [Display(Name = "Department To be Held in")]
         public int Id;
 
@@ -40,8 +43,16 @@ namespace ExamRoomAllocation.Models
         [Display(Name = "Department Name")]
         public string Name;
 
-        [Required]
         [Display(Name = "Stream Name")]
         public Nullable<int> StreamId;
+    }
+
+    public class StreamMetadata
+    {
+        public int Id;
+
+        [Required]
+        [Display(Name ="Stream Name")]
+        public string Name;
     }
 }
