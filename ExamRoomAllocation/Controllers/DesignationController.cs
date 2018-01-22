@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
-using System.Data;
-using System.Net;
-using System.Data.Entity;
 
 namespace ExamRoomAllocation.Controllers
 {
     public class DesignationController : Controller
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+
         // GET: Designation
         public ActionResult Index()
         {
@@ -22,12 +23,12 @@ namespace ExamRoomAllocation.Controllers
         // GET: Designation/Details/5
         public ActionResult Details(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);                
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Designation designation = db.Designations.Find(id);
-            if(designation == null)
+            if (designation == null)
             {
                 return HttpNotFound();
             }
@@ -41,9 +42,11 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Designation/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id, Name")] Designation designation)
+        public ActionResult Create([Bind(Include = "Id,Name")] Designation designation)
         {
             if (ModelState.IsValid)
             {
@@ -51,6 +54,7 @@ namespace ExamRoomAllocation.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             return View(designation);
         }
 
@@ -70,9 +74,11 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Designation/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id, Name")] Designation designation)
+        public ActionResult Edit([Bind(Include = "Id,Name")] Designation designation)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +105,8 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Designation/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Designation designation = db.Designations.Find(id);
@@ -107,6 +114,7 @@ namespace ExamRoomAllocation.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

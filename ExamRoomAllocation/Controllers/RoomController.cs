@@ -1,5 +1,4 @@
-﻿using ExamRoomAllocation.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,16 +6,19 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExamRoomAllocation.Models;
 
 namespace ExamRoomAllocation.Controllers
 {
     public class RoomController : Controller
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+
         // GET: Room
         public ActionResult Index()
         {
-            return View(db.Rooms.ToList());
+            var rooms = db.Rooms.Include(r => r.Department);
+            return View(rooms.ToList());
         }
 
         // GET: Room/Details/5
@@ -33,17 +35,20 @@ namespace ExamRoomAllocation.Controllers
             }
             return View(room);
         }
-     
+
         // GET: Room/Create
         public ActionResult Create()
         {
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name");
             return View();
         }
 
         // POST: Room/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,No,Block,Department,Capacity")]Room room)
+        public ActionResult Create([Bind(Include = "Id,No,Block,Capacity,Department_Id,RoomStatus")] Room room)
         {
             if (ModelState.IsValid)
             {
@@ -51,6 +56,8 @@ namespace ExamRoomAllocation.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", room.Department_Id);
             return View(room);
         }
 
@@ -62,36 +69,32 @@ namespace ExamRoomAllocation.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Room room = db.Rooms.Find(id);
-            if (id == null)
+            if (room == null)
             {
                 return HttpNotFound();
             }
-            return View(id);
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", room.Department_Id);
+            return View(room);
         }
 
         // POST: Room/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "No,Block,Department,Capacity")]Room room)
+        public ActionResult Edit([Bind(Include = "Id,No,Block,Capacity,Department_Id,RoomStatus")] Room room)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(room).State = EntityState.Modified;
-            }
-            try
-            {
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch (DataException)
-            {
-                ModelState.AddModelError("", "unable to update, contact admin");
-            }
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", room.Department_Id);
             return View(room);
         }
 
         // GET: Room/Delete/5
-        [HttpGet]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -107,7 +110,8 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Room/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Room room = db.Rooms.Find(id);
@@ -115,6 +119,7 @@ namespace ExamRoomAllocation.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

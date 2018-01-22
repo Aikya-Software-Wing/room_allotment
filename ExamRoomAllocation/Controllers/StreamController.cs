@@ -1,5 +1,4 @@
-﻿using ExamRoomAllocation.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExamRoomAllocation.Models;
 
 namespace ExamRoomAllocation.Controllers
 {
@@ -14,13 +14,13 @@ namespace ExamRoomAllocation.Controllers
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
-        // GET: Streams
+        // GET: Stream
         public ActionResult Index()
         {
             return View(db.Streams.ToList());
         }
 
-        // GET: Streams/Details/5
+        // GET: Stream/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,18 +35,18 @@ namespace ExamRoomAllocation.Controllers
             return View(stream);
         }
 
-        // GET: Streams/Create
+        // GET: Stream/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Streams/Create
+        // POST: Stream/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name")] Stream stream)
+        public ActionResult Create([Bind(Include = "Id,Name")] Stream stream)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +58,7 @@ namespace ExamRoomAllocation.Controllers
             return View(stream);
         }
 
-        // GET: Streams/Edit/5
+        // GET: Stream/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -73,12 +73,12 @@ namespace ExamRoomAllocation.Controllers
             return View(stream);
         }
 
-        // POST: Streams/Edit/5
+        // POST: Stream/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name")] Stream stream)
+        public ActionResult Edit([Bind(Include = "Id,Name")] Stream stream)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +89,7 @@ namespace ExamRoomAllocation.Controllers
             return View(stream);
         }
 
-        // GET: Streams/Delete/5
+        // GET: Stream/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -104,7 +104,7 @@ namespace ExamRoomAllocation.Controllers
             return View(stream);
         }
 
-        // POST: Streams/Delete/5
+        // POST: Stream/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
