@@ -1,6 +1,4 @@
-﻿using ExamRoomAllocation.Helpers;
-using ExamRoomAllocation.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,27 +6,30 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExamRoomAllocation.Helpers;
+using ExamRoomAllocation.Models;
 
 namespace ExamRoomAllocation.Controllers
 {
     public class ExamController : Controller
     {
-        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();        
+        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+
         // GET: Exam
         public ActionResult Index()
         {
-            var departments = db.Exams.Include(d => d.Department);
-            return View(departments.ToList());
+            var exams = db.Exams.Include(e => e.Department).Include(e => e.Session);
+            return View(exams.ToList());
         }
 
         // GET: Exam/Details/5
-        public ActionResult Details(string Code)
+        public ActionResult Details(string id)
         {
-            if (Code == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exam exam = db.Exams.Find(Code);
+            Exam exam = db.Exams.Find(id);
             if (exam == null)
             {
                 return HttpNotFound();
@@ -39,14 +40,17 @@ namespace ExamRoomAllocation.Controllers
         // GET: Exam/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name");
+            ViewBag.Id = new SelectList(db.Departments, "Id", "Name");
+            
             return View();
         }
 
         // POST: Exam/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Code,Name,Date,ExamTime,DepartmentId")] Exam exam)
+        public ActionResult Create([Bind(Include = "Code,ExamTime,Name,Date,Id")] Exam exam)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +61,7 @@ namespace ExamRoomAllocation.Controllers
                     var sessionInDb = ctx.Sessions
                                     .Where(s => s.Name == sessionNew)
                                     .FirstOrDefault<Session>();
-                    if(sessionInDb == null)
+                    if (sessionInDb == null)
                     {
                         var createSession = new SessionController();
                         createSession.Create(sessionNew);
@@ -65,36 +69,42 @@ namespace ExamRoomAllocation.Controllers
                     else
                     {
                         exam.SessionId = sessionInDb.Id;
-                        db.Exams.Add(exam);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
+
                     }
+
+                    db.Exams.Add(exam);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", exam.Id);
+            ViewBag.Id = new SelectList(db.Departments, "Id", "Name", exam.Id);
+           
             return View(exam);
         }
 
         // GET: Exam/Edit/5
-        public ActionResult Edit(string Code)
+        public ActionResult Edit(string id)
         {
-            if (Code == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exam exam = db.Exams.Find(Code);
+            Exam exam = db.Exams.Find(id);
             if (exam == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", exam.Id);
+            ViewBag.Id = new SelectList(db.Departments, "Id", "Name", exam.Id);
+            ViewBag.SessionId = new SelectList(db.Sessions, "Id", "Name", exam.SessionId);
             return View(exam);
         }
 
         // POST: Exam/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Code,Name,Date,ExamTime,DepartmentId")] Exam exam)
+        public ActionResult Edit([Bind(Include = "Code,ExamTime,Name,Date,Id,SessionId")] Exam exam)
         {
             if (ModelState.IsValid)
             {
@@ -102,30 +112,32 @@ namespace ExamRoomAllocation.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", exam.Id);
+            ViewBag.Id = new SelectList(db.Departments, "Id", "Name", exam.Id);
+            ViewBag.SessionId = new SelectList(db.Sessions, "Id", "Name", exam.SessionId);
             return View(exam);
         }
 
         // GET: Exam/Delete/5
-        [HttpGet]
-        public ActionResult Delete(string Code)
+        public ActionResult Delete(string id)
         {
-            if (Code == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exam exam = db.Exams.Find(Code);
+            Exam exam = db.Exams.Find(id);
             if (exam == null)
             {
                 return HttpNotFound();
             }
             return View(exam);
         }
+
         // POST: Exam/Delete/5
-        [HttpPost]
-        public ActionResult DeleteConfirmed(string Code)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(string id)
         {
-            Exam exam = db.Exams.Find(Code);
+            Exam exam = db.Exams.Find(id);
             db.Exams.Remove(exam);
             db.SaveChanges();
             return RedirectToAction("Index");
