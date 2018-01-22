@@ -49,8 +49,15 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult Create(string Name)
         {
             Session session = new Session();
-            int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Session").FirstOrDefault<int>();
-            session.Id = id + 1;
+            try {
+                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Session").FirstOrDefault<int>();
+                session.Id = id + 1; 
+            }
+             catch(InvalidOperationException)
+
+            {
+                session.Id = 0;
+            }
             session.Name = Name;
             if (ModelState.IsValid)
             {
