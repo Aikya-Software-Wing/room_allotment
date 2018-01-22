@@ -1,35 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
-using System.Net;
-using System.Data.Entity;
 
 namespace ExamRoomAllocation.Controllers
 {
     public class DepartmentController : Controller
     {
-        private ExamRoomAllocationEntities db  = new ExamRoomAllocationEntities();
-        
+        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+
         // GET: Department
         public ActionResult Index()
         {
-            var stream = db.Departments.Include(d => d.Stream);
-            return View(db.Departments.ToList());
+            var departments = db.Departments.Include(d => d.Stream);
+            return View(departments.ToList());
         }
 
         // GET: Department/Details/5
         public ActionResult Details(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Department department = db.Departments.Find(id);
-            if(department == null)
+            if (department == null)
             {
                 return HttpNotFound();
             }
@@ -44,31 +44,32 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Department/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name")]Department department)
+        public ActionResult Create([Bind(Include = "Id,Name,StreamId")] Department department)
         {
-            int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Department").FirstOrDefault<int>();
-            department.Id = id + 1;
             if (ModelState.IsValid)
             {
                 db.Departments.Add(department);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name",department.StreamId);
+
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name", department.StreamId);
             return View(department);
         }
 
         // GET: Department/Edit/5
         public ActionResult Edit(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Department department = db.Departments.Find(id);
-            if(department == null)
+            if (department == null)
             {
                 return HttpNotFound();
             }
@@ -77,9 +78,11 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Department/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name")] Department department)
+        public ActionResult Edit([Bind(Include = "Id,Name,StreamId")] Department department)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +90,7 @@ namespace ExamRoomAllocation.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name",department.StreamId);
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name", department.StreamId);
             return View(department);
         }
 
@@ -107,7 +110,8 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Department/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Department department = db.Departments.Find(id);
@@ -115,6 +119,7 @@ namespace ExamRoomAllocation.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
