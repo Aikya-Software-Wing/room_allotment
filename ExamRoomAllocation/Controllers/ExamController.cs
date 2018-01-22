@@ -52,20 +52,24 @@ namespace ExamRoomAllocation.Controllers
             {
                 Session session = new Session();
                 string sessionNew = SessionHelper.CreateSession(exam);
-                string query = "SELECT * FROM session where Name = '@name'";
-                session = db.Sessions.SqlQuery(query, sessionNew).SingleOrDefault();
-                if ( session == null)
+                using (var ctx = new ExamRoomAllocationEntities())
                 {
-                    var createSession = new SessionController();
-                    createSession.Create(sessionNew);
+                    var sessionInDb = ctx.Sessions
+                                    .Where(s => s.Name == sessionNew)
+                                    .FirstOrDefault<Session>();
+                    if(sessionInDb == null)
+                    {
+                        var createSession = new SessionController();
+                        createSession.Create(sessionNew);
+                    }
+                    else
+                    {
+                        exam.SessionId = sessionInDb.Id;
+                        db.Exams.Add(exam);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 }
-                else
-                {
-                    exam.SessionId = session.Id;
-                }
-                db.Exams.Add(exam);
-                db.SaveChanges();
-                return RedirectToAction("Index");
             }
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", exam.Id);
             return View(exam);

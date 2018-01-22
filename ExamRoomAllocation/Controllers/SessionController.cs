@@ -48,16 +48,10 @@ namespace ExamRoomAllocation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(string Name)
         {
-            String ConnectionString = @"data source =.; initial catalog = ExamRoomAllocation; integrated security = True";
-            SqlConnection con = new SqlConnection(ConnectionString);
-            String query = "Select Max(ID) From Session";
-            SqlCommand cmd = new SqlCommand(query, con);
-            con.Open();
-            int id = Convert.ToInt32(cmd.ExecuteScalar());
-            con.Close();
             Session session = new Session();
-            session.Name = Name;
+            int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Session").FirstOrDefault<int>();
             session.Id = id + 1;
+            session.Name = Name;
             if (ModelState.IsValid)
             {
                 db.Sessions.Add(session);

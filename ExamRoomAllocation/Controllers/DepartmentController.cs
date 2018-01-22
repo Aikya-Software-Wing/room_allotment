@@ -48,6 +48,8 @@ namespace ExamRoomAllocation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name")]Department department)
         {
+            int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Department").FirstOrDefault<int>();
+            department.Id = id + 1;
             if (ModelState.IsValid)
             {
                 db.Departments.Add(department);
