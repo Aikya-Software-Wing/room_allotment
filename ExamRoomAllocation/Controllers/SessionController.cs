@@ -1,17 +1,21 @@
-﻿using ExamRoomAllocation.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExamRoomAllocation.Models;
+using System.Data.SqlClient;
+
 
 namespace ExamRoomAllocation.Controllers
 {
     public class SessionController : Controller
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+
         // GET: Session
         public ActionResult Index()
         {
@@ -21,12 +25,12 @@ namespace ExamRoomAllocation.Controllers
         // GET: Session/Details/5
         public ActionResult Details(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Session session = db.Sessions.Find(id);
-            if(session==null)
+            if (session == null)
             {
                 return HttpNotFound();
             }
@@ -44,8 +48,16 @@ namespace ExamRoomAllocation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(string Name)
         {
+            String ConnectionString = @"data source =.; initial catalog = ExamRoomAllocation; integrated security = True";
+            SqlConnection con = new SqlConnection(ConnectionString);
+            String query = "Select Max(ID) From Session";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            int id = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
             Session session = new Session();
             session.Name = Name;
+            session.Id = id + 1;
             if (ModelState.IsValid)
             {
                 db.Sessions.Add(session);
@@ -71,11 +83,13 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Session/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include ="SessionName")]Session session)
+        public ActionResult Edit([Bind(Include = "Id,Name")] Session session)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(session).State = EntityState.Modified;
                 db.SaveChanges();
@@ -100,7 +114,8 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Session/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Session session = db.Sessions.Find(id);
