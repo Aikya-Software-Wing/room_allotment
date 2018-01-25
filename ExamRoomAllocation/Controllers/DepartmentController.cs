@@ -50,6 +50,16 @@ namespace ExamRoomAllocation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,StreamId")] Department department)
         {
+            try
+            {
+                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Department").FirstOrDefault<int>();
+                department.Id = id + 1;
+            }
+            catch (InvalidOperationException)
+
+            {
+                department.Id = 0;
+            }
             if (ModelState.IsValid)
             {
                 db.Departments.Add(department);

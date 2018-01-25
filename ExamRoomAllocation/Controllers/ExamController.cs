@@ -65,6 +65,8 @@ namespace ExamRoomAllocation.Controllers
                     {
                         var createSession = new SessionController();
                         createSession.Create(sessionNew);
+                        var newSessionInDb = db.Sessions.Where(s => s.Name == sessionNew).FirstOrDefault<Session>();
+                        exam.SessionId = newSessionInDb.Id;
                     }
                     else
                     {

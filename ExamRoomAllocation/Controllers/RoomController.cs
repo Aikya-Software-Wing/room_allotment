@@ -48,8 +48,17 @@ namespace ExamRoomAllocation.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,No,Block,Capacity,Department_Id,RoomStatus")] Room room)
-        {
+        public ActionResult Create([Bind(Include = "No,Block,Capacity,Department_Id,RoomStatus")] Room room)
+        {          
+            try
+            {
+                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Room").FirstOrDefault<int>();
+                room.Id = id + 1;
+            }
+            catch (InvalidOperationException)
+            {
+                room.Id = 0;
+            }
             if (ModelState.IsValid)
             {
                 db.Rooms.Add(room);
@@ -82,7 +91,7 @@ namespace ExamRoomAllocation.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,No,Block,Capacity,Department_Id,RoomStatus")] Room room)
+        public ActionResult Edit([Bind(Include = "No,Block,Capacity,Department_Id,RoomStatus")] Room room)
         {
             if (ModelState.IsValid)
             {
