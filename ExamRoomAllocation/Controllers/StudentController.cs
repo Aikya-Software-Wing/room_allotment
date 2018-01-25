@@ -40,6 +40,7 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult Create()
         {
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name");
+            ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name");
             return View();
         }
 
@@ -48,16 +49,24 @@ namespace ExamRoomAllocation.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Sem,DepartmentId")] Student student)
-        {
+        public ActionResult Create([Bind(Include ="Id,Name,Sem,DepartmentId,ExamId")]Student student, List<int> Exams)
+        {           
             if (ModelState.IsValid)
             {
+                if (Exams != null)
+                {
+                    foreach (var code in Exams)
+                    {
+                        Exam exam = db.Exams.Find(code);
+                        student.Exams.Add(exam);
+                    }
+                }
                 db.Students.Add(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", student.DepartmentId);
+            ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name",student.Exams);
             return View(student);
         }
 
@@ -118,6 +127,31 @@ namespace ExamRoomAllocation.Controllers
             db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult ChooseExams()
+        {
+            return View();
+        }
+
+        public JsonResult GetExams(string searchTerm)
+        {
+            var examList = db.Exams.ToList();
+            if(examList!=null)
+            {
+                examList = db.Exams.Where(e => e.Code.Contains(searchTerm)).ToList();
+            }            
+            var modifiedExam = examList.Select(e => new
+            {
+                id = e.Id,
+                text = e.Name
+            });
+            return Json(modifiedExam, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Save(string data)
+        {
+            return Json(0, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
