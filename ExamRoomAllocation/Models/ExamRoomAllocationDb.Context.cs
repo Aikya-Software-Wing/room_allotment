@@ -33,5 +33,7 @@ namespace ExamRoomAllocation.Models
         public virtual DbSet<Stream> Streams { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+
+        public System.Data.Entity.DbSet<ExamRoomAllocation.ViewModel.StudentExam> StudentExams { get; set; }
     }
 }

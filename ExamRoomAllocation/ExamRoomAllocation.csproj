@@ -405,6 +405,7 @@
     <Content Include="Views\Room\Edit.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Student\Create.cshtml" />
+    <Content Include="Views\Student\GetExam.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
