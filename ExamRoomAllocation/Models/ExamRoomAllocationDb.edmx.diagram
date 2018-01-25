@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e3af7008c164462690482949d02b1f07" Name="Diagram1">
+      <Diagram DiagramId="e3af7008c164462690482949d02b1f07" Name="Diagram1" ZoomLevel="74">
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Department" Width="1.5" PointX="3" PointY="4.75" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Designation" Width="1.5" PointX="5.25" PointY="2" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Exam" Width="1.5" PointX="5.25" PointY="4.5" />
@@ -23,6 +23,7 @@
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Student" Width="1.5" PointX="10.5" PointY="5" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Student_dbo_Department_Id" />
         <AssociationConnector Association="ExamRoomAllocationModel.StudentExams" />
+        <AssociationConnector Association="ExamRoomAllocationModel.RoomStudents" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
