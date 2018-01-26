@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExamRoomAllocation.Helpers;
 using ExamRoomAllocation.Models;
 
 namespace ExamRoomAllocation.Controllers
@@ -124,6 +125,13 @@ namespace ExamRoomAllocation.Controllers
             return RedirectToAction("Index");
         }
 
+        // teacher/Allocate
+        public ActionResult Allocate()
+        {
+            examtoteacher assignexam = new examtoteacher();
+            assignexam.Index();
+            return RedirectToAction("Index");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

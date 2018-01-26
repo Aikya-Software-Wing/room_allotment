@@ -1,6 +1,5 @@
 ﻿using System;
 using ExamRoomAllocation.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,7 +17,8 @@ namespace ExamRoomAllocation.Helpers
             try
             {
                 string temp = SessionHelper.TimeHelpher(currendate);
-                return db.Sessions.Where(s => s.Name.Remove(0, s.Name.Length - 1) != temp).ToList();
+
+                return db.Sessions.Where(s => s.Name.Remove(s.Name.Length - 1) != temp).ToList();
             }
             catch (NullReferenceException)
             {
@@ -45,10 +45,11 @@ namespace ExamRoomAllocation.Helpers
         {
             try
             {
-                return db.Teachers.Where(t => t.Department != exam.Department).ToList();
+                return db.Teachers.Where(t => t.Department_Id != exam.Id).ToList();
             }
             catch (NullReferenceException)
             {
+                
                 // to insert alert no teacher available
                 throw;
             }
@@ -59,42 +60,48 @@ namespace ExamRoomAllocation.Helpers
         public int Index()
         {
             db.Exams.OrderBy(e => e.Date);
-            Exam last = db.Exams.LastOrDefault();
-            Exam first = db.Exams.FirstOrDefault();
-            DateTime startdate = first.Date.GetValueOrDefault();
-            DateTime enddate = last.Date.GetValueOrDefault();
-
+           
+            DateTime startdate = db.Exams.Min(e => e.Date).GetValueOrDefault();
+            DateTime enddate = db.Exams.Max(e => e.Date).GetValueOrDefault();
+            
             while (DateTime.Compare(startdate, enddate) < 0)
             {
+                
                 List<Teacher> teacherassignedinthesamedate = new List<Teacher>(); 
                 List<Session> sessions = listofsessions(startdate);
-                foreach (var session in sessions)
+                foreach (var session in sessions.ToList())
                 {
                     List<Exam> ExamInSession = examinsession(session);
-                    foreach (var exam in ExamInSession)
+                    foreach (var exam in ExamInSession.ToList())
                     {
-                        List<Room> RoomconductingExam = exam.Rooms.ToList();
-                        foreach (var room in RoomconductingExam)
-                        {
+                        //List<Room> RoomconductingExam = exam.Rooms.ToList();
+                       // foreach (var room in RoomconductingExam.ToList())
+                        //{
                             List<Teacher> TeacherNotInSamedept = teachernotinsamedept(exam);
                             TeacherNotInSamedept.OrderByDescending(e => e.TeacherPriority);
-                            foreach (var teacher in TeacherNotInSamedept)
-                            {
-                                
-                                int count = teacher.Exams.Count();
-                                if (count <= 8)
+                          foreach (var teacher in TeacherNotInSamedept.ToList() )
+                          {
+                            
+                                if (!(teacherassignedinthesamedate.Contains(teacher)))
                                 {
-                                    teacher.Exams.Add(exam);
+                                    int count = teacher.Exams.Count();
+                                    if (count <= 8)
+                                    {
+                                        teacher.Exams.Add(exam);
+                                    db.SaveChanges();
+                                    teacherassignedinthesamedate.Add(teacher);
                                     break;
+                                    }
                                 }
-                            }
-                            RoomconductingExam.RemoveAll(r => r.No == room.No);
-                        }
+                            
+                          }
+                            //RoomconductingExam.RemoveAll(r => r.No == room.No);
+                       // }
                         ExamInSession.RemoveAll(e => e.Code == exam.Code);
                     }
                     sessions.RemoveAll(s => s.Id == session.Id);
                 }
-                startdate.AddDays(1);
+                startdate = startdate.AddDays(1);
             }
             return 0;
         }

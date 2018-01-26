@@ -40,7 +40,7 @@ namespace ExamRoomAllocation.Controllers
 
         // GET: Student/Create
         [HttpGet]
-        public ActionResult GetExam()
+        public ActionResult Create()
         {
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name");
             ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name");
@@ -52,7 +52,7 @@ namespace ExamRoomAllocation.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult GetExam(StudentExam studentExam)
+        public ActionResult Create(StudentExam studentExam)
         {
             Student student = new Student();
             if (ModelState.IsValid)
