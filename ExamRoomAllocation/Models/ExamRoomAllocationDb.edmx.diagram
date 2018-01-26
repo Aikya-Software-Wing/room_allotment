@@ -8,10 +8,10 @@
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Department" Width="1.5" PointX="3" PointY="4.75" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Designation" Width="1.5" PointX="5.25" PointY="2" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Exam" Width="1.5" PointX="5.25" PointY="4.5" />
-        <EntityTypeShape EntityType="ExamRoomAllocationModel.Room" Width="1.5" PointX="7.5" PointY="0.75" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.Room" Width="1.5" PointX="12" PointY="1.25" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Session" Width="1.5" PointX="3" PointY="2.25" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Stream" Width="1.5" PointX="0.75" PointY="5.25" />
-        <EntityTypeShape EntityType="ExamRoomAllocationModel.Teacher" Width="1.5" PointX="7.5" PointY="4.625" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.Teacher" Width="1.5" PointX="13.125" PointY="4.625" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK__Teacher__Departm__3A4CA8FD" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Department_dbo_Stream_Stream_Id1" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Exam_dbo_Department_Id" />
