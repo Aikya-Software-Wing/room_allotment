@@ -180,7 +180,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherRo__Room___634EBE90">
+        <Association Name="FK__TeacherRo__Room___76619304">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
           <End Role="TeacherRooms" Type="Self.TeacherRooms" Multiplicity="*" />
           <ReferentialConstraint>
@@ -192,7 +192,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherRo__Sessi__6442E2C9">
+        <Association Name="FK__TeacherRo__Sessi__7755B73D">
           <End Role="Session" Type="Self.Session" Multiplicity="1" />
           <End Role="TeacherRooms" Type="Self.TeacherRooms" Multiplicity="*" />
           <ReferentialConstraint>
@@ -204,7 +204,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherRo__Teach__625A9A57">
+        <Association Name="FK__TeacherRo__Teach__756D6ECB">
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
           <End Role="TeacherRooms" Type="Self.TeacherRooms" Multiplicity="*" />
           <ReferentialConstraint>
@@ -394,15 +394,15 @@
             <End Role="Department" EntitySet="Department" />
             <End Role="Teacher" EntitySet="Teacher" />
           </AssociationSet>
-          <AssociationSet Name="FK__TeacherRo__Room___634EBE90" Association="Self.FK__TeacherRo__Room___634EBE90">
+          <AssociationSet Name="FK__TeacherRo__Room___76619304" Association="Self.FK__TeacherRo__Room___76619304">
             <End Role="Room" EntitySet="Room" />
             <End Role="TeacherRooms" EntitySet="TeacherRooms" />
           </AssociationSet>
-          <AssociationSet Name="FK__TeacherRo__Sessi__6442E2C9" Association="Self.FK__TeacherRo__Sessi__6442E2C9">
+          <AssociationSet Name="FK__TeacherRo__Sessi__7755B73D" Association="Self.FK__TeacherRo__Sessi__7755B73D">
             <End Role="Session" EntitySet="Session" />
             <End Role="TeacherRooms" EntitySet="TeacherRooms" />
           </AssociationSet>
-          <AssociationSet Name="FK__TeacherRo__Teach__625A9A57" Association="Self.FK__TeacherRo__Teach__625A9A57">
+          <AssociationSet Name="FK__TeacherRo__Teach__756D6ECB" Association="Self.FK__TeacherRo__Teach__756D6ECB">
             <End Role="Teacher" EntitySet="Teacher" />
             <End Role="TeacherRooms" EntitySet="TeacherRooms" />
           </AssociationSet>
