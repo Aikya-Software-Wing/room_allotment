@@ -24,6 +24,10 @@
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Student_dbo_Department_Id" />
         <AssociationConnector Association="ExamRoomAllocationModel.StudentExams" />
         <AssociationConnector Association="ExamRoomAllocationModel.RoomStudents" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.TeacherRoom" Width="1.5" PointX="9.75" PointY="2.125" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Room___634EBE90" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Sessi__6442E2C9" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Teach__625A9A57" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

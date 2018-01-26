@@ -19,6 +19,7 @@ namespace ExamRoomAllocation.Models
         {
             this.Exams = new HashSet<Exam>();
             this.Students = new HashSet<Student>();
+            this.TeacherRooms = new HashSet<TeacherRoom>();
         }
     
         public int Id { get; set; }
@@ -33,5 +34,7 @@ namespace ExamRoomAllocation.Models
         public virtual ICollection<Exam> Exams { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TeacherRoom> TeacherRooms { get; set; }
     }
 }
