@@ -31,7 +31,7 @@ namespace ExamRoomAllocation.Helpers
         {
             try
             {
-                return db.Exams.Where(c => c.SessionId == session.Id).ToList();
+                return db.Exam.Where(c => c.SessionId == session.Id).ToList();
             }
             catch (NullReferenceException)
             {
@@ -59,10 +59,10 @@ namespace ExamRoomAllocation.Helpers
 
         public int Index()
         {
-            db.Exams.OrderBy(e => e.Date);
+            db.Exam.OrderBy(e => e.Date);
            
-            DateTime startdate = db.Exams.Min(e => e.Date).GetValueOrDefault();
-            DateTime enddate = db.Exams.Max(e => e.Date).GetValueOrDefault();
+            DateTime startdate = db.Exam.Min(e => e.Date).GetValueOrDefault();
+            DateTime enddate = db.Exam.Max(e => e.Date).GetValueOrDefault();
             
             while (DateTime.Compare(startdate, enddate) < 0)
             {

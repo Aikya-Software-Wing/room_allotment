@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
+using ExamRoomAllocation.Helpers;
 
 namespace ExamRoomAllocation.Controllers
 {
@@ -128,7 +129,13 @@ namespace ExamRoomAllocation.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        // room/Assign
+        public ActionResult Assign()
+        {
+            StudentHelpher Stud = new StudentHelpher();
+            Stud.Index();
+            return RedirectToAction("Index");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

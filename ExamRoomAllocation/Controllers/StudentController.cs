@@ -43,7 +43,7 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult Create()
         {
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name");
-            ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name");
+            ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name");
             return View();
         }
 
@@ -61,7 +61,7 @@ namespace ExamRoomAllocation.Controllers
                 {
                     foreach (var code in studentExam.SelectedExams)
                     {
-                        Exam exam = db.Exams.Find(code);
+                        Exam exam = db.Exam.Find(code);
                         student.Exams.Add(exam);                        
                     }
                 }
@@ -74,7 +74,7 @@ namespace ExamRoomAllocation.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", student.DepartmentId);
-            ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name", student.Exams);
+            ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name", student.Exams);
             return View();
         }
 
@@ -144,10 +144,10 @@ namespace ExamRoomAllocation.Controllers
 
         public JsonResult GetExams(string searchTerm)
         {
-            var examList = db.Exams.ToList();
+            var examList = db.Exam.ToList();
             if(examList!=null)
             {
-                examList = db.Exams.Where(e => e.Code.Contains(searchTerm)).ToList();
+                examList = db.Exam.Where(e => e.Code.Contains(searchTerm)).ToList();
             }            
             var modifiedExam = examList.Select(e => new
             {

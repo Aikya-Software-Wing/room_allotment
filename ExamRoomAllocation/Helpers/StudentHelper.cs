@@ -7,11 +7,11 @@ using System.Web;
 namespace ExamRoomAllocation.Helpers
 
 {
-    public class examtoroom
+    public class StudentHelpher
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
-        private List<Session> listofsessions()
+        private List<Session> ListOfSessions()
         {
             try
             {
@@ -23,24 +23,24 @@ namespace ExamRoomAllocation.Helpers
                 // to insert alert no session available
             }
         }
-        private List<Exam> examinsession(Session session)
+        private List<Exam> ExamInSession(Session session)
         {
             try
             {
                 Student student = new Student();
-                return db.Exams.Where(c => c.SessionId == session.Id).ToList();
+                return db.Exam.Where(c => c.SessionId == session.Id).ToList();
             }
             catch (NullReferenceException)
             {
-              throw;
-              // to insert alert no exam in session available
+                throw;
+                // to insert alert no exam in session available
             }
-       }
+        }
 
         private List<Room> Room()
 
         {
-           try
+            try
             {
                 db.Rooms.OrderBy(t => t.No);
                 return db.Rooms.ToList();
@@ -54,19 +54,20 @@ namespace ExamRoomAllocation.Helpers
 
         public int Index()
         {
-            List<Session> sessions = listofsessions();
+
+            List<Session> sessions = ListOfSessions();
             List<Student> students = db.Students.ToList();
 
             foreach (var session in sessions)
             {
-                List<Exam> examgroup1 = examinsession(session).Where(e => e.Id % 2 == 0).ToList();
-                List<Exam> examgroup2 = examinsession(session).Where(e => e.Id % 2 != 0).ToList();
+                List<Exam> examgroup1 = ExamInSession(session).Where(e => e.Id % 2 == 0).ToList();
+                List<Exam> examgroup2 = ExamInSession(session).Where(e => e.Id % 2 != 0).ToList();
                 List<Room> rooms = Room();
                 while (true)
                 {
-                    var exam = examgroup1.FirstOrDefault();
-                    var exam1 = examgroup2.FirstOrDefault();
-                    var room = rooms.FirstOrDefault();
+                    Exam exam = examgroup1.FirstOrDefault();
+                    Exam exam1 = examgroup2.FirstOrDefault();
+                    Room room = rooms.FirstOrDefault();
                     if (examgroup1.Count() != 0 && examgroup2.Count() != 0 && rooms.Count != 0)
                     {
                         int i = exam.Students.Count();
@@ -78,24 +79,28 @@ namespace ExamRoomAllocation.Helpers
                             if (i > seatsinone)
                             {
                                 room.Exams.Add(exam);
+                                db.SaveChanges();
                                 i = i - seatsinone;
                                 seatsinone = 0;
                             }
                             if (j > seatsintwo)
                             {
                                 room.Exams.Add(exam1);
+                                db.SaveChanges();
                                 j = j - seatsintwo;
                                 seatsintwo = 0;
                             }
                             if (i < seatsinone)
                             {
                                 room.Exams.Add(exam);
+                                db.SaveChanges();
                                 seatsinone = seatsinone - i;
                                 i = 0;
                             }
                             if (j < seatsintwo)
                             {
                                 room.Exams.Add(exam);
+                                db.SaveChanges();
                                 seatsintwo = seatsintwo - j;
                                 j = 0;
                             }
@@ -116,30 +121,34 @@ namespace ExamRoomAllocation.Helpers
                     }
                     if (examgroup1.Count() == 0 && examgroup2.Count() != 0 && rooms.Count != 0)
                     {
-                        int i = exam.Students.Count();
-                        if (exam.Students.Count() < room.Capacity)
+                        int i = exam1.Students.Count();
+                        if (exam1.Students.Count() < room.Capacity)
                         {
-                            room.Exams.Add(exam);
+                            room.Exams.Add(exam1);
+                            db.SaveChanges();
                             break;
                         }
-                        if (exam.Students.Count() > room.Capacity)
+                        if (exam1.Students.Count() > room.Capacity)
                         {
-                            room.Exams.Add(exam);
+                            room.Exams.Add(exam1);
+                            db.SaveChanges();
                             room.RoomStatus = 0;
                             i = i - room.Capacity.GetValueOrDefault();
                         }
                     }
                     if (examgroup2.Count() == 0 && examgroup1.Count() != 0 && rooms.Count != 0)
                     {
-                        int i = exam1.Students.Count();
-                        if (exam1.Students.Count() < room.Capacity)
+                        int i = exam.Students.Count();
+                        if (exam.Students.Count() < room.Capacity)
                         {
-                            room.Exams.Add(exam1);
+                            room.Exams.Add(exam);
+                            db.SaveChanges();
                             break;
                         }
                         if (exam1.Students.Count() > room.Capacity)
                         {
-                            room.Exams.Add(exam1);
+                            room.Exams.Add(exam);
+                            db.SaveChanges();
                             room.RoomStatus = 0;
                             i = i - room.Capacity.GetValueOrDefault();
                         }
