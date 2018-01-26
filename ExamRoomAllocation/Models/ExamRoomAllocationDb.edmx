@@ -460,9 +460,12 @@
           <EntitySet Name="Designations" EntityType="ExamRoomAllocationModel.Designation" />
           <EntitySet Name="Exams" EntityType="ExamRoomAllocationModel.Exam" />
           <EntitySet Name="Rooms" EntityType="ExamRoomAllocationModel.Room" />
+          <EntitySet Name="RoomStudents" EntityType="ExamRoomAllocationModel.RoomStudent" />
           <EntitySet Name="Sessions" EntityType="ExamRoomAllocationModel.Session" />
           <EntitySet Name="Streams" EntityType="ExamRoomAllocationModel.Stream" />
+          <EntitySet Name="Students" EntityType="ExamRoomAllocationModel.Student" />
           <EntitySet Name="Teachers" EntityType="ExamRoomAllocationModel.Teacher" />
+          <EntitySet Name="TeacherRooms" EntityType="ExamRoomAllocationModel.TeacherRoom" />
           <AssociationSet Name="FK__Teacher__Departm__3A4CA8FD" Association="ExamRoomAllocationModel.FK__Teacher__Departm__3A4CA8FD">
             <End Role="Department" EntitySet="Departments" />
             <End Role="Teacher" EntitySet="Teachers" />
@@ -479,6 +482,10 @@
             <End Role="Department" EntitySet="Departments" />
             <End Role="Room" EntitySet="Rooms" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_Student_dbo_Department_Id" Association="ExamRoomAllocationModel.FK_dbo_Student_dbo_Department_Id">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_Teacher_dbo_Designation_Designation_Id1" Association="ExamRoomAllocationModel.FK_dbo_Teacher_dbo_Designation_Designation_Id1">
             <End Role="Designation" EntitySet="Designations" />
             <End Role="Teacher" EntitySet="Teachers" />
@@ -487,41 +494,43 @@
             <End Role="Session" EntitySet="Sessions" />
             <End Role="Exam" EntitySet="Exams" />
           </AssociationSet>
+          <AssociationSet Name="FK__RoomStude__Room___690797E6" Association="ExamRoomAllocationModel.FK__RoomStude__Room___690797E6">
+            <End Role="Room" EntitySet="Rooms" />
+            <End Role="RoomStudent" EntitySet="RoomStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TeacherRo__Room___76619304" Association="ExamRoomAllocationModel.FK__TeacherRo__Room___76619304">
+            <End Role="Room" EntitySet="Rooms" />
+            <End Role="TeacherRoom" EntitySet="TeacherRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RoomStude__Sessi__69FBBC1F" Association="ExamRoomAllocationModel.FK__RoomStude__Sessi__69FBBC1F">
+            <End Role="Session" EntitySet="Sessions" />
+            <End Role="RoomStudent" EntitySet="RoomStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RoomStude__Stude__681373AD" Association="ExamRoomAllocationModel.FK__RoomStude__Stude__681373AD">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="RoomStudent" EntitySet="RoomStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TeacherRo__Sessi__7755B73D" Association="ExamRoomAllocationModel.FK__TeacherRo__Sessi__7755B73D">
+            <End Role="Session" EntitySet="Sessions" />
+            <End Role="TeacherRoom" EntitySet="TeacherRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TeacherRo__Teach__756D6ECB" Association="ExamRoomAllocationModel.FK__TeacherRo__Teach__756D6ECB">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="TeacherRoom" EntitySet="TeacherRooms" />
+          </AssociationSet>
           <AssociationSet Name="RoomExams" Association="ExamRoomAllocationModel.RoomExams">
             <End Role="Exam" EntitySet="Exams" />
             <End Role="Room" EntitySet="Rooms" />
-          </AssociationSet>
-          <AssociationSet Name="TeacherExams" Association="ExamRoomAllocationModel.TeacherExams">
-            <End Role="Exam" EntitySet="Exams" />
-            <End Role="Teacher" EntitySet="Teachers" />
-          </AssociationSet>
-          <EntitySet Name="Students" EntityType="ExamRoomAllocationModel.Student" />
-          <AssociationSet Name="FK_dbo_Student_dbo_Department_Id" Association="ExamRoomAllocationModel.FK_dbo_Student_dbo_Department_Id">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="Student" EntitySet="Students" />
           </AssociationSet>
           <AssociationSet Name="StudentExams" Association="ExamRoomAllocationModel.StudentExams">
             <End Role="Exam" EntitySet="Exams" />
             <End Role="Student" EntitySet="Students" />
           </AssociationSet>
-          <AssociationSet Name="RoomStudents" Association="ExamRoomAllocationModel.RoomStudents">
-            <End Role="Room" EntitySet="Rooms" />
-            <End Role="Student" EntitySet="Students" />
-          </AssociationSet>
-          <EntitySet Name="TeacherRooms" EntityType="ExamRoomAllocationModel.TeacherRoom" />
-          <AssociationSet Name="FK__TeacherRo__Room___634EBE90" Association="ExamRoomAllocationModel.FK__TeacherRo__Room___634EBE90">
-            <End Role="Room" EntitySet="Rooms" />
-            <End Role="TeacherRoom" EntitySet="TeacherRooms" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TeacherRo__Sessi__6442E2C9" Association="ExamRoomAllocationModel.FK__TeacherRo__Sessi__6442E2C9">
-            <End Role="Session" EntitySet="Sessions" />
-            <End Role="TeacherRoom" EntitySet="TeacherRooms" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TeacherRo__Teach__625A9A57" Association="ExamRoomAllocationModel.FK__TeacherRo__Teach__625A9A57">
+          <AssociationSet Name="TeacherExams" Association="ExamRoomAllocationModel.TeacherExams">
+            <End Role="Exam" EntitySet="Exams" />
             <End Role="Teacher" EntitySet="Teachers" />
-            <End Role="TeacherRoom" EntitySet="TeacherRooms" />
           </AssociationSet>
-          </EntityContainer>
+        </EntityContainer>
         <EntityType Name="Department">
           <Key>
             <PropertyRef Name="Id" />
@@ -556,9 +565,9 @@
           <NavigationProperty Name="Department" Relationship="ExamRoomAllocationModel.FK_dbo_Exam_dbo_Department_Id" FromRole="Exam" ToRole="Department" />
           <NavigationProperty Name="Session" Relationship="ExamRoomAllocationModel.FK__Exam__SessionId__3D2915A8" FromRole="Exam" ToRole="Session" />
           <NavigationProperty Name="Rooms" Relationship="ExamRoomAllocationModel.RoomExams" FromRole="Exam" ToRole="Room" />
-          <NavigationProperty Name="Teachers" Relationship="ExamRoomAllocationModel.TeacherExams" FromRole="Exam" ToRole="Teacher" />
           <NavigationProperty Name="Students" Relationship="ExamRoomAllocationModel.StudentExams" FromRole="Exam" ToRole="Student" />
-          </EntityType>
+          <NavigationProperty Name="Teachers" Relationship="ExamRoomAllocationModel.TeacherExams" FromRole="Exam" ToRole="Teacher" />
+        </EntityType>
         <EntityType Name="Room">
           <Key>
             <PropertyRef Name="Id" />
@@ -570,9 +579,22 @@
           <Property Name="Department_Id" Type="Int32" />
           <Property Name="RoomStatus" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Department" Relationship="ExamRoomAllocationModel.FK_dbo_Room_dbo_Department_Department_Id" FromRole="Room" ToRole="Department" />
+          <NavigationProperty Name="RoomStudents" Relationship="ExamRoomAllocationModel.FK__RoomStude__Room___690797E6" FromRole="Room" ToRole="RoomStudent" />
+          <NavigationProperty Name="TeacherRooms" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Room___76619304" FromRole="Room" ToRole="TeacherRoom" />
           <NavigationProperty Name="Exams" Relationship="ExamRoomAllocationModel.RoomExams" FromRole="Room" ToRole="Exam" />
-          <NavigationProperty Name="Students" Relationship="ExamRoomAllocationModel.RoomStudents" FromRole="Room" ToRole="Student" />
-          <NavigationProperty Name="TeacherRooms" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Room___634EBE90" FromRole="Room" ToRole="TeacherRoom" />
+        </EntityType>
+        <EntityType Name="RoomStudent">
+          <Key>
+            <PropertyRef Name="Student_Id" />
+            <PropertyRef Name="Room_Id" />
+            <PropertyRef Name="Session_Id" />
+          </Key>
+          <Property Name="Student_Id" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Room_Id" Type="Int32" Nullable="false" />
+          <Property Name="Session_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Room" Relationship="ExamRoomAllocationModel.FK__RoomStude__Room___690797E6" FromRole="RoomStudent" ToRole="Room" />
+          <NavigationProperty Name="Session" Relationship="ExamRoomAllocationModel.FK__RoomStude__Sessi__69FBBC1F" FromRole="RoomStudent" ToRole="Session" />
+          <NavigationProperty Name="Student" Relationship="ExamRoomAllocationModel.FK__RoomStude__Stude__681373AD" FromRole="RoomStudent" ToRole="Student" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
@@ -581,7 +603,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Exams" Relationship="ExamRoomAllocationModel.FK__Exam__SessionId__3D2915A8" FromRole="Session" ToRole="Exam" />
-          <NavigationProperty Name="TeacherRooms" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Sessi__6442E2C9" FromRole="Session" ToRole="TeacherRoom" />
+          <NavigationProperty Name="RoomStudents" Relationship="ExamRoomAllocationModel.FK__RoomStude__Sessi__69FBBC1F" FromRole="Session" ToRole="RoomStudent" />
+          <NavigationProperty Name="TeacherRooms" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Sessi__7755B73D" FromRole="Session" ToRole="TeacherRoom" />
         </EntityType>
         <EntityType Name="Stream">
           <Key>
@@ -590,6 +613,18 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Departments" Relationship="ExamRoomAllocationModel.FK_dbo_Department_dbo_Stream_Stream_Id1" FromRole="Stream" ToRole="Department" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Sem" Type="Int32" />
+          <Property Name="DepartmentId" Type="Int32" />
+          <NavigationProperty Name="Department" Relationship="ExamRoomAllocationModel.FK_dbo_Student_dbo_Department_Id" FromRole="Student" ToRole="Department" />
+          <NavigationProperty Name="RoomStudents" Relationship="ExamRoomAllocationModel.FK__RoomStude__Stude__681373AD" FromRole="Student" ToRole="RoomStudent" />
+          <NavigationProperty Name="Exams" Relationship="ExamRoomAllocationModel.StudentExams" FromRole="Student" ToRole="Exam" />
         </EntityType>
         <EntityType Name="Teacher">
           <Key>
@@ -603,8 +638,21 @@
           <Property Name="Department_Id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Department" Relationship="ExamRoomAllocationModel.FK__Teacher__Departm__3A4CA8FD" FromRole="Teacher" ToRole="Department" />
           <NavigationProperty Name="Designation" Relationship="ExamRoomAllocationModel.FK_dbo_Teacher_dbo_Designation_Designation_Id1" FromRole="Teacher" ToRole="Designation" />
+          <NavigationProperty Name="TeacherRooms" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Teach__756D6ECB" FromRole="Teacher" ToRole="TeacherRoom" />
           <NavigationProperty Name="Exams" Relationship="ExamRoomAllocationModel.TeacherExams" FromRole="Teacher" ToRole="Exam" />
-          <NavigationProperty Name="TeacherRooms" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Teach__625A9A57" FromRole="Teacher" ToRole="TeacherRoom" />
+        </EntityType>
+        <EntityType Name="TeacherRoom">
+          <Key>
+            <PropertyRef Name="Teacher_Id" />
+            <PropertyRef Name="Room_Id" />
+            <PropertyRef Name="Session_Id" />
+          </Key>
+          <Property Name="Teacher_Id" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Room_Id" Type="Int32" Nullable="false" />
+          <Property Name="Session_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Room" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Room___76619304" FromRole="TeacherRoom" ToRole="Room" />
+          <NavigationProperty Name="Session" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Sessi__7755B73D" FromRole="TeacherRoom" ToRole="Session" />
+          <NavigationProperty Name="Teacher" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Teach__756D6ECB" FromRole="TeacherRoom" ToRole="Teacher" />
         </EntityType>
         <Association Name="FK__Teacher__Departm__3A4CA8FD">
           <End Type="ExamRoomAllocationModel.Department" Role="Department" Multiplicity="1" />
@@ -654,6 +702,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_Student_dbo_Department_Id">
+          <End Type="ExamRoomAllocationModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="ExamRoomAllocationModel.Student" Role="Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_Teacher_dbo_Designation_Designation_Id1">
           <End Type="ExamRoomAllocationModel.Designation" Role="Designation" Multiplicity="0..1" />
           <End Type="ExamRoomAllocationModel.Teacher" Role="Teacher" Multiplicity="*" />
@@ -678,60 +738,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="RoomExams">
-          <End Type="ExamRoomAllocationModel.Exam" Role="Exam" Multiplicity="*" />
-          <End Type="ExamRoomAllocationModel.Room" Role="Room" Multiplicity="*" />
-        </Association>
-        <Association Name="TeacherExams">
-          <End Type="ExamRoomAllocationModel.Exam" Role="Exam" Multiplicity="*" />
-          <End Type="ExamRoomAllocationModel.Teacher" Role="Teacher" Multiplicity="*" />
-        </Association>
-        <EntityType Name="Student">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Sem" Type="Int32" />
-          <Property Name="DepartmentId" Type="Int32" />
-          <NavigationProperty Name="Department" Relationship="ExamRoomAllocationModel.FK_dbo_Student_dbo_Department_Id" FromRole="Student" ToRole="Department" />
-          <NavigationProperty Name="Exams" Relationship="ExamRoomAllocationModel.StudentExams" FromRole="Student" ToRole="Exam" />
-          <NavigationProperty Name="Rooms" Relationship="ExamRoomAllocationModel.RoomStudents" FromRole="Student" ToRole="Room" />
-        </EntityType>
-        <Association Name="FK_dbo_Student_dbo_Department_Id">
-          <End Type="ExamRoomAllocationModel.Department" Role="Department" Multiplicity="0..1" />
-          <End Type="ExamRoomAllocationModel.Student" Role="Student" Multiplicity="*" />
+        <Association Name="FK__RoomStude__Room___690797E6">
+          <End Type="ExamRoomAllocationModel.Room" Role="Room" Multiplicity="1" />
+          <End Type="ExamRoomAllocationModel.RoomStudent" Role="RoomStudent" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Department">
+            <Principal Role="Room">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Student">
-              <PropertyRef Name="DepartmentId" />
+            <Dependent Role="RoomStudent">
+              <PropertyRef Name="Room_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="StudentExams">
-          <End Type="ExamRoomAllocationModel.Exam" Role="Exam" Multiplicity="*" />
-          <End Type="ExamRoomAllocationModel.Student" Role="Student" Multiplicity="*" />
-        </Association>
-        <Association Name="RoomStudents">
-          <End Type="ExamRoomAllocationModel.Room" Role="Room" Multiplicity="*" />
-          <End Type="ExamRoomAllocationModel.Student" Role="Student" Multiplicity="*" />
-        </Association>
-        <EntityType Name="TeacherRoom">
-          <Key>
-            <PropertyRef Name="Teacher_Id" />
-            <PropertyRef Name="Room_Id" />
-            <PropertyRef Name="Session_Id" />
-          </Key>
-          <Property Name="Teacher_Id" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Room_Id" Type="Int32" Nullable="false" />
-          <Property Name="Session_Id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Room" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Room___634EBE90" FromRole="TeacherRoom" ToRole="Room" />
-          <NavigationProperty Name="Session" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Sessi__6442E2C9" FromRole="TeacherRoom" ToRole="Session" />
-          <NavigationProperty Name="Teacher" Relationship="ExamRoomAllocationModel.FK__TeacherRo__Teach__625A9A57" FromRole="TeacherRoom" ToRole="Teacher" />
-        </EntityType>
-        <Association Name="FK__TeacherRo__Room___634EBE90">
+        <Association Name="FK__TeacherRo__Room___76619304">
           <End Type="ExamRoomAllocationModel.Room" Role="Room" Multiplicity="1" />
           <End Type="ExamRoomAllocationModel.TeacherRoom" Role="TeacherRoom" Multiplicity="*" />
           <ReferentialConstraint>
@@ -743,7 +762,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherRo__Sessi__6442E2C9">
+        <Association Name="FK__RoomStude__Sessi__69FBBC1F">
+          <End Type="ExamRoomAllocationModel.Session" Role="Session" Multiplicity="1" />
+          <End Type="ExamRoomAllocationModel.RoomStudent" Role="RoomStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Session">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoomStudent">
+              <PropertyRef Name="Session_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RoomStude__Stude__681373AD">
+          <End Type="ExamRoomAllocationModel.Student" Role="Student" Multiplicity="1" />
+          <End Type="ExamRoomAllocationModel.RoomStudent" Role="RoomStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoomStudent">
+              <PropertyRef Name="Student_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TeacherRo__Sessi__7755B73D">
           <End Type="ExamRoomAllocationModel.Session" Role="Session" Multiplicity="1" />
           <End Type="ExamRoomAllocationModel.TeacherRoom" Role="TeacherRoom" Multiplicity="*" />
           <ReferentialConstraint>
@@ -755,7 +798,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherRo__Teach__625A9A57">
+        <Association Name="FK__TeacherRo__Teach__756D6ECB">
           <End Type="ExamRoomAllocationModel.Teacher" Role="Teacher" Multiplicity="1" />
           <End Type="ExamRoomAllocationModel.TeacherRoom" Role="TeacherRoom" Multiplicity="*" />
           <ReferentialConstraint>
@@ -766,6 +809,18 @@
               <PropertyRef Name="Teacher_Id" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="RoomExams">
+          <End Type="ExamRoomAllocationModel.Exam" Role="Exam" Multiplicity="*" />
+          <End Type="ExamRoomAllocationModel.Room" Role="Room" Multiplicity="*" />
+        </Association>
+        <Association Name="StudentExams">
+          <End Type="ExamRoomAllocationModel.Exam" Role="Exam" Multiplicity="*" />
+          <End Type="ExamRoomAllocationModel.Student" Role="Student" Multiplicity="*" />
+        </Association>
+        <Association Name="TeacherExams">
+          <End Type="ExamRoomAllocationModel.Exam" Role="Exam" Multiplicity="*" />
+          <End Type="ExamRoomAllocationModel.Teacher" Role="Teacher" Multiplicity="*" />
         </Association>
         </Schema>
     </edmx:ConceptualModels>
@@ -814,6 +869,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RoomStudents">
+            <EntityTypeMapping TypeName="ExamRoomAllocationModel.RoomStudent">
+              <MappingFragment StoreEntitySet="RoomStudents">
+                <ScalarProperty Name="Session_Id" ColumnName="Session_Id" />
+                <ScalarProperty Name="Room_Id" ColumnName="Room_Id" />
+                <ScalarProperty Name="Student_Id" ColumnName="Student_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Sessions">
             <EntityTypeMapping TypeName="ExamRoomAllocationModel.Session">
               <MappingFragment StoreEntitySet="Session">
@@ -825,6 +889,16 @@
           <EntitySetMapping Name="Streams">
             <EntityTypeMapping TypeName="ExamRoomAllocationModel.Stream">
               <MappingFragment StoreEntitySet="Stream">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="ExamRoomAllocationModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Sem" ColumnName="Sem" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -842,9 +916,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TeacherRooms">
+            <EntityTypeMapping TypeName="ExamRoomAllocationModel.TeacherRoom">
+              <MappingFragment StoreEntitySet="TeacherRooms">
+                <ScalarProperty Name="Session_Id" ColumnName="Session_Id" />
+                <ScalarProperty Name="Room_Id" ColumnName="Room_Id" />
+                <ScalarProperty Name="Teacher_Id" ColumnName="Teacher_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <AssociationSetMapping Name="RoomExams" TypeName="ExamRoomAllocationModel.RoomExams" StoreEntitySet="RoomExams">
             <EndProperty Name="Room">
               <ScalarProperty Name="Id" ColumnName="Room_Id" />
+            </EndProperty>
+            <EndProperty Name="Exam">
+              <ScalarProperty Name="Code" ColumnName="Exam_Code" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="StudentExams" TypeName="ExamRoomAllocationModel.StudentExams" StoreEntitySet="StudentExams">
+            <EndProperty Name="Student">
+              <ScalarProperty Name="Id" ColumnName="Student_USN" />
             </EndProperty>
             <EndProperty Name="Exam">
               <ScalarProperty Name="Code" ColumnName="Exam_Code" />
@@ -858,42 +949,7 @@
               <ScalarProperty Name="Code" ColumnName="Exam_Code" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Students">
-            <EntityTypeMapping TypeName="ExamRoomAllocationModel.Student">
-              <MappingFragment StoreEntitySet="Student">
-                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
-                <ScalarProperty Name="Sem" ColumnName="Sem" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="StudentExams" TypeName="ExamRoomAllocationModel.StudentExams" StoreEntitySet="StudentExams">
-            <EndProperty Name="Student">
-              <ScalarProperty Name="Id" ColumnName="Student_USN" />
-            </EndProperty>
-            <EndProperty Name="Exam">
-              <ScalarProperty Name="Code" ColumnName="Exam_Code" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="RoomStudents" TypeName="ExamRoomAllocationModel.RoomStudents" StoreEntitySet="RoomStudents">
-            <EndProperty Name="Student">
-              <ScalarProperty Name="Id" ColumnName="Student_Id" />
-            </EndProperty>
-            <EndProperty Name="Room">
-              <ScalarProperty Name="Id" ColumnName="Room_Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <EntitySetMapping Name="TeacherRooms">
-            <EntityTypeMapping TypeName="ExamRoomAllocationModel.TeacherRoom">
-              <MappingFragment StoreEntitySet="TeacherRooms">
-                <ScalarProperty Name="Session_Id" ColumnName="Session_Id" />
-                <ScalarProperty Name="Room_Id" ColumnName="Room_Id" />
-                <ScalarProperty Name="Teacher_Id" ColumnName="Teacher_Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          </EntityContainerMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

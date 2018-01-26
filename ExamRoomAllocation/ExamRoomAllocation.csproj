@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="Helpers\examtoteacher.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
+    <Compile Include="Helpers\StudentHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Department.cs">
       <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
@@ -216,6 +217,9 @@
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\PartialClasses.cs" />
     <Compile Include="Models\Room.cs">
+      <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RoomStudent.cs">
       <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Session.cs">
