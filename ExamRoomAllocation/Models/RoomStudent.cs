@@ -14,6 +14,7 @@ namespace ExamRoomAllocation.Models
     
     public partial class RoomStudent
     {
+        public int Id { get; set; }
         public string Student_Id { get; set; }
         public int Room_Id { get; set; }
         public int Session_Id { get; set; }
