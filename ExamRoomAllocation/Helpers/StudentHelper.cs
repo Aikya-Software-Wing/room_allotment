@@ -55,9 +55,10 @@ namespace ExamRoomAllocation.Helpers
         private int RoomToStudent(int i,List<Student> stud1,Room room,Session session)
         {
             int k=0;
-            RoomStudent r1 = new RoomStudent();
+            
             while (k < i)
             {
+                RoomStudent r1 = new RoomStudent();
                 Student student = stud1.FirstOrDefault();
                 List<RoomStudent> roomstudent = db.RoomStudents.ToList();
                 foreach(var rs in roomstudent)
@@ -73,7 +74,8 @@ namespace ExamRoomAllocation.Helpers
                     r1.Student_Id = student.Id;
                     room.RoomStudents.Add(r1);
                     db.SaveChanges();
-                    k++;
+                stud1.RemoveAll(e => e.Id == student.Id);
+                k++;
                 Skip: stud1.RemoveAll(e => e.Id == student.Id);
 
             }
@@ -90,13 +92,20 @@ namespace ExamRoomAllocation.Helpers
             List<Student> students = db.Students.ToList();
 
 
+
+
+
+
+
             foreach (var session in sessions)
             {
+                
                 List<Exam> examgroup1 = ExamInSession(session).Where(e => e.Id % 2 == 0).ToList();
                 List<Exam> examgroup2 = ExamInSession(session).Where(e => e.Id % 2 != 0).ToList();
                 List<Room> rooms = Room();
                 while (true)
                 {
+                    List<RoomStudent> temp = db.RoomStudents.ToList();
                     Exam exam = examgroup1.FirstOrDefault();
                     Exam exam1 = examgroup2.FirstOrDefault();
                     Room room = rooms.FirstOrDefault();
@@ -107,19 +116,40 @@ namespace ExamRoomAllocation.Helpers
                         int j = exam1.Students.Count();
                         List<Student> stud1 = exam.Students.ToList();
                         List<Student> stud2 = exam1.Students.ToList();
-                        
-                        if (room.RoomStatus != 0)
+                        foreach (var temp1 in temp)
                         {
-                            int seatsinone = seats / 2;
-                            int seatsintwo = seats / 2;
+                            
+                            stud1.RemoveAll(s => s.Id == temp1.Student_Id && temp1.Session_Id == session.Id);
+                            stud2.RemoveAll(s => s.Id == temp1.Student_Id && temp1.Session_Id == session.Id);
+                            
+                        }
+                        i = stud1.Count();
+                        j = stud2.Count();
+                        if (room.RoomStatus != 0)//have to reset to default values
+                        {
+                            int seatsinone = 0;
+                            int seatsintwo = 0;
+                            if (seats % 2 == 0)
+                            {
+                                 seatsinone = seats / 2;
+                                 seatsintwo = seats / 2;
+                            }
+                            else if(seats % 2 !=0)
+                            {
+                                seatsinone = seats / 2 + 1;
+                                seatsintwo = seats / 2;
+                            }
+                            
+                            
                             if (i > seatsinone)
                             {
                                 RoomToStudent(seatsinone, stud1, room, session);
                                 room.Exams.Add(exam);
                                 db.SaveChanges();
                                 i = i - seatsinone;
-                                seatsinone = 0;
                                 seats = seats - seatsinone;
+                                seatsinone = 0;
+                                
                             }
                             if (j > seatsintwo)
                             {
@@ -127,8 +157,9 @@ namespace ExamRoomAllocation.Helpers
                                 room.Exams.Add(exam1);
                                 db.SaveChanges();
                                 j = j - seatsintwo;
-                                seatsintwo = 0;
                                 seats = seats - seatsintwo;
+                                seatsintwo = 0;
+                                
                             }
                             if (i <= seatsinone)
                             {
@@ -142,7 +173,7 @@ namespace ExamRoomAllocation.Helpers
                             if (j <= seatsintwo)
                             {
                                 RoomToStudent(j, stud2, room, session);
-                                room.Exams.Add(exam);
+                                room.Exams.Add(exam1);
                                 db.SaveChanges();
                                 seatsintwo = seatsintwo - j;
                                 seats = seats - j;

@@ -41,7 +41,6 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult Create()
         {
             ViewBag.Id = new SelectList(db.Departments, "Id", "Name");
-            ViewBag.SessionId = new SelectList(db.Sessions, "Id", "Name");
             return View();
         }
 
