@@ -408,7 +408,6 @@
     <Content Include="Views\Room\Edit.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Student\Create.cshtml" />
-    <Content Include="Views\Student\GetExam.cshtml" />
     <Content Include="Views\Exam\Create.cshtml" />
     <Content Include="Views\Exam\Delete.cshtml" />
     <Content Include="Views\Exam\Details.cshtml" />
