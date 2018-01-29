@@ -96,9 +96,20 @@ namespace ExamRoomAllocation.Helpers
             List<Student> students = db.Students.ToList();
             foreach (var session in sessions)
             {
+                List<Exam> ExamGroup = ExamInSession(session).ToList();
+                List<Exam> examgroup1 = new List<Exam>() ;
+                List<Exam> examgroup2 = new List<Exam>() ;
+                int itemp = 0;
+                foreach(var exam in ExamGroup)
+                {if (itemp % 2 == 0)
+                    {
+                        examgroup1.Add(exam);
+                    }
+                    else
+                    { examgroup2.Add(exam); }
+                    itemp++;
+                }
                 
-                List<Exam> examgroup1 = ExamInSession(session).Where(e => e.Id % 2 == 0).ToList();
-                List<Exam> examgroup2 = ExamInSession(session).Where(e => e.Id % 2 != 0).ToList();
                 List<Room> rooms = Room();
                 while (true)
                 {
