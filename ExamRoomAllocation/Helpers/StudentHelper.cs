@@ -291,6 +291,7 @@ namespace ExamRoomAllocation.Helpers
                 foreach(var room in roomtemp)
                 {
                     room.RoomStatus = 1;
+                    db.SaveChanges();
                 }
             }
             return 0;
