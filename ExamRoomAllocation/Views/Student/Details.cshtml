@@ -33,11 +33,19 @@
         <dd>
             @Html.DisplayFor(model => model.Department.Name)
         </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Exams)
+        </dt>
+
+        <dd>
+            @foreach (var exam in Model.Exams)
+            {
+                @Html.DisplayFor(modelItem => exam.Code)
+                <br />
+            }
+        </dd>
     </dl>
-    @foreach (var exam in Model.Exams)
-    {
-        @Html.DisplayFor(modelItem => exam.Code)<br/>
-    }
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |

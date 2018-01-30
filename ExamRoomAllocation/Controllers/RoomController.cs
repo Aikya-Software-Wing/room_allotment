@@ -58,7 +58,7 @@ namespace ExamRoomAllocation.Controllers
             }
             catch (InvalidOperationException)
             {
-                room.Id = 0;
+                room.Id = 1;
             }
             if (ModelState.IsValid)
             {

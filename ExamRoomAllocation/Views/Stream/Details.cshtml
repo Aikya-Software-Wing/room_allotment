@@ -18,6 +18,18 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Departments)
+        </dt>
+
+        <dd>
+            @foreach(var department in Model.Departments)
+            {
+                @Html.DisplayFor(modelItem => department.Name)
+                <br />
+            }
+        </dd>
+
     </dl>
 </div>
 <p>
