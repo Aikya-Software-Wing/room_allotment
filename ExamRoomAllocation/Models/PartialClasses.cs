@@ -20,4 +20,29 @@ namespace ExamRoomAllocation.Models
     public partial class Stream
     {
     }
+
+    [MetadataType(typeof(DesignationMetadata))]
+    public partial class Designation
+    {
+    }
+
+    [MetadataType(typeof(RoomMetadata))]
+    public partial class Room
+    {
+    }
+
+    [MetadataType(typeof(SessionMetadata))]
+    public partial class Session
+    {
+    }
+
+    [MetadataType(typeof(StudentMetadata))]
+    public partial class Student
+    {
+    }
+
+    [MetadataType(typeof(TeacherMetadata))]
+    public partial class Teacher
+    {
+    }
 }

@@ -62,6 +62,7 @@ namespace ExamRoomAllocation.Controllers
             }
             if (ModelState.IsValid)
             {
+                room.RoomStatus = 0;
                 db.Rooms.Add(room);
                 db.SaveChanges();
                 return RedirectToAction("Index");

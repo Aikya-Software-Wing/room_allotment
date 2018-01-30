@@ -86,7 +86,7 @@ namespace ExamRoomAllocation.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var studentInDb = db.Students.AsNoTracking().Where(s => s.Id == id);
+            //var studentInDb = db.Students.AsNoTracking().Where(s => s.Id == id);
             Student student = db.Students.Find(id);
             StudentExam studentExam = new StudentExam();
             if (student == null)
