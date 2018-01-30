@@ -74,9 +74,9 @@ namespace ExamRoomAllocation.Helpers
                     List<Exam> ExamInSession = examinsession(session);
                     foreach (var exam in ExamInSession.ToList())
                     {
-                        //List<Room> RoomconductingExam = exam.Rooms.ToList();
-                       // foreach (var room in RoomconductingExam.ToList())
-                        //{
+                        List<Room> RoomconductingExam = exam.Rooms.ToList();
+                       foreach (var room in RoomconductingExam.ToList())
+                        {
                             List<Teacher> TeacherNotInSamedept = teachernotinsamedept(exam);
                             TeacherNotInSamedept.OrderByDescending(e => e.TeacherPriority);
                           foreach (var teacher in TeacherNotInSamedept.ToList() )
@@ -95,8 +95,8 @@ namespace ExamRoomAllocation.Helpers
                                 }
                             
                           }
-                            //RoomconductingExam.RemoveAll(r => r.No == room.No);
-                       // }
+                            RoomconductingExam.RemoveAll(r => r.No == room.No);
+                       }
                         ExamInSession.RemoveAll(e => e.Code == exam.Code);
                     }
                     sessions.RemoveAll(s => s.Id == session.Id);
