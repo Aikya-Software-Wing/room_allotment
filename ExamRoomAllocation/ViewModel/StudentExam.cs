@@ -21,6 +21,6 @@ namespace ExamRoomAllocation.ViewModel
 
         public int DepartmentId { get; set; }
 
-        public string[] SelectedExams { get; set; }
+        public List<string> SelectedExams { get; set; }
     }
 }

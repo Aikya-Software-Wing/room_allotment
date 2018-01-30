@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -85,13 +86,21 @@ namespace ExamRoomAllocation.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var studentInDb = db.Students.AsNoTracking().Where(s => s.Id == id);
             Student student = db.Students.Find(id);
+            StudentExam studentExam = new StudentExam();
             if (student == null)
             {
                 return HttpNotFound();
             }
+            studentExam.Id = student.Id;
+            studentExam.DepartmentId = (int)student.DepartmentId;
+            studentExam.Sem = (int)student.Sem;
+            studentExam.Name = student.Name;
+
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", student.DepartmentId);
-            return View(student);
+            ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name", student.Exams);
+            return View(studentExam);
         }
 
         // POST: Student/Edit/5
@@ -99,16 +108,31 @@ namespace ExamRoomAllocation.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Sem,DepartmentId")] Student student)
+        public ActionResult Edit( StudentExam studentExam)
         {
+            Student student = new Student();
             if (ModelState.IsValid)
             {
+                if (studentExam.SelectedExams != null)
+                {
+                    foreach (var code in studentExam.SelectedExams)
+                    {
+                        Exam exam = db.Exam.Find(code);
+                        student.Exams.Add(exam);
+                    }
+                }
+                student.DepartmentId = studentExam.DepartmentId;
+                student.Id = studentExam.Id;
+                student.Name = studentExam.Name;
+                student.Sem = studentExam.Sem;
                 db.Entry(student).State = EntityState.Modified;
+                //db.Set<Student>().AddOrUpdate(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", student.DepartmentId);
-            return View(student);
+            ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name", student.Exams);
+            return View(studentExam);
         }
 
         // GET: Student/Delete/5
@@ -135,31 +159,6 @@ namespace ExamRoomAllocation.Controllers
             db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        public ActionResult ChooseExams()
-        {
-            return View();
-        }
-
-        public JsonResult GetExams(string searchTerm)
-        {
-            var examList = db.Exam.ToList();
-            if(examList!=null)
-            {
-                examList = db.Exam.Where(e => e.Code.Contains(searchTerm)).ToList();
-            }            
-            var modifiedExam = examList.Select(e => new
-            {
-                id = e.Id,
-                text = e.Name
-            });
-            return Json(modifiedExam, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult Save(string data)
-        {
-            return Json(0, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

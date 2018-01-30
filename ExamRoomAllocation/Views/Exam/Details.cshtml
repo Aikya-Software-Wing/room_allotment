@@ -50,6 +50,18 @@
             @Html.DisplayFor(model => model.Session.Name)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model=>model.Students)
+        </dt>
+
+        <dd>
+            @foreach(var student in Model.Students.ToList())
+            {
+                @Html.DisplayFor(modelItem => student.Id)
+                <br />
+            }
+        </dd>
+
     </dl>
 </div>
 <p>

@@ -50,6 +50,17 @@
             @Html.DisplayFor(model => model.Department.Name)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Exams)
+        </dt>
+
+        <dd>
+            @foreach(var exam in Model.Exams.ToList())
+            {
+                @Html.DisplayFor(modelItem => exam.Code)
+                <br />
+            }
+        </dd>
     </dl>
 </div>
 <p>

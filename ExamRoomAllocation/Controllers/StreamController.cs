@@ -48,6 +48,16 @@ namespace ExamRoomAllocation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name")] Stream stream)
         {
+            try
+            {
+                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Department").FirstOrDefault<int>();
+                stream.Id = id + 1;
+            }
+            catch (InvalidOperationException)
+
+            {
+                stream.Id = 1;
+            }
             if (ModelState.IsValid)
             {
                 db.Streams.Add(stream);

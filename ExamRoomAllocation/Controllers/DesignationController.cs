@@ -48,6 +48,16 @@ namespace ExamRoomAllocation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name")] Designation designation)
         {
+            try
+            {
+                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Designation").FirstOrDefault<int>();
+                designation.Id = id + 1;
+            }
+            catch (InvalidOperationException)
+
+            {
+                designation.Id = 1;
+            }
             if (ModelState.IsValid)
             {
                 db.Designations.Add(designation);
