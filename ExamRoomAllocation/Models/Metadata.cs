@@ -91,23 +91,6 @@ namespace ExamRoomAllocation.Models
         public string Name;
     }
 
-    public class StudentMetadata
-    {
-        [Required]
-        [Display(Name = "USN")]
-        public string Id;
-
-        [Required]
-        [Display(Name = "USN")]
-        [RegularExpression(@"^([a-zA-sz\s]{4,100})$", ErrorMessage = "No numbers, at least 4 characters")]
-        public string Name;
-
-        [Required]
-        [Display(Name ="Semester")]
-        [RegularExpression("([1-8]*)", ErrorMessage = "Must be in between 1-8")]
-        public Nullable<int> Sem;
-    }
-
     public class TeacherMetadata
     {
         [Required]
@@ -128,5 +111,25 @@ namespace ExamRoomAllocation.Models
         [Display(Name ="Priority Level")]
         [RegularExpression("([0-9]*)", ErrorMessage = "Must be in between 0-9")]
         public int TeacherPriority;
+    }
+}
+
+namespace ExamRoomAllocation.ViewModel
+{
+    public class StudentExamMetadata
+    {
+        [Required]
+        [Display(Name = "USN")]
+        public string Id;
+
+        [Required]
+        [Display(Name = "Name")]
+        [RegularExpression(@"([a-zA-sz\s]{4,100})$", ErrorMessage = "No numbers, at least 4 characters")]
+        public string Name;
+
+        [Required]
+        [Display(Name = "Semester")]
+        [RegularExpression("([1-8]*)", ErrorMessage = "Must be in between 1-8")]
+        public Nullable<int> Sem;
     }
 }

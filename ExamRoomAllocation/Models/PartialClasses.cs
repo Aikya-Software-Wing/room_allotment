@@ -36,13 +36,16 @@ namespace ExamRoomAllocation.Models
     {
     }
 
-    [MetadataType(typeof(StudentMetadata))]
-    public partial class Student
-    {
-    }
-
     [MetadataType(typeof(TeacherMetadata))]
     public partial class Teacher
+    {
+    }
+}
+
+namespace ExamRoomAllocation.ViewModel
+{
+    [MetadataType(typeof(StudentExamMetadata))]
+    public partial class StudentExam
     {
     }
 }

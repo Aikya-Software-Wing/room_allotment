@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace ExamRoomAllocation.ViewModel
 {
-    public class StudentExam
+    public partial class StudentExam
     {
         [Required]
         public string Id { get; set; }
