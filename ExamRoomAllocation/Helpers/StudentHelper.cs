@@ -7,7 +7,7 @@ using System.Web;
 namespace ExamRoomAllocation.Helpers
 
 {
-    public class StudentHelpher
+    public class StudentHelper
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
@@ -29,7 +29,7 @@ namespace ExamRoomAllocation.Helpers
             try
             {
                 Student student = new Student();
-                return db.Exams.Where(c => c.SessionId == session.Id).ToList();
+                return db.Exam.Where(c => c.SessionId == session.Id).ToList();
             }
             catch (NullReferenceException)
             {

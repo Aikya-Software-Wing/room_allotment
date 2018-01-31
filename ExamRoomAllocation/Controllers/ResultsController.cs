@@ -21,10 +21,10 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult Allocate()
         {
-            examtoteacher assignExam = new examtoteacher();
-            StudentHelpher stud = new StudentHelpher();
-            assignExam.Index();
+            TeacherToRoom assignExam = new TeacherToRoom();
+            StudentHelper stud = new StudentHelper();
             stud.Index();
+            assignExam.Index();
             return RedirectToAction("Index");
         }
 

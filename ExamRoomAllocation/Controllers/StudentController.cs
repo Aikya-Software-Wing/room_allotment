@@ -118,6 +118,7 @@ namespace ExamRoomAllocation.Controllers
         {
             //Student student = new Student();
             Student student = db.Students.Find(studentExam.Id);
+            student.Exams.Clear();
             if (ModelState.IsValid)
             {
                 if (studentExam.SelectedExams != null)

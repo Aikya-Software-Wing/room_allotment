@@ -62,7 +62,7 @@ namespace ExamRoomAllocation.Controllers
             }
             if (ModelState.IsValid)
             {
-                room.RoomStatus = 0;
+                room.RoomStatus = 1;
                 db.Rooms.Add(room);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -133,7 +133,7 @@ namespace ExamRoomAllocation.Controllers
         // room/Assign
         public ActionResult Assign()
         {
-            StudentHelpher Stud = new StudentHelpher();
+            StudentHelper Stud = new StudentHelper();
             Stud.Index();
             return RedirectToAction("Index");
         }
