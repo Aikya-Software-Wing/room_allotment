@@ -16,12 +16,16 @@ namespace ExamRoomAllocation.Controllers
         // GET: Results
         public ActionResult Index()
         {
+            return View();
+        }
+
+        public ActionResult Allocate()
+        {
             examtoteacher assignExam = new examtoteacher();
             StudentHelpher stud = new StudentHelpher();
             assignExam.Index();
             stud.Index();
-            return View();
-            //return RedirectToAction("RoomsIndex");
+            return RedirectToAction("Index");
         }
 
         public ActionResult RoomsIndex()
