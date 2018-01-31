@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -79,15 +80,20 @@ namespace ExamRoomAllocation.Controllers
             return View();
         }
 
+        public Student GetStudent(string id)
+        {
+            var studentInDb = db.Students.AsNoTracking().Where(s => s.Id == id);
+            return studentInDb.First();
+        }
+
         // GET: Student/Edit/5
         public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            //var studentInDb = db.Students.AsNoTracking().Where(s => s.Id == id);
-            Student student = db.Students.Find(id);
+            }            
+            Student student = GetStudent(id);
             StudentExam studentExam = new StudentExam();
             if (student == null)
             {
@@ -108,9 +114,10 @@ namespace ExamRoomAllocation.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( StudentExam studentExam)
+        public ActionResult Edit(StudentExam studentExam)
         {
-            Student student = new Student();
+            //Student student = new Student();
+            Student student = db.Students.Find(studentExam.Id);
             if (ModelState.IsValid)
             {
                 if (studentExam.SelectedExams != null)
@@ -120,16 +127,11 @@ namespace ExamRoomAllocation.Controllers
                         Exam exam = db.Exam.Find(code);
                         student.Exams.Add(exam);
                     }
-                }
-                student.DepartmentId = studentExam.DepartmentId;
-                student.Id = studentExam.Id;
-                student.Name = studentExam.Name;
-                student.Sem = studentExam.Sem;
+                }                             
                 db.Entry(student).State = EntityState.Modified;
-                //db.Set<Student>().AddOrUpdate(student);
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }
+            } 
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", student.DepartmentId);
             ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name", student.Exams);
             return View(studentExam);

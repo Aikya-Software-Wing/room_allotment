@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div>
+    <h4>Input : </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.ActionLink("Stream", "Index", "Stream")
+            <br />
+            @Html.ActionLink("Department", "Index", "Department")
+            <br />
+            @Html.ActionLink("Designation", "Index", "Designation")
+            <br />
+            @Html.ActionLink("Exam", "Index", "Exam")
+            <br />
+            @Html.ActionLink("Room", "Index", "Room")
+            <br />
+            @Html.ActionLink("Student", "Index", "Student")
+            <br />
+            @Html.ActionLink("Teacher", "Index", "Teacher")
+            <br />
+            @Html.ActionLink("Session", "Index", "Session")
+            <br />
+            @Html.ActionLink("Begin Allocation", "Allocate", "Results")
+            <br />
+        </dd>
+    </dl>
+
+    <h4>Output : </h4>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.ActionLink("Rooms", "RoomsIndex")
+            <br />
+        </dd>
+    </dl>
+</div>

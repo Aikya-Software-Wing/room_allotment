@@ -86,9 +86,6 @@ namespace ExamRoomAllocation.Helpers
             return 0;
         }
 
-
-
-
         public int Index()
         {
 
