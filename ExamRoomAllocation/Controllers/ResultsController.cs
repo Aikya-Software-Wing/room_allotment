@@ -20,8 +20,8 @@ namespace ExamRoomAllocation.Controllers
             StudentHelpher stud = new StudentHelpher();
             assignExam.Index();
             stud.Index();
-            //return View();
-            return RedirectToAction("RoomsIndex");
+            return View();
+            //return RedirectToAction("RoomsIndex");
         }
 
         public ActionResult RoomsIndex()

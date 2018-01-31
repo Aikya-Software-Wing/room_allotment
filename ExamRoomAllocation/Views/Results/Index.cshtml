@@ -1,15 +1,37 @@
 ﻿@{
-    ViewBag.Title = "Output";
+    ViewBag.Title = "Home";
 }
 
 <div>
-    <h4>Outputs of : </h4>
+    <h4>Input : </h4>
     <hr />
     <dl class="dl-horizontal">
         <dd>
-            @Html.ActionLink("Rooms", "RoomsIndex")
+            @Html.ActionLink("Stream", "Index", "Stream")
             <br />
-            @Html.ActionLink("Exams", "Exams")
+            @Html.ActionLink("Department", "Index", "Department")
+            <br />
+            @Html.ActionLink("Designation", "Index", "Designation")
+            <br />
+            @Html.ActionLink("Exam", "Index", "Exam")
+            <br />
+            @Html.ActionLink("Room", "Index", "Room")
+            <br />
+            @Html.ActionLink("Student", "Index", "Student")
+            <br />
+            @Html.ActionLink("Teacher", "Index", "Teacher")
+            <br />
+            @Html.ActionLink("Session", "Index", "Session")
+            <br />
+        </dd>
+    </dl>
+
+    <h4>Output : </h4>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.ActionLink("Rooms", "RoomsIndex")
             <br />
         </dd>
     </dl>
