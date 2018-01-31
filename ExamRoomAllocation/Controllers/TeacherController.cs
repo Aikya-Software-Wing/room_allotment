@@ -128,7 +128,7 @@ namespace ExamRoomAllocation.Controllers
         // teacher/Allocate
         public ActionResult Allocate()
         {
-            examtoteacher assignexam = new examtoteacher();
+            TeacherToRoom assignexam = new TeacherToRoom();
             assignexam.Index();
             return RedirectToAction("Index");
         }

@@ -184,7 +184,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\examtoteacher.cs" />
+    <Compile Include="Helpers\TeacherToRoom.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
     <Compile Include="Helpers\StudentHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
