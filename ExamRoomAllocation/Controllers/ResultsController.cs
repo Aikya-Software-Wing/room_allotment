@@ -57,13 +57,16 @@ namespace ExamRoomAllocation.Controllers
             }
             roomViewModel.Students = studentsList;
 
+            var exams = db.Exam.Where(e=>e.SessionId == sessionId).ToList();
             List<string> examsList = new List<string>();
-            var exams = db.Database.SqlQuery<string>("SELECT DISTINCT Exam_Code FROM RoomExams JOIN Exam ON RoomExams.Exam_Code = Exam.Code").ToList();
             foreach (var exam in exams)
             {
-                examsList.Add(exam);
+                if (exam.Rooms.Contains(room))
+                {
+                    examsList.Add(exam.Code);
+                }
             }
-            roomViewModel.ExamCode = examsList;
+            roomViewModel.ExamCode = new List<string>(examsList);
 
             Session session = db.Sessions.Find(sessionId);
             roomViewModel.SessionName = session.Name;
