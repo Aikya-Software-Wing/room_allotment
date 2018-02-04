@@ -57,7 +57,7 @@ namespace ExamRoomAllocation.Helpers
         {
             try
             {
-                List<Teacher> temp = db.Teachers.ToList();
+                List<Teacher> temp = db.Teachers.Where(t=>t.TeacherPriority > 0).ToList();                
                 foreach (var exam in Examsinroom)
                 {
                     temp.RemoveAll(t => t.Department_Id == exam.Id);

@@ -81,7 +81,14 @@ namespace ExamRoomAllocation.Controllers
 
             Teacher teacher = new Teacher();
             TeacherRoom teacherId = db.TeacherRooms.Where(r => r.Room_Id == RoomId && r.Session_Id == sessionId).FirstOrDefault();
-            teacher = db.Teachers.Find(teacherId.Teacher_Id);
+            try
+            {
+                teacher = db.Teachers.Find(teacherId.Teacher_Id);
+            }
+            catch(NullReferenceException)
+            {
+                return View("Error");
+            }
             roomViewModel.TeacherName = teacher.Name;
             roomViewModel.TeacherDepartment = teacher.Department.Name.ToString();
 
