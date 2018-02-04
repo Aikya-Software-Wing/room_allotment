@@ -1,51 +1,45 @@
 ﻿@model ExamRoomAllocation.ViewModel.RoomViewModel
 
+<br />
+<br />
+<p>
+    @Html.ActionLink("Back To List", "RoomSession", new { id = Model.RoomId })
+</p>
 
-<div>
-    <h4>Room</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.SessionName)
-        </dt>
+@{
+    int counter = 0;
+    var roomId = Model.RoomNumber;
+    var block = Model.BlockName;
+    @: @block block - @roomId
+    <br />
+    var time = Model.SessionTime.Value.ToShortTimeString();
+    var date = Model.Date.Value.ToShortDateString();
+    @: @date    @time
+    <br />
+    var teacher = Model.TeacherName;
+    var teacherDepartment = Model.TeacherDepartment;
+    @: Invigilator - @teacher (@teacherDepartment)
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.SessionName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TeacherName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TeacherName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ExamCode)
-        </dt>
-        
-        <dd>
-            @foreach(var exam in Model.ExamCode.ToList())
-            {
-                @Html.DisplayFor(modelItem => exam)
+<table class="table">
+    <tr>
+        @foreach (var department in Model.Departments.ToList())
+        {
+            <th>
+                @Html.DisplayFor(model => model.ExamCode[counter])
                 <br />
-            }            
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Students)
-        </dt>
-
-        <dd>
-            @foreach (var student in Model.Students.ToList())
-            {
-                @Html.DisplayFor(modelItem => student)
+                @Html.DisplayFor(modelIteml => department)
                 <br />
-            }
-        </dd>
-    </dl>
-</div>
-<p>    
-    @Html.ActionLink("Back to List", "Index","Results")
+                @foreach (var student in Model.Students.Where(d => d.Department.Name == department).ToList())
+                {
+                    @Html.DisplayFor(s => student.Id)
+                    <br />
+                }
+            </th>
+            counter++;
+        }
+    </tr>
+</table>
+<p>
+    @Html.ActionLink("Back To List", "RoomSession", new { id = Model.RoomId })
 </p>

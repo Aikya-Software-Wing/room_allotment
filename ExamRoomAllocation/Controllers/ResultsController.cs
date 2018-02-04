@@ -48,35 +48,66 @@ namespace ExamRoomAllocation.Controllers
 
             int RoomId = Convert.ToInt32(TempData["ID"]);
             Room room = db.Rooms.Find(RoomId);
+            roomViewModel.BlockName = room.Block;
+            roomViewModel.RoomNumber = room.No;
+            roomViewModel.RoomId = room.Id;
 
-            List<string> studentsList = new List<string>();
+            List<Student> studentRaw = new List<Student>();
             var students = db.RoomStudents.Where(r => r.Room_Id == RoomId && r.Session_Id == sessionId).ToList();
             foreach (var student in students)
             {
-                studentsList.Add(student.Student_Id);
+                var studentInDb = db.Students.Where(s => s.Id == student.Student_Id).FirstOrDefault();
+                studentRaw.Add(studentInDb);
             }
-            roomViewModel.Students = studentsList;
+            roomViewModel.Students = studentRaw;
 
             var exams = db.Exam.Where(e=>e.SessionId == sessionId).ToList();
             List<string> examsList = new List<string>();
+            List<string> departments = new List<string>();
             foreach (var exam in exams)
             {
                 if (exam.Rooms.Contains(room))
                 {
                     examsList.Add(exam.Code);
+                    departments.Add(exam.Department.Name.ToString());
                 }
             }
             roomViewModel.ExamCode = new List<string>(examsList);
+            roomViewModel.Departments = new List<string>(departments);
 
-            Session session = db.Sessions.Find(sessionId);
-            roomViewModel.SessionName = session.Name;
+            Exam examForDate = exams.First();
+            roomViewModel.Date = examForDate.Date.Value.Date;
+            roomViewModel.SessionTime = examForDate.ExamTime;
 
             Teacher teacher = new Teacher();
             TeacherRoom teacherId = db.TeacherRooms.Where(r => r.Room_Id == RoomId && r.Session_Id == sessionId).FirstOrDefault();
             teacher = db.Teachers.Find(teacherId.Teacher_Id);
             roomViewModel.TeacherName = teacher.Name;
+            roomViewModel.TeacherDepartment = teacher.Department.Name.ToString();
 
             return View(roomViewModel);
+        }
+
+        public ActionResult TeacherIndex()
+        {
+            var teachers = db.Teachers.ToList();
+            return View(teachers);
+        }
+
+        public ActionResult TeacherDetails(string id)
+        {
+            TeacherViewModel teacherViewModel = new TeacherViewModel();
+            var teacher = db.Teachers.Find(id);
+            var teacherDetails = db.TeacherRooms.Where(t => t.Teacher_Id == id).ToList();
+            teacherViewModel.TeacherName = teacher.Name;
+            var SessionList = new List<string>();
+            foreach ( var t in teacherDetails)
+            {
+                SessionList.Add(t.Session.Name);
+            }
+            teacherViewModel.SessionList = SessionList;
+            teacherViewModel.TeacherId = id;
+            return View(teacherViewModel);
         }
     }
 }
