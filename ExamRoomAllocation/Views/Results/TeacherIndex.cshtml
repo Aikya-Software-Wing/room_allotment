@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<ExamRoomAllocation.Models.Teacher>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -23,7 +20,8 @@
             @Html.DisplayFor(modelItem => item.Department.Name)
         </td>
         <td>
-            @Html.ActionLink("Details", "TeacherDetails", new { id=item.Id })
+            @Html.ActionLink("Details", "TeacherDetails", new { id = item.Id }) |
+            @Html.ActionLink("Edit", "EditTeacherDetails", new { id = item.Id })
         </td>
     </tr>
 }

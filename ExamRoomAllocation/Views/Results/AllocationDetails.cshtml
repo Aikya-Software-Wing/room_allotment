@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ExamRoomAllocation.Models.Exam>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            Session Time
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            Students
+        </th>
+        <th>
+            Rooms
+        </th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExamTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @item.Students.Count()
+        </td>
+        <td>
+            @item.Rooms.Count()
+        </td>
+    </tr>
+}
+
+</table>
+
+@{ 
+    var duties = (int)ViewData["TotalDuties"];
+    <p>Total Duties = @duties</p>
+}

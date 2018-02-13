@@ -99,7 +99,7 @@ namespace ExamRoomAllocation.Models
 
         [Required]
         [Display(Name = "Teacher Name")]
-        [RegularExpression(@"^([a-zA-sz\s]{4,100})$", ErrorMessage = "No numbers, at least 4 characters")]
+        //[RegularExpression(@"^([a-zA-sz\s]{4,100})$", ErrorMessage = "No numbers, at least 4 characters")]
         public string Name;
 
         [Required]

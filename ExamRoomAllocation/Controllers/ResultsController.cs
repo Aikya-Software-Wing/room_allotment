@@ -3,7 +3,9 @@ using ExamRoomAllocation.Models;
 using ExamRoomAllocation.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -48,7 +50,14 @@ namespace ExamRoomAllocation.Controllers
 
             int RoomId = Convert.ToInt32(TempData["ID"]);
             Room room = db.Rooms.Find(RoomId);
-            roomViewModel.BlockName = room.Block;
+            try
+            {
+                roomViewModel.BlockName = room.Block;
+            }
+            catch (NullReferenceException)
+            {
+                return View("Error");
+            }
             roomViewModel.RoomNumber = room.No;
             roomViewModel.RoomId = room.Id;
 
@@ -115,6 +124,49 @@ namespace ExamRoomAllocation.Controllers
             teacherViewModel.SessionList = SessionList;
             teacherViewModel.TeacherId = id;
             return View(teacherViewModel);
+        }
+
+        public ActionResult EditTeacherDetails(string Teacher_id)
+        {
+            if (Teacher_id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Teacher teacher = db.Teachers.Find(Teacher_id);
+            if (teacher == null)
+            {
+                return HttpNotFound();
+            }
+            return View(teacher);
+        }
+
+        // POST: Department/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTeacherDetails([Bind(Include = "RoomId,SessionId")] TeacherRoom teacher)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(teacher).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.SessionId = new SelectList(db.Streams, "Id", "Name", teacher.Session_Id);
+            return View(teacher);
+        }
+
+        public ActionResult AllocationDetails()
+        {
+            var examsList = db.Exam.ToList();
+            var rooms = db.Rooms.ToList();
+            int totalDuties = 0;
+            foreach (var room in rooms)
+            {
+                if (room.RoomStatus != 0)
+                    totalDuties++;
+            }           
+            ViewData["totalDuties"] = totalDuties;
+            return View(examsList);
         }
     }
 }
