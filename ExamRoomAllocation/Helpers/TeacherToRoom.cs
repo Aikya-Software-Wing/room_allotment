@@ -103,7 +103,7 @@ namespace ExamRoomAllocation.Helpers
                     {
                         List<Exam> ExaminRoom = ExamInRoom(Room.Id,session.Id);
                         List<Teacher> TeacherNotInSamedept = TeacherNotInSameDept(ExaminRoom);
-                        TeacherNotInSamedept.OrderByDescending(e => e.TeacherPriority);
+                        TeacherNotInSamedept.OrderByDescending(e => e.TeacherPriority).OrderByDescending(e => e.Experience);
                         foreach (var Teacher in TeacherNotInSamedept)
                         {
 

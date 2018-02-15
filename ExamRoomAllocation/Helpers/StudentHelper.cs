@@ -129,7 +129,25 @@ namespace ExamRoomAllocation.Helpers
                         Rooms.RemoveAll(r => r.No == room.No);
                         continue;
                     }
-                    if (ExamGroup1.Count() != 0 && ExamGroup2.Count() != 0 && Rooms.Count != 0)
+                    if (exam1 != null)
+                    {
+                        List<Exam> exams = room.Exams.Where(e => e.Code == exam1.Code && e.SessionId == session.Id).ToList();
+                        if (exams.Count() != 0)
+                        {
+                            exam1 = ExamGroup1.Find(e => e.Id != exam1.Id);
+                           
+                        }
+                    }
+                    if (exam != null)
+                    {
+                        List<Exam> exams1 = room.Exams.Where(e => e.Code == exam.Code && e.SessionId == session.Id).ToList();
+                        if (exams1.Count() != 0)
+                        {
+                            exam = ExamGroup2.Find(e => e.Id != exam.Id);
+                           
+                        }
+                    }
+                    if (exam != null && exam1 != null && Rooms.Count != 0)
                     {
                         int Group1Count = exam.Students.Count();
                         int Group2Count = exam1.Students.Count();
@@ -223,19 +241,26 @@ namespace ExamRoomAllocation.Helpers
                         }
                        
                     }
-                    if (ExamGroup1.Count() == 0 && ExamGroup2.Count() != 0 && Rooms.Count != 0)
+                    if (exam == null && exam1 != null && Rooms.Count != 0)
                     {
                         int GroupCount = exam1.Students.Count();
                         List<Student> StudentGroup = exam1.Students.ToList();
-                       
-                        if (exam1.Students.Count() <= Seats)
+                        foreach (var Temp1 in Temp)
                         {
-                            RoomToStudent(exam1.Students.Count(), StudentGroup, room, session);
+
+                            StudentGroup.RemoveAll(s => s.Id == Temp1.Student_Id && Temp1.Session_Id == session.Id);
+                        }
+                        GroupCount = StudentGroup.Count();
+                        if (GroupCount <= Seats && GroupCount != 0)
+                        {
+                            RoomToStudent(GroupCount, StudentGroup, room, session);
                             room.Exams.Add(exam1);
                             db.SaveChanges();
-                            break;
+                            room.RoomStatus = 0;
+                            GroupCount = 0;
+                            Seats = 0;
                         }
-                        if (exam1.Students.Count() > Seats)
+                        if (GroupCount > Seats && GroupCount != 0)
                         {
                             RoomToStudent(Seats, StudentGroup, room, session);
                             room.Exams.Add(exam1);
@@ -249,19 +274,31 @@ namespace ExamRoomAllocation.Helpers
                             room.RoomStatus = 0;
 
                         }
+                        if(GroupCount ==0)
+                        {
+                            ExamGroup2.RemoveAll(e => e.Id == exam1.Id);
+                        }
                     }
-                    if (ExamGroup2.Count() == 0 && ExamGroup1.Count() != 0 && Rooms.Count != 0)
+                    if (exam1 == null && exam != null && Rooms.Count != 0)
                     {
                         int GroupCount = exam.Students.Count();
                         List<Student> StudentGroup = exam.Students.ToList();
-                        if (exam.Students.Count() <= Seats)
+                        foreach (var Temp1 in Temp)
                         {
-                            RoomToStudent(exam.Students.Count(), StudentGroup, room, session);
+
+                            StudentGroup.RemoveAll(s => s.Id == Temp1.Student_Id && Temp1.Session_Id == session.Id);
+                        }
+                        GroupCount = StudentGroup.Count();
+                        if (GroupCount <= Seats && GroupCount != 0)
+                        {
+                            RoomToStudent(GroupCount, StudentGroup, room, session);
                             room.Exams.Add(exam);
                             db.SaveChanges();
-                            break;
+                            room.RoomStatus = 0 ;
+                            GroupCount = 0;
+                            Seats = 0 ;
                         }
-                        if (exam.Students.Count() > Seats)
+                        if (GroupCount > Seats && GroupCount != 0)
                         {
                             RoomToStudent(Seats, StudentGroup, room, session);
                             room.Exams.Add(exam);
@@ -274,9 +311,13 @@ namespace ExamRoomAllocation.Helpers
                         {
                             room.RoomStatus = 0;
 
+                        } 
+                        if(GroupCount==0)
+                        {
+                            ExamGroup1.RemoveAll(e => e.Id == exam.Id);
                         }
                     }
-                    if (ExamGroup1.Count() == 0 && ExamGroup2.Count() == 0)
+                    if (exam == null && exam1 == null)
                     {
                         break;
                     }
