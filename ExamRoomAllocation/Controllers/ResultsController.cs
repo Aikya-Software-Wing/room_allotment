@@ -62,27 +62,28 @@ namespace ExamRoomAllocation.Controllers
             roomViewModel.RoomId = room.Id;
 
             List<Student> studentRaw = new List<Student>();
+            List<string> departments = new List<string>();
             var students = db.RoomStudents.Where(r => r.Room_Id == RoomId && r.Session_Id == sessionId).ToList();
             foreach (var student in students)
             {
                 var studentInDb = db.Students.Where(s => s.Id == student.Student_Id).FirstOrDefault();
                 studentRaw.Add(studentInDb);
+                departments.Add(studentInDb.Department.Name.ToString());
             }
+            var uniqueDepartments = new HashSet<string>(departments);
             roomViewModel.Students = studentRaw;
+            roomViewModel.Departments = new List<string>(uniqueDepartments);
 
             var exams = db.Exam.Where(e=>e.SessionId == sessionId).ToList();
             List<string> examsList = new List<string>();
-            List<string> departments = new List<string>();
             foreach (var exam in exams)
             {
                 if (exam.Rooms.Contains(room))
                 {
                     examsList.Add(exam.Code);
-                    departments.Add(exam.Department.Name.ToString());
                 }
             }
             roomViewModel.ExamCode = new List<string>(examsList);
-            roomViewModel.Departments = new List<string>(departments);
 
             Exam examForDate = exams.First();
             roomViewModel.Date = examForDate.Date.Value.Date;
@@ -157,16 +158,15 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult AllocationDetails()
         {
-            var examsList = db.Exam.ToList();
+            var exams = db.Exam.ToList();
             var rooms = db.Rooms.ToList();
             int totalDuties = 0;
-            foreach (var room in rooms)
+            foreach (var exam in exams)
             {
-                if (room.RoomStatus != 0)
-                    totalDuties++;
-            }           
+                totalDuties += exam.Rooms.Count;
+            }
             ViewData["totalDuties"] = totalDuties;
-            return View(examsList);
+            return View(exams);
         }
     }
 }

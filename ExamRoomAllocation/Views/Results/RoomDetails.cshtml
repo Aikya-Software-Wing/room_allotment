@@ -8,6 +8,8 @@
 
 @{
     int counter = 0;
+    var departments = Model.Departments.ToList();
+    var students = Model.Students.ToList();
     var roomId = Model.RoomNumber;
     var block = Model.BlockName;
     @: @block block - @roomId
@@ -23,19 +25,34 @@
 
 <table class="table">
     <tr>
-        @foreach (var department in Model.Departments.ToList())
+        @foreach (var department in departments)
         {
-            <th>
-                @Html.DisplayFor(model => model.ExamCode[counter])
+        <th>
+            @if(Model.ExamCode.Count == 1)
+            {
+                @Html.DisplayFor(model => model.ExamCode[0])
+            }
+            @if (counter == 0 && Model.ExamCode.Count > 1)
+            {
+                @Html.DisplayFor(model => model.ExamCode[0])
+            }
+            @if (counter == 1 && Model.ExamCode.Count > 1)
+            {
+                @Html.DisplayFor(model => model.ExamCode[1])
+            }
+            <br />
+            @Html.DisplayFor(modelIteml => department)
+            <br />
+            @{ 
+                var index = departments[counter];
+                var studentsList = students.Where(d => d.Department.Name == index).ToList();
+            }
+            @foreach (var student in studentsList)
+            {
+                @Html.DisplayFor(s => student.Id)
                 <br />
-                @Html.DisplayFor(modelIteml => department)
-                <br />
-                @foreach (var student in Model.Students.Where(d => d.Department.Name == department).ToList())
-                {
-                    @Html.DisplayFor(s => student.Id)
-                    <br />
-                }
-            </th>
+            }
+        </th>
             counter++;
         }
     </tr>
