@@ -26,8 +26,9 @@ namespace ExamRoomAllocation.Models
         public Nullable<System.DateTime> ExamTime { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> Id { get; set; }
+        public Nullable<int> DepartmentId { get; set; }
         public int SessionId { get; set; }
+        public int Id { get; set; }
     
         public virtual Department Department { get; set; }
         public virtual Session Session { get; set; }

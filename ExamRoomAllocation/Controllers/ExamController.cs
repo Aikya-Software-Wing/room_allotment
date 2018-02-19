@@ -18,7 +18,7 @@ namespace ExamRoomAllocation.Controllers
         // GET: Exam
         public ActionResult Index()
         {
-            var exams = db.Exam.Include(e => e.Department).Include(e => e.Session);
+            var exams = db.Exams.Include(e => e.Department).Include(e => e.Session);
             return View(exams.ToList());
         }
 
@@ -29,7 +29,7 @@ namespace ExamRoomAllocation.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exam exam = db.Exam.Find(id);
+            Exam exam = db.Exams.Find(id);
             if (exam == null)
             {
                 return HttpNotFound();
@@ -73,7 +73,7 @@ namespace ExamRoomAllocation.Controllers
 
                     }
 
-                    db.Exam.Add(exam);
+                    db.Exams.Add(exam);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -89,7 +89,7 @@ namespace ExamRoomAllocation.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exam exam = db.Exam.Find(id);
+            Exam exam = db.Exams.Find(id);
             if (exam == null)
             {
                 return HttpNotFound();
@@ -124,7 +124,7 @@ namespace ExamRoomAllocation.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exam exam = db.Exam.Find(id);
+            Exam exam = db.Exams.Find(id);
             if (exam == null)
             {
                 return HttpNotFound();
@@ -137,8 +137,8 @@ namespace ExamRoomAllocation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Exam exam = db.Exam.Find(id);
-            db.Exam.Remove(exam);
+            Exam exam = db.Exams.Find(id);
+            db.Exams.Remove(exam);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

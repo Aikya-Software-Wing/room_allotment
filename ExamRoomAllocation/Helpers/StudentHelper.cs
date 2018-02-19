@@ -29,7 +29,7 @@ namespace ExamRoomAllocation.Helpers
             try
             {
                 Student student = new Student();
-                return db.Exam.Where(c => c.SessionId == session.Id).ToList();
+                return db.Exams.Where(c => c.SessionId == session.Id).ToList();
             }
             catch (NullReferenceException)
             {

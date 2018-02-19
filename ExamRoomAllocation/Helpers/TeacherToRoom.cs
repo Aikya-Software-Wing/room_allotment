@@ -32,7 +32,7 @@ namespace ExamRoomAllocation.Helpers
             try
             {
                 //here i wamt to return the exams conducted in the particular room in the particular session. 
-                List<Exam> ExamInRoom = db.Exam.Where(x => x.SessionId == sessionid).ToList();
+                List<Exam> ExamInRoom = db.Exams.Where(x => x.SessionId == sessionid).ToList();
                 List<Exam> FinalList = new List<Exam>();
                 Room room = db.Rooms.Find(roomid);
                 foreach (var exam in ExamInRoom)
@@ -76,10 +76,10 @@ namespace ExamRoomAllocation.Helpers
 
         public int Index()
         {
-            db.Exam.OrderBy(e => e.Date);
+            db.Exams.OrderBy(e => e.Date);
 
-            DateTime StartDate = db.Exam.Min(e => e.Date).GetValueOrDefault();
-            DateTime EndDate = db.Exam.Max(e => e.Date).GetValueOrDefault();
+            DateTime StartDate = db.Exams.Min(e => e.Date).GetValueOrDefault();
+            DateTime EndDate = db.Exams.Max(e => e.Date).GetValueOrDefault();
 
             while (DateTime.Compare(StartDate, EndDate) <= 0)
             {

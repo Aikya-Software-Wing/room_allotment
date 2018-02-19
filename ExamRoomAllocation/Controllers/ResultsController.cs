@@ -23,10 +23,12 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult Allocate()
         {
-            TeacherToRoom assignExam = new TeacherToRoom();
-            StudentHelper stud = new StudentHelper();
-            stud.Index();
-            assignExam.Index();
+            //TeacherToRoom assignExam = new TeacherToRoom();
+            //StudentHelper stud = new StudentHelper();
+            //stud.Index();
+            //assignExam.Index();
+            FirstYearHelper studentRoom = new FirstYearHelper();
+            studentRoom.Allocate();
             return RedirectToAction("Index");
         }
 
@@ -74,7 +76,7 @@ namespace ExamRoomAllocation.Controllers
             roomViewModel.Students = studentRaw;
             roomViewModel.Departments = new List<string>(uniqueDepartments);
 
-            var exams = db.Exam.Where(e=>e.SessionId == sessionId).ToList();
+            var exams = db.Exams.Where(e=>e.SessionId == sessionId).ToList();
             List<string> examsList = new List<string>();
             foreach (var exam in exams)
             {
@@ -158,7 +160,7 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult AllocationDetails()
         {
-            var exams = db.Exam.ToList();
+            var exams = db.Exams.ToList();
             var rooms = db.Rooms.ToList();
             int totalDuties = 0;
             foreach (var exam in exams)

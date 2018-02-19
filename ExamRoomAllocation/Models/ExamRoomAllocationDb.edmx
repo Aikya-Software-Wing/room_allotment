@@ -22,14 +22,15 @@
         </EntityType>
         <EntityType Name="Exam">
           <Key>
-            <PropertyRef Name="Code" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="Code" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="ExamTime" Type="datetime" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
           <Property Name="Date" Type="datetime" />
-          <Property Name="Id" Type="int" />
+          <Property Name="DepartmentId" Type="int" />
           <Property Name="SessionId" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Room">
           <Key>
@@ -45,10 +46,10 @@
         <EntityType Name="RoomExams">
           <Key>
             <PropertyRef Name="Room_Id" />
-            <PropertyRef Name="Exam_Code" />
+            <PropertyRef Name="Exam_Id" />
           </Key>
           <Property Name="Room_Id" Type="int" Nullable="false" />
-          <Property Name="Exam_Code" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Exam_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="RoomStudents">
           <Key>
@@ -85,10 +86,10 @@
         <EntityType Name="StudentExams">
           <Key>
             <PropertyRef Name="Student_USN" />
-            <PropertyRef Name="Exam_Code" />
+            <PropertyRef Name="Exam_Id" />
           </Key>
           <Property Name="Student_USN" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Exam_Code" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Exam_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Teacher">
           <Key>
@@ -104,10 +105,10 @@
         <EntityType Name="TeacherExams">
           <Key>
             <PropertyRef Name="Teacher_Id" />
-            <PropertyRef Name="Exam_Code" />
+            <PropertyRef Name="Exam_Id" />
           </Key>
           <Property Name="Teacher_Id" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Exam_Code" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Exam_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="TeacherRooms">
           <Key>
@@ -127,6 +128,30 @@
             </Principal>
             <Dependent Role="Exam">
               <PropertyRef Name="SessionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RoomExams__Exam___42ACE4D4">
+          <End Role="Exam" Type="Self.Exam" Multiplicity="1" />
+          <End Role="RoomExams" Type="Self.RoomExams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exam">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoomExams">
+              <PropertyRef Name="Exam_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RoomExams__Room___41B8C09B">
+          <End Role="Room" Type="Self.Room" Multiplicity="1" />
+          <End Role="RoomExams" Type="Self.RoomExams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoomExams">
+              <PropertyRef Name="Room_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -166,6 +191,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__StudentEx__Exam___3552E9B6">
+          <End Role="Exam" Type="Self.Exam" Multiplicity="1" />
+          <End Role="StudentExams" Type="Self.StudentExams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exam">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentExams">
+              <PropertyRef Name="Exam_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__StudentEx__Stude__345EC57D">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="StudentExams" Type="Self.StudentExams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StudentExams">
+              <PropertyRef Name="Student_USN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Teacher__Departm__3A4CA8FD">
           <End Role="Department" Type="Self.Department" Multiplicity="1" />
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
@@ -175,6 +224,30 @@
             </Principal>
             <Dependent Role="Teacher">
               <PropertyRef Name="Department_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TeacherEx__Exam___2F9A1060">
+          <End Role="Exam" Type="Self.Exam" Multiplicity="1" />
+          <End Role="TeacherExams" Type="Self.TeacherExams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exam">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TeacherExams">
+              <PropertyRef Name="Exam_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TeacherEx__Teach__2EA5EC27">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="TeacherExams" Type="Self.TeacherExams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TeacherExams">
+              <PropertyRef Name="Teacher_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -234,7 +307,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Exam">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="DepartmentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -250,34 +323,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_RoomExams_dbo_Exam_Exam_Code">
-          <End Role="Exam" Type="Self.Exam" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="RoomExams" Type="Self.RoomExams" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Exam">
-              <PropertyRef Name="Code" />
-            </Principal>
-            <Dependent Role="RoomExams">
-              <PropertyRef Name="Exam_Code" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_RoomExams_dbo_Room_Room_Id">
-          <End Role="Room" Type="Self.Room" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="RoomExams" Type="Self.RoomExams" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Room">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="RoomExams">
-              <PropertyRef Name="Room_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_dbo_Student_dbo_Department_Id">
           <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
           <End Role="Student" Type="Self.Student" Multiplicity="*" />
@@ -290,34 +335,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_StudentExams_dbo_Exam_Exam_Code">
-          <End Role="Exam" Type="Self.Exam" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="StudentExams" Type="Self.StudentExams" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Exam">
-              <PropertyRef Name="Code" />
-            </Principal>
-            <Dependent Role="StudentExams">
-              <PropertyRef Name="Exam_Code" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_StudentExams_dbo_Student_Student_USN">
-          <End Role="Student" Type="Self.Student" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="StudentExams" Type="Self.StudentExams" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Student">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="StudentExams">
-              <PropertyRef Name="Student_USN" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_dbo_Teacher_dbo_Designation_Designation_Id1">
           <End Role="Designation" Type="Self.Designation" Multiplicity="0..1" />
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
@@ -327,34 +344,6 @@
             </Principal>
             <Dependent Role="Teacher">
               <PropertyRef Name="Designation_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_TeacherExams_dbo_Exam_Exam_Code">
-          <End Role="Exam" Type="Self.Exam" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="TeacherExams" Type="Self.TeacherExams" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Exam">
-              <PropertyRef Name="Code" />
-            </Principal>
-            <Dependent Role="TeacherExams">
-              <PropertyRef Name="Exam_Code" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_TeacherExams_dbo_Teacher_Teacher_Id">
-          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="TeacherExams" Type="Self.TeacherExams" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Teacher">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TeacherExams">
-              <PropertyRef Name="Teacher_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -376,6 +365,14 @@
             <End Role="Session" EntitySet="Session" />
             <End Role="Exam" EntitySet="Exam" />
           </AssociationSet>
+          <AssociationSet Name="FK__RoomExams__Exam___42ACE4D4" Association="Self.FK__RoomExams__Exam___42ACE4D4">
+            <End Role="Exam" EntitySet="Exam" />
+            <End Role="RoomExams" EntitySet="RoomExams" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RoomExams__Room___41B8C09B" Association="Self.FK__RoomExams__Room___41B8C09B">
+            <End Role="Room" EntitySet="Room" />
+            <End Role="RoomExams" EntitySet="RoomExams" />
+          </AssociationSet>
           <AssociationSet Name="FK__RoomStude__Room___0E391C95" Association="Self.FK__RoomStude__Room___0E391C95">
             <End Role="Room" EntitySet="Room" />
             <End Role="RoomStudents" EntitySet="RoomStudents" />
@@ -388,9 +385,25 @@
             <End Role="Student" EntitySet="Student" />
             <End Role="RoomStudents" EntitySet="RoomStudents" />
           </AssociationSet>
+          <AssociationSet Name="FK__StudentEx__Exam___3552E9B6" Association="Self.FK__StudentEx__Exam___3552E9B6">
+            <End Role="Exam" EntitySet="Exam" />
+            <End Role="StudentExams" EntitySet="StudentExams" />
+          </AssociationSet>
+          <AssociationSet Name="FK__StudentEx__Stude__345EC57D" Association="Self.FK__StudentEx__Stude__345EC57D">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="StudentExams" EntitySet="StudentExams" />
+          </AssociationSet>
           <AssociationSet Name="FK__Teacher__Departm__3A4CA8FD" Association="Self.FK__Teacher__Departm__3A4CA8FD">
             <End Role="Department" EntitySet="Department" />
             <End Role="Teacher" EntitySet="Teacher" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TeacherEx__Exam___2F9A1060" Association="Self.FK__TeacherEx__Exam___2F9A1060">
+            <End Role="Exam" EntitySet="Exam" />
+            <End Role="TeacherExams" EntitySet="TeacherExams" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TeacherEx__Teach__2EA5EC27" Association="Self.FK__TeacherEx__Teach__2EA5EC27">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="TeacherExams" EntitySet="TeacherExams" />
           </AssociationSet>
           <AssociationSet Name="FK__TeacherRo__Room___09746778" Association="Self.FK__TeacherRo__Room___09746778">
             <End Role="Room" EntitySet="Room" />
@@ -416,37 +429,13 @@
             <End Role="Department" EntitySet="Department" />
             <End Role="Room" EntitySet="Room" />
           </AssociationSet>
-          <AssociationSet Name="FK_dbo_RoomExams_dbo_Exam_Exam_Code" Association="Self.FK_dbo_RoomExams_dbo_Exam_Exam_Code">
-            <End Role="Exam" EntitySet="Exam" />
-            <End Role="RoomExams" EntitySet="RoomExams" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_RoomExams_dbo_Room_Room_Id" Association="Self.FK_dbo_RoomExams_dbo_Room_Room_Id">
-            <End Role="Room" EntitySet="Room" />
-            <End Role="RoomExams" EntitySet="RoomExams" />
-          </AssociationSet>
           <AssociationSet Name="FK_dbo_Student_dbo_Department_Id" Association="Self.FK_dbo_Student_dbo_Department_Id">
             <End Role="Department" EntitySet="Department" />
             <End Role="Student" EntitySet="Student" />
           </AssociationSet>
-          <AssociationSet Name="FK_dbo_StudentExams_dbo_Exam_Exam_Code" Association="Self.FK_dbo_StudentExams_dbo_Exam_Exam_Code">
-            <End Role="Exam" EntitySet="Exam" />
-            <End Role="StudentExams" EntitySet="StudentExams" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_StudentExams_dbo_Student_Student_USN" Association="Self.FK_dbo_StudentExams_dbo_Student_Student_USN">
-            <End Role="Student" EntitySet="Student" />
-            <End Role="StudentExams" EntitySet="StudentExams" />
-          </AssociationSet>
           <AssociationSet Name="FK_dbo_Teacher_dbo_Designation_Designation_Id1" Association="Self.FK_dbo_Teacher_dbo_Designation_Designation_Id1">
             <End Role="Designation" EntitySet="Designation" />
             <End Role="Teacher" EntitySet="Teacher" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_TeacherExams_dbo_Exam_Exam_Code" Association="Self.FK_dbo_TeacherExams_dbo_Exam_Exam_Code">
-            <End Role="Exam" EntitySet="Exam" />
-            <End Role="TeacherExams" EntitySet="TeacherExams" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_TeacherExams_dbo_Teacher_Teacher_Id" Association="Self.FK_dbo_TeacherExams_dbo_Teacher_Teacher_Id">
-            <End Role="Teacher" EntitySet="Teacher" />
-            <End Role="TeacherExams" EntitySet="TeacherExams" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -552,14 +541,15 @@
         </EntityType>
         <EntityType Name="Exam">
           <Key>
-            <PropertyRef Name="Code" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="Code" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ExamTime" Type="DateTime" Precision="3" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Precision="3" />
-          <Property Name="Id" Type="Int32" />
+          <Property Name="DepartmentId" Type="Int32" />
           <Property Name="SessionId" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Department" Relationship="ExamRoomAllocationModel.FK_dbo_Exam_dbo_Department_Id" FromRole="Exam" ToRole="Department" />
           <NavigationProperty Name="Session" Relationship="ExamRoomAllocationModel.FK__Exam__SessionId__3D2915A8" FromRole="Exam" ToRole="Session" />
           <NavigationProperty Name="Rooms" Relationship="ExamRoomAllocationModel.RoomExams" FromRole="Exam" ToRole="Room" />
@@ -682,7 +672,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Exam">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="DepartmentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -844,8 +834,9 @@
           <EntitySetMapping Name="Exams">
             <EntityTypeMapping TypeName="ExamRoomAllocationModel.Exam">
               <MappingFragment StoreEntitySet="Exam">
-                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ExamTime" ColumnName="ExamTime" />
@@ -928,7 +919,7 @@
               <ScalarProperty Name="Id" ColumnName="Room_Id" />
             </EndProperty>
             <EndProperty Name="Exam">
-              <ScalarProperty Name="Code" ColumnName="Exam_Code" />
+              <ScalarProperty Name="Id" ColumnName="Exam_Id" />
             </EndProperty>
           </AssociationSetMapping>
           <AssociationSetMapping Name="StudentExams" TypeName="ExamRoomAllocationModel.StudentExams" StoreEntitySet="StudentExams">
@@ -936,7 +927,7 @@
               <ScalarProperty Name="Id" ColumnName="Student_USN" />
             </EndProperty>
             <EndProperty Name="Exam">
-              <ScalarProperty Name="Code" ColumnName="Exam_Code" />
+              <ScalarProperty Name="Id" ColumnName="Exam_Id" />
             </EndProperty>
           </AssociationSetMapping>
           <AssociationSetMapping Name="TeacherExams" TypeName="ExamRoomAllocationModel.TeacherExams" StoreEntitySet="TeacherExams">
@@ -944,7 +935,7 @@
               <ScalarProperty Name="Id" ColumnName="Teacher_Id" />
             </EndProperty>
             <EndProperty Name="Exam">
-              <ScalarProperty Name="Code" ColumnName="Exam_Code" />
+              <ScalarProperty Name="Id" ColumnName="Exam_Id" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

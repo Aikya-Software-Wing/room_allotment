@@ -45,7 +45,7 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult Create()
         {
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name");
-            ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name");
+            ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name");
             return View();
         }
 
@@ -63,7 +63,7 @@ namespace ExamRoomAllocation.Controllers
                 {
                     foreach (var code in studentExam.SelectedExams)
                     {
-                        Exam exam = db.Exam.Find(code);
+                        Exam exam = db.Exams.Find(code);
                         student.Exams.Add(exam);                        
                     }
                 }
@@ -76,7 +76,7 @@ namespace ExamRoomAllocation.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", student.DepartmentId);
-            ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name", student.Exams);
+            ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name", student.Exams);
             return View();
         }
 
@@ -105,7 +105,7 @@ namespace ExamRoomAllocation.Controllers
             studentExam.Name = student.Name;
 
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", student.DepartmentId);
-            ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name", student.Exams);
+            ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name", student.Exams);
             return View(studentExam);
         }
 
@@ -125,7 +125,7 @@ namespace ExamRoomAllocation.Controllers
                 {
                     foreach (var code in studentExam.SelectedExams)
                     {
-                        Exam exam = db.Exam.Find(code);
+                        Exam exam = db.Exams.Find(code);
                         student.Exams.Add(exam);
                     }
                 }                             
@@ -134,7 +134,7 @@ namespace ExamRoomAllocation.Controllers
                 return RedirectToAction("Index");
             } 
             ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", student.DepartmentId);
-            ViewBag.ExamId = new MultiSelectList(db.Exam, "Code", "Name", student.Exams);
+            ViewBag.ExamId = new MultiSelectList(db.Exams, "Code", "Name", student.Exams);
             return View(studentExam);
         }
 
