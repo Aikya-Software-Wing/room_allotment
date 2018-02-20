@@ -23,12 +23,12 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult Allocate()
         {
-            //TeacherToRoom assignExam = new TeacherToRoom();
-            //StudentHelper stud = new StudentHelper();
-            //stud.Index();
-            //assignExam.Index();
-            FirstYearHelper studentRoom = new FirstYearHelper();
-            studentRoom.Allocate();
+           TeacherToRoom assignExam = new TeacherToRoom();
+           StudentHelper stud = new StudentHelper();
+           stud.Index();
+            assignExam.Index();
+           
+            
             return RedirectToAction("Index");
         }
 

@@ -185,10 +185,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\FirstYearHelper.cs" />
     <Compile Include="Helpers\TeacherToRoom.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
     <Compile Include="Helpers\StudentHelper.cs" />
+    <Compile Include="Helpers\temp.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Department.cs">
       <DependentUpon>ExamRoomAllocationDb.tt</DependentUpon>
@@ -241,6 +241,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\ExamDept.cs" />
     <Compile Include="ViewModel\RoomViewModel.cs" />
     <Compile Include="ViewModel\StudentExam.cs" />
     <Compile Include="ViewModel\TeacherEditViewModel.cs" />
@@ -413,7 +414,6 @@
     <Content Include="Views\Room\Index.cshtml" />
     <Content Include="Views\Student\Create.cshtml" />
     <Content Include="Views\Exam\Create.cshtml" />
-    <Content Include="Views\Exam\Delete.cshtml" />
     <Content Include="Views\Exam\Details.cshtml" />
     <Content Include="Views\Exam\Edit.cshtml" />
     <Content Include="Views\Exam\Index.cshtml" />
@@ -426,6 +426,7 @@
     <Content Include="Views\Results\TeacherDetails.cshtml" />
     <Content Include="Views\Results\AllocationDetails.cshtml" />
     <Content Include="Views\Results\EditTeacherDetails.cshtml" />
+    <Content Include="Views\Exam\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -129,7 +129,7 @@ namespace ExamRoomAllocation.Helpers
                         Rooms.RemoveAll(r => r.No == room.No);
                         continue;
                     }
-                    if (exam1 != null)
+                    /*if (exam1 != null)
                     {
                         List<Exam> exams = room.Exams.Where(e => e.Code == exam1.Code && e.SessionId == session.Id).ToList();
                         if (exams.Count() != 0)
@@ -146,7 +146,7 @@ namespace ExamRoomAllocation.Helpers
                             exam = ExamGroup2.Find(e => e.Id != exam.Id);
                            
                         }
-                    }
+                    }*/
                     if (exam != null && exam1 != null && Rooms.Count != 0)
                     {
                         int Group1Count = exam.Students.Count();
@@ -219,7 +219,6 @@ namespace ExamRoomAllocation.Helpers
                             if (Seats == 0)
                             {
                                 room.RoomStatus = 0;
-
                             }
 
                             if (Group1Count == 0 && Group2Count==0 )
@@ -244,12 +243,13 @@ namespace ExamRoomAllocation.Helpers
                     if (exam == null && exam1 != null && Rooms.Count != 0)
                     {
                         int GroupCount = exam1.Students.Count();
+                        Seats = Seats / 2;
                         List<Student> StudentGroup = exam1.Students.ToList();
                         foreach (var Temp1 in Temp)
                         {
-
                             StudentGroup.RemoveAll(s => s.Id == Temp1.Student_Id && Temp1.Session_Id == session.Id);
                         }
+                        
                         GroupCount = StudentGroup.Count();
                         if (GroupCount <= Seats && GroupCount != 0)
                         {
@@ -281,11 +281,11 @@ namespace ExamRoomAllocation.Helpers
                     }
                     if (exam1 == null && exam != null && Rooms.Count != 0)
                     {
+                        Seats = Seats / 2;
                         int GroupCount = exam.Students.Count();
                         List<Student> StudentGroup = exam.Students.ToList();
                         foreach (var Temp1 in Temp)
                         {
-
                             StudentGroup.RemoveAll(s => s.Id == Temp1.Student_Id && Temp1.Session_Id == session.Id);
                         }
                         GroupCount = StudentGroup.Count();

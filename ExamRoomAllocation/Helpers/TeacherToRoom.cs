@@ -126,8 +126,31 @@ namespace ExamRoomAllocation.Helpers
                                     break;
                                 }
                             }
-
                         }
+                            foreach (var Teacher1 in TeacherNotInSamedept)
+                            {
+
+                                if (!(TeacherAssignedInTheSameDate.Contains(Teacher1)))
+                                {
+                                    int Count = Teacher1.Exams.Count();
+                                    if (Count <= 8)
+                                    {
+                                        TeacherRoom Tr1 = new TeacherRoom();
+                                        foreach (var exam in ExaminRoom)
+                                        {
+                                            Teacher1.Exams.Add(exam);
+                                        }
+                                        Tr1.Session_Id = session.Id;
+                                        Tr1.Room_Id = Room.Id;
+                                        Tr1.Teacher_Id = Teacher1.Id;
+                                        Teacher1.TeacherRooms.Add(Tr1);
+                                        db.SaveChanges();
+                                        TeacherAssignedInTheSameDate.Add(Teacher1);
+                                        break;
+                                    }
+                                }
+
+                            }
                         RoomConductingExamInSession.RemoveAll(r => r.No == Room.No);
                     }
                     Sessions.RemoveAll(s => s.Id == session.Id);
