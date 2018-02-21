@@ -8,8 +8,8 @@ namespace ExamRoomAllocation.ViewModel
 {
     public class RoomViewModel
     {
-        public string TeacherName { get; set; }
-        public string TeacherDepartment { get; set; }      
+        public List<Teacher> Teachers { get; set; }
+        //public List<string> TeacherDepartment { get; set; }      
         public Nullable<System.DateTime> Date  { get; set; }
         public Nullable<System.DateTime> SessionTime { get; set; }
         public List<string> ExamCode { get; set; }

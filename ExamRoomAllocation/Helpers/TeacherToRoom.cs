@@ -89,12 +89,12 @@ namespace ExamRoomAllocation.Helpers
                 foreach (var session in Sessions.ToList())
                 {
                     List<RoomStudent> r1 = db.RoomStudents.Where(e => e.Session_Id == session.Id).ToList();
-                    List<Room> RoomConductingExamInSession = new List<Room>();//where it got initialized dynamic list ohk go it but here i want to get list of rooms
-                    foreach (var roomstudent in r1 )                           // in that session conducting exam.. u r free to change it..
+                    List<Room> RoomConductingExamInSession = new List<Room>();
+                    foreach (var roomstudent in r1 )                           
                     {
                         Room temp = new Room();
                         temp.Id = roomstudent.Room_Id;
-                        Room temp1 = RoomConductingExamInSession.Find(r => r.Id == temp.Id);//here there is a search on same list
+                        Room temp1 = RoomConductingExamInSession.Find(r => r.Id == temp.Id);
                         if (temp1 == null)
                         { RoomConductingExamInSession.Add(temp); }
                     }

@@ -76,7 +76,7 @@ namespace ExamRoomAllocation.Controllers
             roomViewModel.Students = studentRaw;
             roomViewModel.Departments = new List<string>(uniqueDepartments);
 
-            var exams = db.Exams.Where(e=>e.SessionId == sessionId).ToList();
+            var exams = db.Exams.Where(e => e.SessionId == sessionId).ToList();
             List<string> examsList = new List<string>();
             foreach (var exam in exams)
             {
@@ -91,19 +91,27 @@ namespace ExamRoomAllocation.Controllers
             roomViewModel.Date = examForDate.Date.Value.Date;
             roomViewModel.SessionTime = examForDate.ExamTime;
 
-            Teacher teacher = new Teacher();
-            TeacherRoom teacherId = db.TeacherRooms.Where(r => r.Room_Id == RoomId && r.Session_Id == sessionId).FirstOrDefault();
+            var teachers = new List<Teacher>();
+            var teacherRoom = db.TeacherRooms.Where(r => r.Room_Id == RoomId && r.Session_Id == sessionId).ToList();
             try
             {
-                teacher = db.Teachers.Find(teacherId.Teacher_Id);
+                foreach (var enitity in teacherRoom)
+                {
+                    var id = enitity.Teacher_Id;
+                    teachers.Add(db.Teachers.Find(id));
+                }
             }
-            catch(NullReferenceException)
+            catch (NullReferenceException)
             {
                 return View("Error");
             }
-            roomViewModel.TeacherName = teacher.Name;
-            roomViewModel.TeacherDepartment = teacher.Department.Name.ToString();
-
+            var uniqueTeachers = new HashSet<Teacher>(teachers);
+            var temp = new List<Teacher>();
+            foreach(var teacher in uniqueTeachers)
+            {
+                temp.Add(teacher);
+            }
+            roomViewModel.Teachers = temp;
             return View(roomViewModel);
         }
 

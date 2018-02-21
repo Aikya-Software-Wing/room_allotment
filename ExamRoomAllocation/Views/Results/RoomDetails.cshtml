@@ -18,41 +18,44 @@
     var date = Model.Date.Value.ToShortDateString();
     @: @date    @time
     <br />
-    var teacher = Model.TeacherName;
-    var teacherDepartment = Model.TeacherDepartment;
-    @: Invigilator - @teacher (@teacherDepartment)
+    var teachers = Model.Teachers;
+    foreach (var teacher in Model.Teachers)
+    {
+        @: Invigilator - @(teacher.Name.ToString()) (@teacher.Department.Name.ToString())
+        <br />
+    }
 }
 
 <table class="table">
     <tr>
         @foreach (var department in departments)
         {
-        <th>
-            @if(Model.ExamCode.Count == 1)
-            {
-                @Html.DisplayFor(model => model.ExamCode[0])
-            }
-            @if (counter == 0 && Model.ExamCode.Count > 1)
-            {
-                @Html.DisplayFor(model => model.ExamCode[0])
-            }
-            @if (counter == 1 && Model.ExamCode.Count > 1)
-            {
-                @Html.DisplayFor(model => model.ExamCode[1])
-            }
-            <br />
-            @Html.DisplayFor(modelIteml => department)
-            <br />
-            @{ 
-                var index = departments[counter];
-                var studentsList = students.Where(d => d.Department.Name == index).ToList();
-            }
-            @foreach (var student in studentsList)
-            {
-                @Html.DisplayFor(s => student.Id)
+            <th>
+                @if (Model.ExamCode.Count == 1)
+                {
+                    @Html.DisplayFor(model => model.ExamCode[0])
+                }
+                @if (counter == 0 && Model.ExamCode.Count > 1)
+                {
+                    @Html.DisplayFor(model => model.ExamCode[0])
+                }
+                @if (counter == 1 && Model.ExamCode.Count > 1)
+                {
+                    @Html.DisplayFor(model => model.ExamCode[1])
+                }
                 <br />
-            }
-        </th>
+                @Html.DisplayFor(modelIteml => department)
+                <br />
+                @{
+                    var index = departments[counter];
+                    var studentsList = students.Where(d => d.Department.Name == index).ToList();
+                }
+                @foreach (var student in studentsList)
+                {
+                    @Html.DisplayFor(s => student.Id)
+                    <br />
+                }
+            </th>
             counter++;
         }
     </tr>
