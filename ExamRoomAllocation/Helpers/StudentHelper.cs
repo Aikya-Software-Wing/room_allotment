@@ -151,8 +151,8 @@ namespace ExamRoomAllocation.Helpers
                     {
                         int Group1Count = exam.Students.Count();
                         int Group2Count = exam1.Students.Count();
-                        List<Student> StudentGroup1 = exam.Students.ToList();
-                        List<Student> StudentGroup2 = exam1.Students.ToList();
+                        List<Student> StudentGroup1 = exam.Students.OrderBy(d => d.DepartmentId).ToList();
+                        List<Student> StudentGroup2 = exam1.Students.OrderBy(d => d.DepartmentId).ToList();
                         foreach (var Temp1 in Temp)
                         {
                             

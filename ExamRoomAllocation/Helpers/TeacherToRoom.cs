@@ -127,9 +127,11 @@ namespace ExamRoomAllocation.Helpers
                                 }
                             }
                         }
+                        int studentsInRoom = db.RoomStudents.Where(r => r.Session_Id == session.Id && r.Room_Id == Room.Id).Count();
+                        if (studentsInRoom > 50)
+                        {
                             foreach (var Teacher1 in TeacherNotInSamedept)
                             {
-
                                 if (!(TeacherAssignedInTheSameDate.Contains(Teacher1)))
                                 {
                                     int Count = Teacher1.Exams.Count();
@@ -149,8 +151,8 @@ namespace ExamRoomAllocation.Helpers
                                         break;
                                     }
                                 }
-
                             }
+                        }
                         RoomConductingExamInSession.RemoveAll(r => r.No == Room.No);
                     }
                     Sessions.RemoveAll(s => s.Id == session.Id);
