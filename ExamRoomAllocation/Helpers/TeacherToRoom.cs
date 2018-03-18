@@ -57,12 +57,18 @@ namespace ExamRoomAllocation.Helpers
         {
             try
             {
-                List<Teacher> temp = db.Teachers.Where(t=>t.TeacherPriority > 0).ToList();                
+                List<Teacher> temp = db.Teachers.Where(t=>t.TeacherPriority > 0).ToList();
+                List<Teacher> temp1 = db.Teachers.Where(t => t.TeacherPriority > 0).ToList();
                 foreach (var exam in Examsinroom)
                 {
-                    temp.RemoveAll(t => t.Department_Id == exam.Id);
+                    temp.RemoveAll(t => t.Department_Id == exam.DepartmentId);
                 }
-                return temp;
+                if (temp.Count()!=0)
+                {
+                    return temp;
+                }
+                else
+                    return temp1;
             }
             catch (NullReferenceException)
             {
@@ -106,49 +112,54 @@ namespace ExamRoomAllocation.Helpers
                         TeacherNotInSamedept.OrderByDescending(e => e.TeacherPriority).OrderByDescending(e => e.Experience);
                         foreach (var Teacher in TeacherNotInSamedept)
                         {
-
-                            if (!(TeacherAssignedInTheSameDate.Contains(Teacher)))
+                            if (Teacher.TeacherPriority != -1)
                             {
-                                int Count = Teacher.Exams.Count();
-                                if (Count <= 8)
+                                if (!(TeacherAssignedInTheSameDate.Contains(Teacher)))
                                 {
-                                    TeacherRoom Tr1 = new TeacherRoom();
-                                    foreach (var exam in ExaminRoom)
-                                    {
-                                        Teacher.Exams.Add(exam);
-                                    }
-                                    Tr1.Session_Id = session.Id;
-                                    Tr1.Room_Id = Room.Id;
-                                    Tr1.Teacher_Id = Teacher.Id;
-                                    Teacher.TeacherRooms.Add(Tr1);
-                                    db.SaveChanges();
-                                    TeacherAssignedInTheSameDate.Add(Teacher);
-                                    break;
-                                }
-                            }
-                        }
-                        int studentsInRoom = db.RoomStudents.Where(r => r.Session_Id == session.Id && r.Room_Id == Room.Id).Count();
-                        if (studentsInRoom > 50)
-                        {
-                            foreach (var Teacher1 in TeacherNotInSamedept)
-                            {
-                                if (!(TeacherAssignedInTheSameDate.Contains(Teacher1)))
-                                {
-                                    int Count = Teacher1.Exams.Count();
+                                    int Count = Teacher.Exams.Count();
                                     if (Count <= 8)
                                     {
                                         TeacherRoom Tr1 = new TeacherRoom();
                                         foreach (var exam in ExaminRoom)
                                         {
-                                            Teacher1.Exams.Add(exam);
+                                            Teacher.Exams.Add(exam);
                                         }
                                         Tr1.Session_Id = session.Id;
                                         Tr1.Room_Id = Room.Id;
-                                        Tr1.Teacher_Id = Teacher1.Id;
-                                        Teacher1.TeacherRooms.Add(Tr1);
+                                        Tr1.Teacher_Id = Teacher.Id;
+                                        Teacher.TeacherRooms.Add(Tr1);
                                         db.SaveChanges();
-                                        TeacherAssignedInTheSameDate.Add(Teacher1);
+                                        TeacherAssignedInTheSameDate.Add(Teacher);
                                         break;
+                                    }
+                                }
+                            }
+                        }
+                        int studentsInRoom = db.RoomStudents.Where(r => r.Session_Id == session.Id && r.Room_Id == Room.Id).Count();
+                        if (studentsInRoom > 32)
+                        {
+                            foreach (var Teacher1 in TeacherNotInSamedept)
+                            {
+                                if (Teacher1.TeacherPriority != -1)
+                                {
+                                    if (!(TeacherAssignedInTheSameDate.Contains(Teacher1)))
+                                    {
+                                        int Count = Teacher1.Exams.Count();
+                                        if (Count <= 8)
+                                        {
+                                            TeacherRoom Tr1 = new TeacherRoom();
+                                            foreach (var exam in ExaminRoom)
+                                            {
+                                                Teacher1.Exams.Add(exam);
+                                            }
+                                            Tr1.Session_Id = session.Id;
+                                            Tr1.Room_Id = Room.Id;
+                                            Tr1.Teacher_Id = Teacher1.Id;
+                                            Teacher1.TeacherRooms.Add(Tr1);
+                                            db.SaveChanges();
+                                            TeacherAssignedInTheSameDate.Add(Teacher1);
+                                            break;
+                                        }
                                     }
                                 }
                             }
