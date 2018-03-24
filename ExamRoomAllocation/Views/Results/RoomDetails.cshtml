@@ -1,0 +1,65 @@
+﻿@model ExamRoomAllocation.ViewModel.RoomViewModel
+
+<br />
+<br />
+<p>
+    @Html.ActionLink("Back To List", "RoomSession", new { id = Model.RoomId })
+</p>
+
+@{
+    int counter = 0;
+    var departments = Model.Departments.ToList();
+    var students = Model.Students.ToList();
+    var roomId = Model.RoomNumber;
+    var block = Model.BlockName;
+    @: @block block - @roomId
+    <br />
+    var time = Model.SessionTime.Value.ToShortTimeString();
+    var date = Model.Date.Value.ToShortDateString();
+    @: @date    @time
+    <br />
+    var teachers = Model.Teachers;
+    foreach (var teacher in Model.Teachers)
+    {
+        @: Invigilator - @(teacher.Name.ToString()) (@teacher.Department.Name.ToString())
+        <br />
+    }
+}
+
+<table class="table">
+    <tr>
+        @foreach (var department in departments)
+        {
+            <th>
+                @if (Model.ExamCode.Count == 1)
+                {
+                    @Html.DisplayFor(model => model.ExamCode[0])
+                }
+                @if (counter == 0 && Model.ExamCode.Count > 1)
+                {
+                    @Html.DisplayFor(model => model.ExamCode[0])
+                }
+                @if (counter == 1 && Model.ExamCode.Count > 1)
+                {
+                    @Html.DisplayFor(model => model.ExamCode[1])
+                }
+                <br />
+                @Html.DisplayFor(modelIteml => department)
+                <br />
+                @{
+                    var index = departments[counter];
+                    var studentsList = students.Where(d => d.Department.Name == index).ToList();
+                }
+                @foreach (var student in studentsList)
+                {
+                    @Html.DisplayFor(s => student.Id)
+                    <br />
+                }
+            </th>
+            counter++;
+        }
+    </tr>
+</table>
+<p>
+    @Html.ActionLink("Back To List", "RoomSession", new { id = Model.RoomId })
+</p>

@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
-using System.Net;
-using System.Data.Entity;
 
 namespace ExamRoomAllocation.Controllers
 {
     public class DepartmentController : Controller
     {
-        private ExamRoomAllocationEntities db  = new ExamRoomAllocationEntities();
-        
+        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+
         // GET: Department
         public ActionResult Index()
         {
-            return View(db.Departments.ToList());
+            var departments = db.Departments.Include(d => d.Stream);
+            return View(departments.ToList());
         }
 
         // GET: Department/Details/5
         public ActionResult Details(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Department department = db.Departments.Find(id);
-            if(department == null)
+            if (department == null)
             {
                 return HttpNotFound();
             }
@@ -38,76 +39,77 @@ namespace ExamRoomAllocation.Controllers
         // GET: Department/Create
         public ActionResult Create()
         {
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name");
             return View();
         }
 
         // POST: Department/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include ="id,Name")]Department department)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,Name,StreamId")] Department department)
         {
             try
             {
-                // TODO: Add insert logic here
-                if(ModelState.IsValid)
-                {
-                    db.Departments.Add(department);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }                
+                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Department").FirstOrDefault<int>();
+                department.Id = id + 1;
             }
-            catch(DataException)
+            catch (InvalidOperationException)
+
             {
-                ModelState.AddModelError("", "Unable to create , contact sys admin");
+                department.Id = 1;
             }
+            if (ModelState.IsValid)
+            {
+                db.Departments.Add(department);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name", department.StreamId);
             return View(department);
         }
 
         // GET: Department/Edit/5
         public ActionResult Edit(int? id)
         {
-            if(id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Department department = db.Departments.Find(id);
-            if(department == null)
-            {
-                return HttpNotFound();
-            }
-            return View(department);
-        }
-
-        // POST: Department/Edit/5
-        [HttpPost]
-        public ActionResult Edit([Bind(Include ="id, Name")] Department department)
-        {
-            try
-            {
-                // TODO: Add update logic here
-                if(ModelState.IsValid)
-                {
-                    db.Entry(department).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-                return RedirectToAction("Index");
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("","Updation Failed, contact admin");
-            }
-            return View(department);
-        }
-
-        // GET: Department/Delete/5
-        public ActionResult Delete(int? id, bool? SaveChangesError = false)
-        {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (SaveChangesError.GetValueOrDefault())
+            Department department = db.Departments.Find(id);
+            if (department == null)
             {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
+                return HttpNotFound();
+            }
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name", department.StreamId);
+            return View(department);
+        }
+
+        // POST: Department/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,Name,StreamId")] Department department)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(department).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.StreamId = new SelectList(db.Streams, "Id", "Name", department.StreamId);
+            return View(department);
+        }
+
+        // GET: Department/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Department department = db.Departments.Find(id);
             if (department == null)
@@ -118,22 +120,16 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Department/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Department department = db.Departments.Find(id);
-                db.Departments.Remove(department);
-                db.SaveChanges();
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
-            }
+            Department department = db.Departments.Find(id);
+            db.Departments.Remove(department);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

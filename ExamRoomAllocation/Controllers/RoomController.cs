@@ -1,5 +1,4 @@
-﻿using ExamRoomAllocation.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,16 +6,20 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExamRoomAllocation.Models;
+using ExamRoomAllocation.Helpers;
 
 namespace ExamRoomAllocation.Controllers
 {
     public class RoomController : Controller
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+
         // GET: Room
         public ActionResult Index()
         {
-            return View(db.Rooms.ToList());
+            var rooms = db.Rooms.Include(r => r.Department);
+            return View(rooms.ToList());
         }
 
         // GET: Room/Details/5
@@ -33,31 +36,39 @@ namespace ExamRoomAllocation.Controllers
             }
             return View(room);
         }
-     
+
         // GET: Room/Create
         public ActionResult Create()
         {
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name");
             return View();
         }
 
         // POST: Room/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include ="id,No,Block,Department,Capacity")]Room room)
-        {
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "No,Block,Capacity,Department_Id,RoomStatus")] Room room)
+        {          
             try
             {
-                // TODO: Add insert logic here
-                if(ModelState.IsValid)
-                {
-                    db.Rooms.Add(room);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Room").FirstOrDefault<int>();
+                room.Id = id + 1;
             }
-            catch(DataException)
+            catch (InvalidOperationException)
             {
-                ModelState.AddModelError("","Creation not possible, contact admin");
+                room.Id = 1;
             }
+            if (ModelState.IsValid)
+            {
+                room.RoomStatus = 1;
+                db.Rooms.Add(room);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", room.Department_Id);
             return View(room);
         }
 
@@ -69,44 +80,37 @@ namespace ExamRoomAllocation.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Room room = db.Rooms.Find(id);
-            if (id == null)
+            if (room == null)
             {
                 return HttpNotFound();
             }
-            return View(id);
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", room.Department_Id);
+            return View(room);
         }
 
         // POST: Room/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "No,Block,Department,Capacity")]Room room)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "No,Block,Capacity,Department_Id,RoomStatus")] Room room)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(room).State = EntityState.Modified;
-            }
-            try
-            {
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch (DataException)
-            {
-                ModelState.AddModelError("", "unable to update, contact admin");
-            }
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", room.Department_Id);
             return View(room);
         }
 
         // GET: Room/Delete/5
-        [HttpGet]
-        public ActionResult Delete(int? id, bool? SaveChangesError = false)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (SaveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
             }
             Room room = db.Rooms.Find(id);
             if (room == null)
@@ -117,20 +121,20 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Room/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Room room = db.Rooms.Find(id);
-                db.Rooms.Remove(room);
-                db.SaveChanges();
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
-            }
+            Room room = db.Rooms.Find(id);
+            db.Rooms.Remove(room);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        // room/Assign
+        public ActionResult Assign()
+        {
+            StudentHelper Stud = new StudentHelper();
+            Stud.Index();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

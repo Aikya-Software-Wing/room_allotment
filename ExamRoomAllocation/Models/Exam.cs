@@ -18,24 +18,25 @@ namespace ExamRoomAllocation.Models
         public Exam()
         {
             this.Rooms = new HashSet<Room>();
-            this.Teachers = new HashSet<Teacher>();
             this.Students = new HashSet<Student>();
+            this.Teachers = new HashSet<Teacher>();
         }
     
         public string Code { get; set; }
         public Nullable<System.DateTime> ExamTime { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> Id { get; set; }
+        public Nullable<int> DepartmentId { get; set; }
         public int SessionId { get; set; }
+        public int Id { get; set; }
     
         public virtual Department Department { get; set; }
         public virtual Session Session { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Room> Rooms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Teacher> Teachers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Teacher> Teachers { get; set; }
     }
 }

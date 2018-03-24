@@ -1,0 +1,63 @@
+﻿@model ExamRoomAllocation.ViewModel.TeacherViewModel
+<br />
+<br />
+
+<p>
+    @Html.ActionLink("Back to List", "TeacherIndex", new { id = Model.TeacherId})
+</p>
+
+@{
+    var teacherName = Model.TeacherName;
+    <h4>@teacherName</h4>
+}
+
+@functions{
+    public string SessionTime(string session)
+    {
+        string time;
+        if (session.EndsWith("1"))
+        {
+            time = "9:00 AM";
+        }
+        else
+        {
+            time = "2:00 PM";
+        }
+        Html.Display(time);
+        return time;
+    }
+
+    public string Date(string session)
+    {
+        Html.Display(session);
+        return session;
+    }
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SessionList)
+        </th>
+    </tr>
+
+    @foreach (var session in Model.SessionList.ToList())
+    {
+    <tr>
+        <td>
+            @Date(session.Substring(0,5))
+        </td>
+        <td>
+            @SessionTime(session)
+        </td>
+    </tr>
+    }
+
+</table>
+
+<p>
+    @Html.ActionLink("Back to List", "TeacherIndex", new { id = Model.TeacherId })
+</p>

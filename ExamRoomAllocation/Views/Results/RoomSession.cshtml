@@ -1,0 +1,19 @@
+﻿@model IEnumerable<ExamRoomAllocation.Models.Session>
+
+<div>
+    <h4>Select A Session</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            @foreach (var item in Model)
+            {
+                @Html.ActionLink(item.Name, "RoomDetails", "Results", new { sessionId = item.Id }, null)       
+                <br />
+            }
+        </dd>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Back to List","RoomsIndex","Results")
+</p>

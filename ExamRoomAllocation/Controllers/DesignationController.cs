@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
-using System.Data;
-using System.Net;
-using System.Data.Entity;
 
 namespace ExamRoomAllocation.Controllers
 {
     public class DesignationController : Controller
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
+
         // GET: Designation
         public ActionResult Index()
         {
@@ -22,12 +23,12 @@ namespace ExamRoomAllocation.Controllers
         // GET: Designation/Details/5
         public ActionResult Details(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);                
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Designation designation = db.Designations.Find(id);
-            if(designation == null)
+            if (designation == null)
             {
                 return HttpNotFound();
             }
@@ -41,23 +42,29 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Designation/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include = "id, Name")] Designation designation)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,Name")] Designation designation)
         {
             try
             {
-                // TODO: Add insert logic here
-                if(ModelState.IsValid)
-                {
-                    db.Designations.Add(designation);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Designation").FirstOrDefault<int>();
+                designation.Id = id + 1;
             }
-            catch(DataException)
+            catch (InvalidOperationException)
+
             {
-                ModelState.AddModelError("", "Unable to Create, contact sys admin");
+                designation.Id = 1;
             }
+            if (ModelState.IsValid)
+            {
+                db.Designations.Add(designation);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
             return View(designation);
         }
 
@@ -77,36 +84,27 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Designation/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "id, Name")] Designation designation)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,Name")] Designation designation)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-                if(ModelState.IsValid)
-                {
-                    db.Entry(designation).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
+                db.Entry(designation).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
-            }
-            catch(DataException)
-            {
-                ModelState.AddModelError("", "Updation Failed, contact admin");
             }
             return View(designation);
         }
 
         // GET: Designation/Delete/5
-        public ActionResult Delete(int? id, bool? SaveChangesError = false)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (SaveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
             }
             Designation designation = db.Designations.Find(id);
             if (designation == null)
@@ -117,22 +115,16 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Designation/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Designation designation = db.Designations.Find(id);
-                db.Designations.Remove(designation);
-                db.SaveChanges();
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
-            }
+            Designation designation = db.Designations.Find(id);
+            db.Designations.Remove(designation);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

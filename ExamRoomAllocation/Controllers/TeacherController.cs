@@ -1,5 +1,4 @@
-﻿using ExamRoomAllocation.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExamRoomAllocation.Helpers;
+using ExamRoomAllocation.Models;
 
 namespace ExamRoomAllocation.Controllers
 {
@@ -17,18 +18,19 @@ namespace ExamRoomAllocation.Controllers
         // GET: Teacher
         public ActionResult Index()
         {
-            return View(db.Teachers.ToList());
+            var teachers = db.Teachers.Include(t => t.Department).Include(t => t.Designation);
+            return View(teachers.ToList());
         }
 
         // GET: Teacher/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Teacher teacher = db.Teachers.Find(id);
-            if(teacher == null)
+            if (teacher == null)
             {
                 return HttpNotFound();
             }
@@ -38,76 +40,71 @@ namespace ExamRoomAllocation.Controllers
         // GET: Teacher/Create
         public ActionResult Create()
         {
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name");
+            ViewBag.Designation_Id = new SelectList(db.Designations, "Id", "Name");
             return View();
         }
 
         // POST: Teacher/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create([Bind(Include ="Name, Experience, Department_Id, Designation_Id")]Teacher teacher)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,Name,Experience,Designation_Id,TeacherPriority,Department_Id")] Teacher teacher)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                if(ModelState.IsValid)
-                {
-                    db.Teachers.Add(teacher);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+                db.Teachers.Add(teacher);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            catch(DataException)
-            {
-                ModelState.AddModelError("", "Creation not possible, contact admin");
-            }
+
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", teacher.Department_Id);
+            ViewBag.Designation_Id = new SelectList(db.Designations, "Id", "Name", teacher.Designation_Id);
             return View(teacher);
         }
 
         // GET: Teacher/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if(id==null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Teacher teacher = db.Teachers.Find(id);
-            if(teacher == null)
-            {
-                return HttpNotFound();
-            }
-            return View(teacher);
-        }
-
-        // POST: Teacher/Edit/5
-        [HttpPost]
-        public ActionResult Edit([Bind(Include = "Name,Experience,Designation_Id,Department_Id")]Teacher teacher)
-        {
-            try
-            {
-                // TODO: Add update logic here
-                if(ModelState.IsValid)
-                {
-                    db.Entry(teacher).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                ModelState.AddModelError("", "unable to update, contact admin");
-            }
-            return View(teacher);
-        }
-
-        // GET: Teacher/Delete/5
-        public ActionResult Delete(int? id, bool? SaveChangesError = false)
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if(SaveChangesError.GetValueOrDefault())
+            Teacher teacher = db.Teachers.Find(id);
+            if (teacher == null)
             {
-                ViewBag.ErrorMessage = "Delete Failed, try again or call admin.";
+                return HttpNotFound();
+            }
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", teacher.Department_Id);
+            ViewBag.Designation_Id = new SelectList(db.Designations, "Id", "Name", teacher.Designation_Id);
+            return View(teacher);
+        }
+
+        // POST: Teacher/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,Name,Experience,Designation_Id,TeacherPriority,Department_Id")] Teacher teacher)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(teacher).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.Department_Id = new SelectList(db.Departments, "Id", "Name", teacher.Department_Id);
+            ViewBag.Designation_Id = new SelectList(db.Designations, "Id", "Name", teacher.Designation_Id);
+            return View(teacher);
+        }
+
+        // GET: Teacher/Delete/5
+        public ActionResult Delete(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Teacher teacher = db.Teachers.Find(id);
             if (teacher == null)
@@ -118,26 +115,26 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // POST: Teacher/Delete/5
-        [HttpPost]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(string id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                Teacher teacher = db.Teachers.Find(id);
-                db.Teachers.Remove(teacher);
-                db.SaveChanges();
-                
-            }
-            catch
-            {
-                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
-            }
+            Teacher teacher = db.Teachers.Find(id);
+            db.Teachers.Remove(teacher);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // teacher/Allocate
+        public ActionResult Allocate()
+        {
+            TeacherToRoom assignexam = new TeacherToRoom();
+            assignexam.Index();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)
         {
-            if(disposing)
+            if (disposing)
             {
                 db.Dispose();
             }

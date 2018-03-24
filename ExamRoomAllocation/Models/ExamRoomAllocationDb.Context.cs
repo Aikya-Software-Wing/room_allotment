@@ -29,9 +29,11 @@ namespace ExamRoomAllocation.Models
         public virtual DbSet<Designation> Designations { get; set; }
         public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
+        public virtual DbSet<RoomStudent> RoomStudents { get; set; }
         public virtual DbSet<Session> Sessions { get; set; }
         public virtual DbSet<Stream> Streams { get; set; }
-        public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<Teacher> Teachers { get; set; }
+        public virtual DbSet<TeacherRoom> TeacherRooms { get; set; }
     }
 }

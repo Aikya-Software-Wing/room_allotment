@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ExamRoomAllocation.Models.Room>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.No)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Block)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Capacity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Department.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.No)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Block)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Capacity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Department.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "RoomSession", new { id=item.Id }) 
+        </td>
+    </tr>
+}
+
+</table>
