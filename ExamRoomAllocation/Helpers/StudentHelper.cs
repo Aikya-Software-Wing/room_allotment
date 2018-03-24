@@ -1,7 +1,6 @@
 ﻿using ExamRoomAllocation.Models;
 using System.Linq;
 using System.Collections.Generic;
-using System;
 
 namespace ExamRoomAllocation.Helpers
 {
@@ -9,20 +8,22 @@ namespace ExamRoomAllocation.Helpers
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
+        /// <summary>
+        /// This method find the best room that the exam can be held in.
+        /// The algorithm will look for the room that can fit the maximum number of students
+        /// </summary>
+        /// <param name="exam">The exam for which a room should be found</param>
+        /// <returns>The allotment that fits best</returns>
         private Allotment FindBestFitForExam(Exam exam)
         {
-            int temp = db.RoomStudents.Where(x => x.exam_id == exam.Id && x.Session_Id == exam.SessionId).Count();
-            // int temp = db.Students.Where(x => x.RoomStudents.Where(y => y.Room.Exams.Where(z => z.Id == exam.Id && z.SessionId == exam.SessionId).Count() != 0).Count() != 0).Count();
-            int studentsWritingExam = exam.Students.Count - temp;
+            int studentsWritingExam = exam.Students.Count - db.RoomStudents.Where(x => x.exam_id == exam.Id && x.Session_Id == exam.SessionId).Count();
             List<Allotment> allotments = new List<Allotment>();
-            System.Diagnostics.Debug.WriteLine("exam id = " + exam.Id + " students writing = " + studentsWritingExam + " temp = " + temp);
 
             foreach (var room in db.Rooms.ToList())
             {
                 int numberOfExamsInRoom = room.Exams.Where(x => x.SessionId == exam.SessionId).Count();
                 int studentsInRoom = db.RoomStudents.Where(x => x.Room_Id == room.Id && x.Session_Id == exam.SessionId).Count();
                 int roomCapacity = (numberOfExamsInRoom == 0) ? (room.Capacity.Value / 2) : (room.Capacity.Value - studentsInRoom);
-                System.Diagnostics.Debug.WriteLine("room id = " + room.Id + " room capacity = " + roomCapacity + " students in room = " + studentsInRoom);
 
                 if (roomCapacity > 0)
                 {
@@ -40,11 +41,13 @@ namespace ExamRoomAllocation.Helpers
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("----------");
-
             return allotments.OrderByDescending(x => x.NumberOfStudents).ThenByDescending(x => x.ExamIndexInRoom).First();
         }
 
+        /// <summary>
+        /// This method will update the database table "RoomStudents"
+        /// </summary>
+        /// <param name="allotment">The allotment that has to be added</param>
         private void AllotStudentsToRoom(Allotment allotment)
         {
             List<Student> students = db.Students.Where(x => x.Exams.Where(y => y.Id == allotment.ExamId).Count() != 0 && x.RoomStudents.Where(y => y.exam_id == allotment.ExamId).Count() == 0).Take(allotment.NumberOfStudents).ToList();
@@ -62,12 +65,21 @@ namespace ExamRoomAllocation.Helpers
             db.SaveChanges();
         }
 
+        /// <summary>
+        /// This method will update the table RoomExams
+        /// </summary>
+        /// <param name="room">The room that needs to be updated</param>
+        /// <param name="exam">The exam that is held in the room</param>
         private void AllotExamToRoom(Room room, Exam exam)
         {
             db.Rooms.Where(x => x.Id == room.Id).First().Exams.Add(exam);
             db.SaveChanges();
         }
 
+        /// <summary>
+        /// This method will find the best fit rooms for all the exams in a session
+        /// </summary>
+        /// <param name="session">The session for which rooms have to be alloted</param>
         private void AllotStudentsForSession(Session session)
         {
             int studentsToAllot = session.Exams.Sum(x => x.Students.Count());
@@ -84,22 +96,16 @@ namespace ExamRoomAllocation.Helpers
             } while (studentsToAllot > 0);
         }
 
-        public void AllotStduentsToRooms()
+        /// <summary>
+        /// This method is the starting point of the algorithm
+        /// </summary>
+        public void AllotStudentsToRooms()
         {
             foreach (var session in db.Sessions.ToList())
             {
                 AllotStudentsForSession(session);
             }
         }
-    }
-
-    class RoomModelWithAlgorithmParameters
-    {
-        public int Id { get; set; }
-
-        public int Capacity { get; set; }
-
-        public int NumberOfDepartments { get; set; }
     }
 
     class Allotment

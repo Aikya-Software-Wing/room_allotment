@@ -25,7 +25,7 @@ namespace ExamRoomAllocation.Controllers
         {
            TeacherToRoom assignExam = new TeacherToRoom();
            StudentHelper stud = new StudentHelper();
-           stud.AllotStduentsToRooms();
+           stud.AllotStudentsToRooms();
             assignExam.Index();
            
             

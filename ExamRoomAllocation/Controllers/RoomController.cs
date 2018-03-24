@@ -134,7 +134,7 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult Assign()
         {
             StudentHelper Stud = new StudentHelper();
-            Stud.AllotStduentsToRooms();
+            Stud.AllotStudentsToRooms();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)
