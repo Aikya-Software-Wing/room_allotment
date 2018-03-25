@@ -2,9 +2,6 @@
 using ExamRoomAllocation.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using ExamRoomAllocation.Controllers;
 
 namespace ExamRoomAllocation.Helpers
 {
@@ -16,7 +13,7 @@ namespace ExamRoomAllocation.Helpers
         {
             try
             {
-                string Temp = SessionHelper.TimeHelpher(CurrentDate);
+                string Temp = SessionHelper.TimeHelper(CurrentDate);
 
                 return db.Sessions.Where(s => s.Name.Remove(s.Name.Length - 1) == Temp).ToList();
             }

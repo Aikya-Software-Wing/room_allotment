@@ -53,7 +53,7 @@ namespace ExamRoomAllocation.Controllers
         {          
             try
             {
-                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Room").FirstOrDefault<int>();
+                int id = db.Rooms.Max(x => x.Id);
                 room.Id = id + 1;
             }
             catch (InvalidOperationException)

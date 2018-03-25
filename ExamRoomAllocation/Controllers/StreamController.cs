@@ -50,7 +50,7 @@ namespace ExamRoomAllocation.Controllers
         {
             try
             {
-                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Department").FirstOrDefault<int>();
+                int id = db.Streams.Max(x => x.Id);
                 stream.Id = id + 1;
             }
             catch (InvalidOperationException)

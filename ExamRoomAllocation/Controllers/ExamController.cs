@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Helpers;
 using ExamRoomAllocation.Models;
@@ -53,33 +50,25 @@ namespace ExamRoomAllocation.Controllers
         {
             if (ModelState.IsValid)
             {
-                Session session = new Session();
                 string sessionNew = SessionHelper.CreateSession(exam);
-                using (var ctx = new ExamRoomAllocationEntities())
+                var session = db.Sessions.Where(s => s.Name == sessionNew).FirstOrDefault<Session>();
+                if (session == null)
                 {
-                    var sessionInDb = ctx.Sessions
-                                    .Where(s => s.Name == sessionNew)
-                                    .FirstOrDefault<Session>();
-                    if (sessionInDb == null)
-                    {
-                        var createSession = new SessionController();
-                        createSession.Create(sessionNew);
-                        var newSessionInDb = db.Sessions.Where(s => s.Name == sessionNew).FirstOrDefault<Session>();
-                        exam.SessionId = newSessionInDb.Id;
-                    }
-                    else
-                    {
-                        exam.SessionId = sessionInDb.Id;
-
-                    }
-
-                    db.Exams.Add(exam);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    var createSession = new SessionHelper();
+                    createSession.AddSession(sessionNew);
+                    var newSession = db.Sessions.Where(s => s.Name == sessionNew).FirstOrDefault<Session>();
+                    exam.SessionId = newSession.Id;
                 }
+                else
+                {
+                    exam.SessionId = session.Id;
+
+                }
+                db.Exams.Add(exam);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             ViewBag.Id = new SelectList(db.Departments, "Id", "Name", exam.Id);
-
             return View(exam);
         }
         // GET: Exam/Edit/5

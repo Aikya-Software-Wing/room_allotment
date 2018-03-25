@@ -70,7 +70,7 @@ namespace ExamRoomAllocation.Helpers
             return s.ToString();
         }
 
-        public static string TimeHelpher(DateTime? CurrentDate)
+        public static string TimeHelper(DateTime? CurrentDate)
         {
             StringBuilder s = new StringBuilder();
             int  examDay, examMonth;
@@ -118,7 +118,26 @@ namespace ExamRoomAllocation.Helpers
             }
             return s.ToString();
         }
+
+        public Session AddSession(string Name)
+        {
+            Session session = new Session();
+            try
+            {
+                int id = db.Sessions.Max(x => x.Id);
+                session.Id = id + 1;
+            }
+            catch (InvalidOperationException)
+            {
+                session.Id = 0;
+            }
+            session.Name = Name;
+            db.Sessions.Add(session);
+            db.SaveChanges();
+            return session;
+        }
+
     }
 
-   
+
 }

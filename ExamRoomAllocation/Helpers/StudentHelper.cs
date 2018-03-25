@@ -11,6 +11,12 @@ namespace ExamRoomAllocation.Helpers
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
+        public Student GetStudent(string id)
+        {
+            var studentInDb = db.Students.AsNoTracking().Where(s => s.Id == id);
+            return studentInDb.First();
+        }
+
         private List<Session> ListOfSessions()
         {
             try
