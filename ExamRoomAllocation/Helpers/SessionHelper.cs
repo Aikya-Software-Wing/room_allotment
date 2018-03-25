@@ -2,123 +2,60 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Web.Mvc;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 
 namespace ExamRoomAllocation.Helpers
 {
     public class SessionHelper
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
-        private Session session = new Session();
 
+        /// <summary>
+        /// This method returns the session name
+        /// </summary>
+        /// <param name="exam"></param>
+        /// <returns> the session name string . ex : 15Mar1 (1st session on 15th mar) </returns>
         public static string CreateSession(Exam exam)
         {
-            StringBuilder s = new StringBuilder();
-            int examHour, examDay, examMonth;
-
-            examHour = exam.ExamTime.Value.Hour;
-            examDay = exam.Date.Value.Day;
-            examMonth = exam.Date.Value.Month;
-
-            s.Append(examDay.ToString());
-            switch (examMonth)
-            {
-                case 1: s.Append("JAN");
-                    break;
-                case 2:
-                    s.Append("FEB");
-                    break;
-                case 3:
-                    s.Append("MAR");
-                    break;
-                case 4:
-                    s.Append("APR");
-                    break;
-                case 5:
-                    s.Append("MAY");
-                    break;
-                case 6:
-                    s.Append("JUN");
-                    break;
-                case 7:
-                    s.Append("JUL");
-                    break;
-                case 8:
-                    s.Append("AUG");
-                    break;
-                case 9:
-                    s.Append("SEP");
-                    break;
-                case 10:
-                    s.Append("OCT");
-                    break;
-                case 11:
-                    s.Append("NOV");
-                    break;
-                case 12:
-                    s.Append("DEC");
-                    break;
-            }
+            var examInDateTime = new DateTime(exam.Date.Value.Year, exam.Date.Value.Month, exam.Date.Value.Day);
+            var examString = examInDateTime.ToString("ddMMM");
+            int examHour = exam.ExamTime.Value.Hour;
+            var examStringBuilder = new StringBuilder();
+            examStringBuilder.Append(examString);
 
             if (examHour < 12)
             {
-                s.Append("1");
+                examStringBuilder.Append("1");
             }
             else
             {
-                s.Append("2");
+                examStringBuilder.Append("2");
             }
-            return s.ToString();
+            return examStringBuilder.ToString();
         }
 
+        /// <summary>
+        /// This method returns the session name
+        /// </summary>
+        /// <param name="Date on which the exam is held"></param>
+        /// <returns> the session name string . ex : 15Mar </returns>
         public static string TimeHelper(DateTime? CurrentDate)
         {
             StringBuilder s = new StringBuilder();
-            int  examDay, examMonth;
-            examDay = CurrentDate.Value.Day;
-            examMonth = CurrentDate.Value.Month;
-            s.Append(examDay.ToString());
-            switch (examMonth)
-            {
-                case 1:
-                    s.Append("JAN");
-                    break;
-                case 2:
-                    s.Append("FEB");
-                    break;
-                case 3:
-                    s.Append("MAR");
-                    break;
-                case 4:
-                    s.Append("APR");
-                    break;
-                case 5:
-                    s.Append("MAY");
-                    break;
-                case 6:
-                    s.Append("JUN");
-                    break;
-                case 7:
-                    s.Append("JUL");
-                    break;
-                case 8:
-                    s.Append("AUG");
-                    break;
-                case 9:
-                    s.Append("SEP");
-                    break;
-                case 10:
-                    s.Append("OCT");
-                    break;
-                case 11:
-                    s.Append("NOV");
-                    break;
-                case 12:
-                    s.Append("DEC");
-                    break;
-            }
-            return s.ToString();
+            var examInDateTime = new DateTime(CurrentDate.Value.Year, CurrentDate.Value.Month, CurrentDate.Value.Day);
+            var examString = examInDateTime.ToString("ddMMM");
+            return examString;
         }
 
+
+        /// <summary>
+        /// This method creates a new session and saves it in the database
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns> the session that is created and saved </returns>
+        [HttpPost]
         public Session AddSession(string Name)
         {
             Session session = new Session();
@@ -136,8 +73,5 @@ namespace ExamRoomAllocation.Helpers
             db.SaveChanges();
             return session;
         }
-
     }
-
-
 }
