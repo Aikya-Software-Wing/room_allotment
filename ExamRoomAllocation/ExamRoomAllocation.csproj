@@ -241,7 +241,6 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModel\RoomViewModel.cs" />
     <Compile Include="ViewModel\StudentExam.cs" />
-    <Compile Include="ViewModel\TeacherEditViewModel.cs" />
     <Compile Include="ViewModel\TeacherViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -422,7 +421,6 @@
     <Content Include="Views\Results\TeacherIndex.cshtml" />
     <Content Include="Views\Results\TeacherDetails.cshtml" />
     <Content Include="Views\Results\AllocationDetails.cshtml" />
-    <Content Include="Views\Results\EditTeacherDetails.cshtml" />
     <Content Include="Views\Exam\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
