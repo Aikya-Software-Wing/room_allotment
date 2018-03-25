@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExamRoomAllocation.Models
 {
@@ -54,10 +55,14 @@ namespace ExamRoomAllocation.Models
         /// Function to save the current allotment to the database
         /// </summary>
         /// <param name="db">the database to save to</param>
-        public void Save(ExamRoomAllocationEntities db)
+        /// <returns>Task that represents the save</returns>
+        public Task SaveAsync(ExamRoomAllocationEntities db)
         {
-            AllotExamToRoom(db);
-            AllotStudentsToRoom(db);
+            return Task.Run(() =>
+            {
+                AllotExamToRoom(db);
+                AllotStudentsToRoom(db);
+            });
         }
     }
 }

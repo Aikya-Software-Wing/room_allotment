@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
 using ExamRoomAllocation.Helpers;
+using ExamRoomAllocation.Interfaces;
 
 namespace ExamRoomAllocation.Controllers
 {
@@ -133,8 +134,8 @@ namespace ExamRoomAllocation.Controllers
         // room/Assign
         public ActionResult Assign()
         {
-            BestFitRoomAllotment Stud = new BestFitRoomAllotment();
-            Stud.AllotStudentsToRoomsAsync(db.Sessions.ToList(), db.Rooms.ToList(), db).Wait();
+            IAllotmentDriver driver = new StudentCountBasedAllotmentDriver();
+            driver.DriveAllotmentAsync(db, new BestFitRoomAllotment(), new GreedyResultOptimizer()).Wait();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

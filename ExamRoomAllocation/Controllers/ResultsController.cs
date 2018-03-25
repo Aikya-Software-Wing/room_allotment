@@ -1,4 +1,5 @@
 ﻿using ExamRoomAllocation.Helpers;
+using ExamRoomAllocation.Interfaces;
 using ExamRoomAllocation.Models;
 using ExamRoomAllocation.ViewModel;
 using System;
@@ -23,10 +24,9 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult Allocate()
         {
             TeacherToRoom assignExam = new TeacherToRoom();
-            BestFitRoomAllotment stud = new BestFitRoomAllotment();
 
-
-            stud.AllotStudentsToRoomsAsync(db.Sessions.ToList(), db.Rooms.ToList(), db).Wait();
+            IAllotmentDriver driver = new StudentCountBasedAllotmentDriver();
+            driver.DriveAllotmentAsync(db, new BestFitRoomAllotment(), new GreedyResultOptimizer()).Wait();
             assignExam.Index();
             return RedirectToAction("Index");
         }

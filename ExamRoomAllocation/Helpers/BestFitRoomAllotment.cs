@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ExamRoomAllocation.Interfaces;
 
 namespace ExamRoomAllocation.Helpers
 {
-    public class BestFitRoomAllotment
+    public class BestFitRoomAllotment : IRoomAllotment
     {
 
         /// <summary>
@@ -58,57 +59,26 @@ namespace ExamRoomAllocation.Helpers
         }
 
         /// <summary>
-        /// Method to fetch the previously made allotments from the database
-        /// </summary>
-        /// <param name="rooms">The rooms from which the allotments have to be fetched</param>
-        /// <returns>The allotments made</returns>
-        private List<Allotment> GetPreviousAllotments(List<Room> rooms)
-        {
-            List<Allotment> allotments = new List<Allotment>();
-
-            foreach(var room in rooms)
-            {
-                int index = 1;
-                foreach(var exam in room.Exams.ToList())
-                {
-                    allotments.Add(new Allotment
-                    {
-                        Exam = exam,
-                        Room = room,
-                        ExamIndexInRoom = index++,
-                        NumberOfStudents = room.RoomStudents.Where(x => x.exam_id == exam.Id && x.Session_Id == exam.SessionId).Count()
-                    });
-                }
-            }
-
-            return allotments;
-        }
-
-        /// <summary>
         /// This method will find the best fit rooms for all the exams in a session
         /// </summary>
         /// <param name="session">The session for which rooms have to be alloted</param>
         /// <param name="roomsAvailable">The rooms available for allotment</param>
-        /// <param name="db">The backing database context</param>
-        /// <param name="isPartialAllotment">true, if we are resuming a previously started allotment</param>
-        private void AllotStudentsForSession(Session session, List<Room> roomsAvailable, ExamRoomAllocationEntities db, bool isPartialAllotment)
+        /// <param name="allotments">The previous allotments</param>
+        private List<Allotment> AllotStudentsForSession(Session session, List<Room> roomsAvailable, List<Allotment> allotments)
         {
-            List<Allotment> allotments = isPartialAllotment ? GetPreviousAllotments(roomsAvailable) : new List<Allotment>();
             int studentsToAllot = session.Exams.Sum(x => x.Students.Count());
-
             do
             {
                 foreach (var exam in session.Exams.ToList())
                 {
                     Allotment allotment = FindBestFitForExam(exam, roomsAvailable, allotments);
-                    allotment.Save(db);
+                    allotment.Room.Exams.Add(allotment.Exam);
                     allotments.Add(allotment);
-
                     studentsToAllot -= allotment.NumberOfStudents;
                 }
             } while (studentsToAllot > 0);
 
-            allotments.Clear();
+            return allotments;
         }
 
         /// <summary>
@@ -116,14 +86,14 @@ namespace ExamRoomAllocation.Helpers
         /// </summary>
         /// <param name="sessions">The sessions for which the allotment have to be performed</param>
         /// <param name="rooms">The list of available rooms</param>
-        /// <param name="db">The backing database</param>
-        /// <param name="isPartialAllotment">true, if we are resuming a previously started allotment</param>
-        private void AllotStudentsToRooms(List<Session> sessions, List<Room> rooms, ExamRoomAllocationEntities db, bool isPartialAllotment = false)
+        /// <param name="allotments">The previous allotments</param>
+        private List<Allotment> AllotStudentsToRooms(List<Session> sessions, List<Room> rooms, List<Allotment> allotments)
         {
             foreach (var session in sessions)
             {
-                AllotStudentsForSession(session, rooms, db, isPartialAllotment);
+                allotments.AddRange(AllotStudentsForSession(session, rooms, allotments));
             }
+            return allotments;
         }
 
         /// <summary>
@@ -131,12 +101,14 @@ namespace ExamRoomAllocation.Helpers
         /// </summary>
         /// <param name="sessions">The sessions for which the allotment have to be performed</param>
         /// <param name="rooms">The list of available rooms</param>
-        /// <param name="db">The backing database</param>
-        /// <param name="isPartialAllotment">true, if we are resuming a previously started allotment</param>
+        /// <param name="allotments">The previous allotments</param>
         /// <returns>The task that corresponds to the algorithm </returns>
-        public Task AllotStudentsToRoomsAsync(List<Session> sessions, List<Room> rooms, ExamRoomAllocationEntities db, bool isPartialAllotment = false)
+        public Task<List<Allotment>> AllotAsync(Session session, List<Room> rooms, List<Allotment> allotments)
         {
-            return Task.Run(() => AllotStudentsToRooms(sessions, rooms, db, isPartialAllotment));
+            return Task.Run(() =>
+            {
+                return AllotStudentsForSession(session, rooms, allotments);
+            });
         }
     }
 }
