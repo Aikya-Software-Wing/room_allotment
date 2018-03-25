@@ -133,8 +133,8 @@ namespace ExamRoomAllocation.Controllers
         // room/Assign
         public ActionResult Assign()
         {
-            StudentHelper Stud = new StudentHelper();
-            Stud.AllotStudentsToRooms();
+            BestFitRoomAllotment Stud = new BestFitRoomAllotment();
+            Stud.AllotStudentsToRoomsAsync(db.Sessions.ToList(), db.Rooms.ToList(), db).Wait();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

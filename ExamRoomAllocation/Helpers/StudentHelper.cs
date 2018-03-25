@@ -1,123 +1,142 @@
 ﻿using ExamRoomAllocation.Models;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ExamRoomAllocation.Helpers
 {
-    public class StudentHelper
+    public class BestFitRoomAllotment
     {
-        private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
         /// <summary>
         /// This method find the best room that the exam can be held in.
         /// The algorithm will look for the room that can fit the maximum number of students
         /// </summary>
         /// <param name="exam">The exam for which a room should be found</param>
+        /// <param name="roomsAvailable">The rooms that are available for allotment</param>
+        /// <param name="allotments">The previouly made allotments</param>
         /// <returns>The allotment that fits best</returns>
-        private Allotment FindBestFitForExam(Exam exam)
+        private Allotment FindBestFitForExam(Exam exam, List<Room> roomsAvailable, List<Allotment> allotments)
         {
-            int studentsWritingExam = exam.Students.Count - db.RoomStudents.Where(x => x.exam_id == exam.Id && x.Session_Id == exam.SessionId).Count();
-            List<Allotment> allotments = new List<Allotment>();
+            int numberOfStudentsAlreadyAllotedARoom = allotments
+                .Where(x => x.Exam.Id == exam.Id && x.Exam.SessionId == exam.SessionId)
+                .Sum(x => x.NumberOfStudents);
+            int studentsWritingExam = exam.Students.Count - numberOfStudentsAlreadyAllotedARoom;
 
-            foreach (var room in db.Rooms.ToList())
+            List<Allotment> allPossibleAllotmentsForExam = new List<Allotment>();
+            foreach (var room in roomsAvailable)
             {
-                int numberOfExamsInRoom = room.Exams.Where(x => x.SessionId == exam.SessionId).Count();
-                int studentsInRoom = db.RoomStudents.Where(x => x.Room_Id == room.Id && x.Session_Id == exam.SessionId).Count();
+                int numberOfExamsInRoom = room.Exams
+                    .Where(x => x.SessionId == exam.SessionId)
+                    .Count();
+
+                int studentsInRoom = allotments
+                    .Where(x => x.Room.Id == room.Id)
+                    .Sum(x => x.NumberOfStudents);
+
                 int roomCapacity = (numberOfExamsInRoom == 0) ? (room.Capacity.Value / 2) : (room.Capacity.Value - studentsInRoom);
 
                 if (roomCapacity > 0)
                 {
                     if (!room.Exams.Contains(exam))
                     {
-                        allotments.Add(new Allotment
+                        allPossibleAllotmentsForExam.Add(new Allotment
                         {
-                            ExamId = exam.Id,
-                            RoomId = room.Id,
                             NumberOfStudents = (studentsWritingExam > roomCapacity) ? (roomCapacity) : (studentsWritingExam),
-                            SessionId = exam.SessionId,
-                            ExamIndexInRoom = room.Exams.Where(x => x.SessionId == exam.SessionId).Count() + 1
+                            ExamIndexInRoom = room.Exams.Where(x => x.SessionId == exam.SessionId).Count() + 1,
+                            Exam = exam,
+                            Room = room
                         });
                     }
                 }
             }
 
-            return allotments.OrderByDescending(x => x.NumberOfStudents).ThenByDescending(x => x.ExamIndexInRoom).First();
+            return allPossibleAllotmentsForExam
+                .OrderByDescending(x => x.NumberOfStudents)
+                .ThenByDescending(x => x.ExamIndexInRoom)
+                .First();
         }
 
         /// <summary>
-        /// This method will update the database table "RoomStudents"
+        /// Method to fetch the previously made allotments from the database
         /// </summary>
-        /// <param name="allotment">The allotment that has to be added</param>
-        private void AllotStudentsToRoom(Allotment allotment)
+        /// <param name="rooms">The rooms from which the allotments have to be fetched</param>
+        /// <returns>The allotments made</returns>
+        private List<Allotment> GetPreviousAllotments(List<Room> rooms)
         {
-            List<Student> students = db.Students.Where(x => x.Exams.Where(y => y.Id == allotment.ExamId).Count() != 0 && x.RoomStudents.Where(y => y.exam_id == allotment.ExamId).Count() == 0).Take(allotment.NumberOfStudents).ToList();
+            List<Allotment> allotments = new List<Allotment>();
 
-            foreach (var student in students)
+            foreach(var room in rooms)
             {
-                db.RoomStudents.Add(new RoomStudent
+                int index = 1;
+                foreach(var exam in room.Exams.ToList())
                 {
-                    Room_Id = allotment.RoomId,
-                    Student_Id = student.Id,
-                    Session_Id = allotment.SessionId,
-                    exam_id = allotment.ExamId
-                });
+                    allotments.Add(new Allotment
+                    {
+                        Exam = exam,
+                        Room = room,
+                        ExamIndexInRoom = index++,
+                        NumberOfStudents = room.RoomStudents.Where(x => x.exam_id == exam.Id && x.Session_Id == exam.SessionId).Count()
+                    });
+                }
             }
-            db.SaveChanges();
-        }
 
-        /// <summary>
-        /// This method will update the table RoomExams
-        /// </summary>
-        /// <param name="room">The room that needs to be updated</param>
-        /// <param name="exam">The exam that is held in the room</param>
-        private void AllotExamToRoom(Room room, Exam exam)
-        {
-            db.Rooms.Where(x => x.Id == room.Id).First().Exams.Add(exam);
-            db.SaveChanges();
+            return allotments;
         }
 
         /// <summary>
         /// This method will find the best fit rooms for all the exams in a session
         /// </summary>
         /// <param name="session">The session for which rooms have to be alloted</param>
-        private void AllotStudentsForSession(Session session)
+        /// <param name="roomsAvailable">The rooms available for allotment</param>
+        /// <param name="db">The backing database context</param>
+        /// <param name="isPartialAllotment">true, if we are resuming a previously started allotment</param>
+        private void AllotStudentsForSession(Session session, List<Room> roomsAvailable, ExamRoomAllocationEntities db, bool isPartialAllotment)
         {
+            List<Allotment> allotments = isPartialAllotment ? GetPreviousAllotments(roomsAvailable) : new List<Allotment>();
             int studentsToAllot = session.Exams.Sum(x => x.Students.Count());
+
             do
             {
                 foreach (var exam in session.Exams.ToList())
                 {
-                    Allotment allotment = FindBestFitForExam(exam);
-                    AllotStudentsToRoom(allotment);
-                    AllotExamToRoom(db.Rooms.Where(x => x.Id == allotment.RoomId).First(), exam);
+                    Allotment allotment = FindBestFitForExam(exam, roomsAvailable, allotments);
+                    allotment.Save(db);
+                    allotments.Add(allotment);
 
                     studentsToAllot -= allotment.NumberOfStudents;
                 }
             } while (studentsToAllot > 0);
+
+            allotments.Clear();
         }
 
         /// <summary>
-        /// This method is the starting point of the algorithm
+        /// This is the starting point for the algorithm
         /// </summary>
-        public void AllotStudentsToRooms()
+        /// <param name="sessions">The sessions for which the allotment have to be performed</param>
+        /// <param name="rooms">The list of available rooms</param>
+        /// <param name="db">The backing database</param>
+        /// <param name="isPartialAllotment">true, if we are resuming a previously started allotment</param>
+        private void AllotStudentsToRooms(List<Session> sessions, List<Room> rooms, ExamRoomAllocationEntities db, bool isPartialAllotment = false)
         {
-            foreach (var session in db.Sessions.ToList())
+            foreach (var session in sessions)
             {
-                AllotStudentsForSession(session);
+                AllotStudentsForSession(session, rooms, db, isPartialAllotment);
             }
         }
-    }
 
-    class Allotment
-    {
-        public int ExamId { get; set; }
-
-        public int RoomId { get; set; }
-
-        public int SessionId { get; set; }
-
-        public int NumberOfStudents { get; set; }
-
-        public int ExamIndexInRoom { get; set; }
+        /// <summary>
+        /// This is the async starting point for the algorithm
+        /// </summary>
+        /// <param name="sessions">The sessions for which the allotment have to be performed</param>
+        /// <param name="rooms">The list of available rooms</param>
+        /// <param name="db">The backing database</param>
+        /// <param name="isPartialAllotment">true, if we are resuming a previously started allotment</param>
+        /// <returns>The task that corresponds to the algorithm </returns>
+        public Task AllotStudentsToRoomsAsync(List<Session> sessions, List<Room> rooms, ExamRoomAllocationEntities db, bool isPartialAllotment = false)
+        {
+            return Task.Run(() => AllotStudentsToRooms(sessions, rooms, db, isPartialAllotment));
+        }
     }
 }
