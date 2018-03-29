@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ExamRoomAllocation.Helpers;
 using ExamRoomAllocation.Models;
 using ExamRoomAllocation.ViewModel;
 
@@ -80,20 +81,15 @@ namespace ExamRoomAllocation.Controllers
             return View();
         }
 
-        public Student GetStudent(string id)
-        {
-            var studentInDb = db.Students.AsNoTracking().Where(s => s.Id == id);
-            return studentInDb.First();
-        }
-
         // GET: Student/Edit/5
         public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }            
-            Student student = GetStudent(id);
+            }
+            var newStudent = new StudentHelper();
+            Student student = newStudent.GetStudent(id);
             StudentExam studentExam = new StudentExam();
             if (student == null)
             {

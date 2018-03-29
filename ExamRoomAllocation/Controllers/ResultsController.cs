@@ -1,4 +1,5 @@
 ﻿using ExamRoomAllocation.Helpers;
+using ExamRoomAllocation.Interfaces;
 using ExamRoomAllocation.Models;
 using ExamRoomAllocation.ViewModel;
 using System;
@@ -6,7 +7,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ExamRoomAllocation.Controllers
@@ -23,12 +23,11 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult Allocate()
         {
-           TeacherToRoom assignExam = new TeacherToRoom();
-           StudentHelper stud = new StudentHelper();
-           stud.Index();
+            TeacherToRoom assignExam = new TeacherToRoom();
+
+            StudentHelpher stud = new StudentHelpher();
+            stud.Allot();
             assignExam.Index();
-           
-            
             return RedirectToAction("Index");
         }
 
@@ -107,7 +106,7 @@ namespace ExamRoomAllocation.Controllers
             }
             var uniqueTeachers = new HashSet<Teacher>(teachers);
             var temp = new List<Teacher>();
-            foreach(var teacher in uniqueTeachers)
+            foreach (var teacher in uniqueTeachers)
             {
                 temp.Add(teacher);
             }
@@ -128,7 +127,7 @@ namespace ExamRoomAllocation.Controllers
             var teacherDetails = db.TeacherRooms.Where(t => t.Teacher_Id == id).ToList();
             teacherViewModel.TeacherName = teacher.Name;
             var SessionList = new List<string>();
-            foreach ( var t in teacherDetails)
+            foreach (var t in teacherDetails)
             {
                 SessionList.Add(t.Session.Name);
             }

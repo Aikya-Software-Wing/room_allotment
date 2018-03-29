@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
 
@@ -52,7 +49,7 @@ namespace ExamRoomAllocation.Controllers
         {
             try
             {
-                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Department").FirstOrDefault<int>();
+                int id = db.Departments.Max(x => x.Id);
                 department.Id = id + 1;
             }
             catch (InvalidOperationException)

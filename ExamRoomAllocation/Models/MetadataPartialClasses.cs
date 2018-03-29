@@ -8,6 +8,11 @@ namespace ExamRoomAllocation.Models
 {
     public class ExamMetadata
     {
+        [MetadataType(typeof(ExamMetadata))]
+        public partial class Exam
+        {
+        }
+
         [Required]
         [Display(Name = "Exam Code")]
         public string Code;
@@ -36,6 +41,11 @@ namespace ExamRoomAllocation.Models
         public int SessionId;
     }
 
+    [MetadataType(typeof(DepartmentMetadata))]
+    public partial class Department
+    {
+    }
+
     public class DepartmentMetadata
     {
         [Required]
@@ -47,6 +57,11 @@ namespace ExamRoomAllocation.Models
         public Nullable<int> StreamId;
     }
 
+    [MetadataType(typeof(StreamMetadata))]
+    public partial class Stream
+    {
+    }
+
     public class StreamMetadata
     {
         [Required]
@@ -55,12 +70,22 @@ namespace ExamRoomAllocation.Models
         public string Name;
     }
 
+    [MetadataType(typeof(DesignationMetadata))]
+    public partial class Designation
+    {
+    }
+
     public class DesignationMetadata
     {
         [Required]
         [Display(Name = "Designation Name")]
         [RegularExpression(@"^([a-zA-sz\s]{4,100})$", ErrorMessage = "No numbers, at least 4 characters")]
         public string Name;
+    }
+
+    [MetadataType(typeof(RoomMetadata))]
+    public partial class Room
+    {
     }
 
     public class RoomMetadata
@@ -84,11 +109,21 @@ namespace ExamRoomAllocation.Models
         public int RoomStatus;
     }
 
+    [MetadataType(typeof(SessionMetadata))]
+    public partial class Session
+    {
+    }
+
     public class SessionMetadata
     {
         [Required]
         [Display(Name ="Session Name")]
         public string Name;
+    }
+
+    [MetadataType(typeof(TeacherMetadata))]
+    public partial class Teacher
+    {
     }
 
     public class TeacherMetadata
@@ -118,6 +153,11 @@ namespace ExamRoomAllocation.ViewModel
 {
     public class StudentExamMetadata
     {
+        [MetadataType(typeof(StudentExamMetadata))]
+        public partial class StudentExam
+        {
+        }
+
         [Required]
         [Display(Name = "USN")]
         public string Id;
@@ -133,3 +173,4 @@ namespace ExamRoomAllocation.ViewModel
         public Nullable<int> Sem;
     }
 }
+

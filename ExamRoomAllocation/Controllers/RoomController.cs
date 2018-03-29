@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
 using ExamRoomAllocation.Helpers;
+using ExamRoomAllocation.Interfaces;
 
 namespace ExamRoomAllocation.Controllers
 {
@@ -53,7 +54,7 @@ namespace ExamRoomAllocation.Controllers
         {          
             try
             {
-                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Room").FirstOrDefault<int>();
+                int id = db.Rooms.Max(x => x.Id);
                 room.Id = id + 1;
             }
             catch (InvalidOperationException)
@@ -133,8 +134,8 @@ namespace ExamRoomAllocation.Controllers
         // room/Assign
         public ActionResult Assign()
         {
-            StudentHelper Stud = new StudentHelper();
-            Stud.Index();
+            IAllotmentDriver driver = new StudentCountBasedAllotmentDriver();
+            driver.DriveAllotmentAsync(db, new BestFitRoomAllotment(), new GreedyResultOptimizer()).Wait();
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)

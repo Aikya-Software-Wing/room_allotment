@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using ExamRoomAllocation.Models;
-using System.Data.SqlClient;
-
 
 namespace ExamRoomAllocation.Controllers
 {
@@ -49,12 +44,12 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult Create(string Name)
         {
             Session session = new Session();
-            try {
-                int id = db.Database.SqlQuery<int>("SELECT MAX(ID) from Session").FirstOrDefault<int>();
+            try
+            {
+                int id = db.Sessions.Max(x => x.Id);
                 session.Id = id + 1; 
             }
              catch(InvalidOperationException)
-
             {
                 session.Id = 0;
             }
