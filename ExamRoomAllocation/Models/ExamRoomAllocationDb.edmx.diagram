@@ -31,6 +31,7 @@
         <AssociationConnector Association="ExamRoomAllocationModel.RoomExams" />
         <AssociationConnector Association="ExamRoomAllocationModel.StudentExams" />
         <AssociationConnector Association="ExamRoomAllocationModel.TeacherExams" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__RoomStude__exam___6E01572D" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
