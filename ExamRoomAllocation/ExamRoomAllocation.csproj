@@ -180,7 +180,7 @@
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StreamController.cs" />
-    <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -429,6 +429,11 @@
     <Content Include="Views\Results\TeacherDetails.cshtml" />
     <Content Include="Views\Results\AllocationDetails.cshtml" />
     <Content Include="Views\Exam\View.cshtml" />
+    <Content Include="Views\Students\Create.cshtml" />
+    <Content Include="Views\Students\Delete.cshtml" />
+    <Content Include="Views\Students\Details.cshtml" />
+    <Content Include="Views\Students\Edit.cshtml" />
+    <Content Include="Views\Students\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

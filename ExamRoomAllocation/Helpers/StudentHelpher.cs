@@ -19,6 +19,8 @@ namespace ExamRoomAllocation.Helpers
                 temp.Student = stud1.First();
                 temp.Room = room;
                 room.RoomStudents.Add(temp);
+                if (room.Exams.Contains(exam1) == false)
+                    room.Exams.Add(exam1); 
                 db.SaveChanges();
                 stud1.Remove(stud1.First());
 
@@ -131,27 +133,33 @@ namespace ExamRoomAllocation.Helpers
                     }
                 }
                 int capacity = (room.Capacity.GetValueOrDefault() - db.RoomStudents.Where(x => x.Room_Id == room.Id && x.Session_Id == session.Id).ToList().Count()) / 2;
-                if (room.RoomStatus == 1 && capacity != 0 && room.Exams.Where(x => x.Code == exam1.Code).Count() == 0 && room.Exams.Where(x => x.Code == exam2.Code).Count() == 0)
+                if (room.RoomStatus == 1 && capacity != 0  )
                 {
                     if (stud1.Count() != 0)
                     {
-                        foreach (var dept in DeptList1)
+                        if (room.Exams.Where(x => x.Code == exam1.Code).Count() == 0)
                         {
-                            if (stud1.Where(x => x.Department.Id == dept.Id).ToList().Count() >= capacity)
+                            foreach (var dept in DeptList1)
                             {
-                                UpdateRoomStudents(session, room, exam1, stud1.Where(x => x.Department.Id == dept.Id).ToList(), capacity);
-                                break;
+                                if (stud1.Where(x => x.Department.Id == dept.Id).ToList().Count() >= capacity)
+                                {
+                                    UpdateRoomStudents(session, room, exam1, stud1.Where(x => x.Department.Id == dept.Id).ToList(), capacity);
+                                    break;
+                                }
                             }
                         }
                     }
                     if (stud2.Count() != 0)
                     {
-                        foreach (var dept in DeptList2)
+                        if (room.Exams.Where(x => x.Code == exam2.Code).Count() == 0)
                         {
-                            if (stud2.Where(x => x.Department.Id == dept.Id).ToList().Count() >= capacity)
+                            foreach (var dept in DeptList2)
                             {
-                                UpdateRoomStudents(session, room, exam2, stud2.Where(x => x.Department.Id == dept.Id).ToList(), capacity);
-                                break;
+                                if (stud2.Where(x => x.Department.Id == dept.Id).ToList().Count() >= capacity)
+                                {
+                                    UpdateRoomStudents(session, room, exam2, stud2.Where(x => x.Department.Id == dept.Id).ToList(), capacity);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -234,6 +242,7 @@ namespace ExamRoomAllocation.Helpers
                 {
                     room.RoomStatus = 1;
                 }
+                db.SaveChanges();
             }
             return 0;
         }
