@@ -1,4 +1,5 @@
 ﻿using ExamRoomAllocation.Helpers;
+using ExamRoomAllocation.Interfaces;
 using ExamRoomAllocation.Models;
 using ExamRoomAllocation.ViewModel;
 using System;
@@ -22,11 +23,12 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult Allocate()
         {
-           TeacherToRoom assignExam = new TeacherToRoom();
-           StudentHelper stud = new StudentHelper();
-           stud.Index();
-           assignExam.Index();
-           return RedirectToAction("Index");
+            TeacherToRoom assignExam = new TeacherToRoom();
+
+            StudentHelpher stud = new StudentHelpher();
+            stud.Allot();
+            assignExam.Index();
+            return RedirectToAction("Index");
         }
 
         public ActionResult RoomsIndex()
@@ -49,7 +51,14 @@ namespace ExamRoomAllocation.Controllers
 
             int RoomId = Convert.ToInt32(TempData["ID"]);
             Room room = db.Rooms.Find(RoomId);
-            roomViewModel.BlockName = room.Block;
+            try
+            {
+                roomViewModel.BlockName = room.Block;
+            }
+            catch (NullReferenceException)
+            {
+                return View("Error");
+            }
             roomViewModel.RoomNumber = room.No;
             roomViewModel.RoomId = room.Id;
 
@@ -83,10 +92,17 @@ namespace ExamRoomAllocation.Controllers
 
             var teachers = new List<Teacher>();
             var teacherRoom = db.TeacherRooms.Where(r => r.Room_Id == RoomId && r.Session_Id == sessionId).ToList();
-            foreach (var enitity in teacherRoom)
+            try
             {
-                var id = enitity.Teacher_Id;
-                teachers.Add(db.Teachers.Find(id));
+                foreach (var enitity in teacherRoom)
+                {
+                    var id = enitity.Teacher_Id;
+                    teachers.Add(db.Teachers.Find(id));
+                }
+            }
+            catch (NullReferenceException)
+            {
+                return View("Error");
             }
             var uniqueTeachers = new HashSet<Teacher>(teachers);
             var temp = new List<Teacher>();
@@ -111,13 +127,42 @@ namespace ExamRoomAllocation.Controllers
             var teacherDetails = db.TeacherRooms.Where(t => t.Teacher_Id == id).ToList();
             teacherViewModel.TeacherName = teacher.Name;
             var SessionList = new List<string>();
-            foreach ( var t in teacherDetails)
+            foreach (var t in teacherDetails)
             {
                 SessionList.Add(t.Session.Name);
             }
             teacherViewModel.SessionList = SessionList;
             teacherViewModel.TeacherId = id;
             return View(teacherViewModel);
+        }
+
+        public ActionResult EditTeacherDetails(string Teacher_id)
+        {
+            if (Teacher_id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Teacher teacher = db.Teachers.Find(Teacher_id);
+            if (teacher == null)
+            {
+                return HttpNotFound();
+            }
+            return View(teacher);
+        }
+
+        // POST: Department/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTeacherDetails([Bind(Include = "RoomId,SessionId")] TeacherRoom teacher)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(teacher).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.SessionId = new SelectList(db.Streams, "Id", "Name", teacher.Session_Id);
+            return View(teacher);
         }
 
         public ActionResult AllocationDetails()

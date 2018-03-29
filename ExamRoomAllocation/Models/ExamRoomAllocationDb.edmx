@@ -59,6 +59,7 @@
           <Property Name="Student_Id" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Room_Id" Type="int" Nullable="false" />
           <Property Name="Session_Id" Type="int" Nullable="false" />
+          <Property Name="exam_id" Type="int" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
@@ -119,7 +120,7 @@
           <Property Name="Room_Id" Type="int" Nullable="false" />
           <Property Name="Session_Id" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Exam__SessionId__3D2915A8">
+        <Association Name="FK__Exam__SessionId__4AB81AF0">
           <End Role="Session" Type="Self.Session" Multiplicity="1" />
           <End Role="Exam" Type="Self.Exam" Multiplicity="*" />
           <ReferentialConstraint>
@@ -131,7 +132,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RoomExams__Exam___42ACE4D4">
+        <Association Name="FK__RoomExams__Exam___4D94879B">
           <End Role="Exam" Type="Self.Exam" Multiplicity="1" />
           <End Role="RoomExams" Type="Self.RoomExams" Multiplicity="*" />
           <ReferentialConstraint>
@@ -143,7 +144,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RoomExams__Room___41B8C09B">
+        <Association Name="FK__RoomExams__Room___4E88ABD4">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
           <End Role="RoomExams" Type="Self.RoomExams" Multiplicity="*" />
           <ReferentialConstraint>
@@ -155,7 +156,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RoomStude__Room___0E391C95">
+        <Association Name="FK__RoomStude__exam___6E01572D">
+          <End Role="Exam" Type="Self.Exam" Multiplicity="0..1" />
+          <End Role="RoomStudents" Type="Self.RoomStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exam">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoomStudents">
+              <PropertyRef Name="exam_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RoomStude__Room___4F7CD00D">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
           <End Role="RoomStudents" Type="Self.RoomStudents" Multiplicity="*" />
           <ReferentialConstraint>
@@ -167,7 +180,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RoomStude__Sessi__0F2D40CE">
+        <Association Name="FK__RoomStude__Sessi__5070F446">
           <End Role="Session" Type="Self.Session" Multiplicity="1" />
           <End Role="RoomStudents" Type="Self.RoomStudents" Multiplicity="*" />
           <ReferentialConstraint>
@@ -179,7 +192,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__RoomStude__Stude__0D44F85C">
+        <Association Name="FK__RoomStude__Stude__5165187F">
           <End Role="Student" Type="Self.Student" Multiplicity="1" />
           <End Role="RoomStudents" Type="Self.RoomStudents" Multiplicity="*" />
           <ReferentialConstraint>
@@ -191,7 +204,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__StudentEx__Exam___3552E9B6">
+        <Association Name="FK__StudentEx__Exam___534D60F1">
           <End Role="Exam" Type="Self.Exam" Multiplicity="1" />
           <End Role="StudentExams" Type="Self.StudentExams" Multiplicity="*" />
           <ReferentialConstraint>
@@ -203,7 +216,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__StudentEx__Stude__345EC57D">
+        <Association Name="FK__StudentEx__Stude__5441852A">
           <End Role="Student" Type="Self.Student" Multiplicity="1" />
           <End Role="StudentExams" Type="Self.StudentExams" Multiplicity="*" />
           <ReferentialConstraint>
@@ -215,7 +228,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Teacher__Departm__3A4CA8FD">
+        <Association Name="FK__Teacher__Departm__5535A963">
           <End Role="Department" Type="Self.Department" Multiplicity="1" />
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="*" />
           <ReferentialConstraint>
@@ -227,7 +240,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherEx__Exam___2F9A1060">
+        <Association Name="FK__TeacherEx__Exam___571DF1D5">
           <End Role="Exam" Type="Self.Exam" Multiplicity="1" />
           <End Role="TeacherExams" Type="Self.TeacherExams" Multiplicity="*" />
           <ReferentialConstraint>
@@ -239,7 +252,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherEx__Teach__2EA5EC27">
+        <Association Name="FK__TeacherEx__Teach__5812160E">
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
           <End Role="TeacherExams" Type="Self.TeacherExams" Multiplicity="*" />
           <ReferentialConstraint>
@@ -251,7 +264,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherRo__Room___09746778">
+        <Association Name="FK__TeacherRo__Room___59063A47">
           <End Role="Room" Type="Self.Room" Multiplicity="1" />
           <End Role="TeacherRooms" Type="Self.TeacherRooms" Multiplicity="*" />
           <ReferentialConstraint>
@@ -263,7 +276,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherRo__Sessi__0A688BB1">
+        <Association Name="FK__TeacherRo__Sessi__59FA5E80">
           <End Role="Session" Type="Self.Session" Multiplicity="1" />
           <End Role="TeacherRooms" Type="Self.TeacherRooms" Multiplicity="*" />
           <ReferentialConstraint>
@@ -275,7 +288,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TeacherRo__Teach__0880433F">
+        <Association Name="FK__TeacherRo__Teach__5AEE82B9">
           <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
           <End Role="TeacherRooms" Type="Self.TeacherRooms" Multiplicity="*" />
           <ReferentialConstraint>
@@ -361,59 +374,63 @@
           <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TeacherExams" EntityType="Self.TeacherExams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TeacherRooms" EntityType="Self.TeacherRooms" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Exam__SessionId__3D2915A8" Association="Self.FK__Exam__SessionId__3D2915A8">
+          <AssociationSet Name="FK__Exam__SessionId__4AB81AF0" Association="Self.FK__Exam__SessionId__4AB81AF0">
             <End Role="Session" EntitySet="Session" />
             <End Role="Exam" EntitySet="Exam" />
           </AssociationSet>
-          <AssociationSet Name="FK__RoomExams__Exam___42ACE4D4" Association="Self.FK__RoomExams__Exam___42ACE4D4">
+          <AssociationSet Name="FK__RoomExams__Exam___4D94879B" Association="Self.FK__RoomExams__Exam___4D94879B">
             <End Role="Exam" EntitySet="Exam" />
             <End Role="RoomExams" EntitySet="RoomExams" />
           </AssociationSet>
-          <AssociationSet Name="FK__RoomExams__Room___41B8C09B" Association="Self.FK__RoomExams__Room___41B8C09B">
+          <AssociationSet Name="FK__RoomExams__Room___4E88ABD4" Association="Self.FK__RoomExams__Room___4E88ABD4">
             <End Role="Room" EntitySet="Room" />
             <End Role="RoomExams" EntitySet="RoomExams" />
           </AssociationSet>
-          <AssociationSet Name="FK__RoomStude__Room___0E391C95" Association="Self.FK__RoomStude__Room___0E391C95">
+          <AssociationSet Name="FK__RoomStude__exam___6E01572D" Association="Self.FK__RoomStude__exam___6E01572D">
+            <End Role="Exam" EntitySet="Exam" />
+            <End Role="RoomStudents" EntitySet="RoomStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RoomStude__Room___4F7CD00D" Association="Self.FK__RoomStude__Room___4F7CD00D">
             <End Role="Room" EntitySet="Room" />
             <End Role="RoomStudents" EntitySet="RoomStudents" />
           </AssociationSet>
-          <AssociationSet Name="FK__RoomStude__Sessi__0F2D40CE" Association="Self.FK__RoomStude__Sessi__0F2D40CE">
+          <AssociationSet Name="FK__RoomStude__Sessi__5070F446" Association="Self.FK__RoomStude__Sessi__5070F446">
             <End Role="Session" EntitySet="Session" />
             <End Role="RoomStudents" EntitySet="RoomStudents" />
           </AssociationSet>
-          <AssociationSet Name="FK__RoomStude__Stude__0D44F85C" Association="Self.FK__RoomStude__Stude__0D44F85C">
+          <AssociationSet Name="FK__RoomStude__Stude__5165187F" Association="Self.FK__RoomStude__Stude__5165187F">
             <End Role="Student" EntitySet="Student" />
             <End Role="RoomStudents" EntitySet="RoomStudents" />
           </AssociationSet>
-          <AssociationSet Name="FK__StudentEx__Exam___3552E9B6" Association="Self.FK__StudentEx__Exam___3552E9B6">
+          <AssociationSet Name="FK__StudentEx__Exam___534D60F1" Association="Self.FK__StudentEx__Exam___534D60F1">
             <End Role="Exam" EntitySet="Exam" />
             <End Role="StudentExams" EntitySet="StudentExams" />
           </AssociationSet>
-          <AssociationSet Name="FK__StudentEx__Stude__345EC57D" Association="Self.FK__StudentEx__Stude__345EC57D">
+          <AssociationSet Name="FK__StudentEx__Stude__5441852A" Association="Self.FK__StudentEx__Stude__5441852A">
             <End Role="Student" EntitySet="Student" />
             <End Role="StudentExams" EntitySet="StudentExams" />
           </AssociationSet>
-          <AssociationSet Name="FK__Teacher__Departm__3A4CA8FD" Association="Self.FK__Teacher__Departm__3A4CA8FD">
+          <AssociationSet Name="FK__Teacher__Departm__5535A963" Association="Self.FK__Teacher__Departm__5535A963">
             <End Role="Department" EntitySet="Department" />
             <End Role="Teacher" EntitySet="Teacher" />
           </AssociationSet>
-          <AssociationSet Name="FK__TeacherEx__Exam___2F9A1060" Association="Self.FK__TeacherEx__Exam___2F9A1060">
+          <AssociationSet Name="FK__TeacherEx__Exam___571DF1D5" Association="Self.FK__TeacherEx__Exam___571DF1D5">
             <End Role="Exam" EntitySet="Exam" />
             <End Role="TeacherExams" EntitySet="TeacherExams" />
           </AssociationSet>
-          <AssociationSet Name="FK__TeacherEx__Teach__2EA5EC27" Association="Self.FK__TeacherEx__Teach__2EA5EC27">
+          <AssociationSet Name="FK__TeacherEx__Teach__5812160E" Association="Self.FK__TeacherEx__Teach__5812160E">
             <End Role="Teacher" EntitySet="Teacher" />
             <End Role="TeacherExams" EntitySet="TeacherExams" />
           </AssociationSet>
-          <AssociationSet Name="FK__TeacherRo__Room___09746778" Association="Self.FK__TeacherRo__Room___09746778">
+          <AssociationSet Name="FK__TeacherRo__Room___59063A47" Association="Self.FK__TeacherRo__Room___59063A47">
             <End Role="Room" EntitySet="Room" />
             <End Role="TeacherRooms" EntitySet="TeacherRooms" />
           </AssociationSet>
-          <AssociationSet Name="FK__TeacherRo__Sessi__0A688BB1" Association="Self.FK__TeacherRo__Sessi__0A688BB1">
+          <AssociationSet Name="FK__TeacherRo__Sessi__59FA5E80" Association="Self.FK__TeacherRo__Sessi__59FA5E80">
             <End Role="Session" EntitySet="Session" />
             <End Role="TeacherRooms" EntitySet="TeacherRooms" />
           </AssociationSet>
-          <AssociationSet Name="FK__TeacherRo__Teach__0880433F" Association="Self.FK__TeacherRo__Teach__0880433F">
+          <AssociationSet Name="FK__TeacherRo__Teach__5AEE82B9" Association="Self.FK__TeacherRo__Teach__5AEE82B9">
             <End Role="Teacher" EntitySet="Teacher" />
             <End Role="TeacherRooms" EntitySet="TeacherRooms" />
           </AssociationSet>
@@ -517,6 +534,10 @@
             <End Role="Exam" EntitySet="Exams" />
             <End Role="Teacher" EntitySet="Teachers" />
           </AssociationSet>
+          <AssociationSet Name="FK__RoomStude__exam___6E01572D" Association="ExamRoomAllocationModel.FK__RoomStude__exam___6E01572D">
+            <End Role="Exam" EntitySet="Exams" />
+            <End Role="RoomStudent" EntitySet="RoomStudents" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Department">
           <Key>
@@ -555,6 +576,7 @@
           <NavigationProperty Name="Rooms" Relationship="ExamRoomAllocationModel.RoomExams" FromRole="Exam" ToRole="Room" />
           <NavigationProperty Name="Students" Relationship="ExamRoomAllocationModel.StudentExams" FromRole="Exam" ToRole="Student" />
           <NavigationProperty Name="Teachers" Relationship="ExamRoomAllocationModel.TeacherExams" FromRole="Exam" ToRole="Teacher" />
+          <NavigationProperty Name="RoomStudents" Relationship="ExamRoomAllocationModel.FK__RoomStude__exam___6E01572D" FromRole="Exam" ToRole="RoomStudent" />
         </EntityType>
         <EntityType Name="Room">
           <Key>
@@ -582,6 +604,8 @@
           <NavigationProperty Name="Room" Relationship="ExamRoomAllocationModel.FK__RoomStude__Room___0E391C95" FromRole="RoomStudent" ToRole="Room" />
           <NavigationProperty Name="Session" Relationship="ExamRoomAllocationModel.FK__RoomStude__Sessi__0F2D40CE" FromRole="RoomStudent" ToRole="Session" />
           <NavigationProperty Name="Student" Relationship="ExamRoomAllocationModel.FK__RoomStude__Stude__0D44F85C" FromRole="RoomStudent" ToRole="Student" />
+          <Property Name="exam_id" Type="Int32" />
+          <NavigationProperty Name="Exam" Relationship="ExamRoomAllocationModel.FK__RoomStude__exam___6E01572D" FromRole="RoomStudent" ToRole="Exam" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
@@ -808,6 +832,18 @@
           <End Type="ExamRoomAllocationModel.Exam" Role="Exam" Multiplicity="*" />
           <End Type="ExamRoomAllocationModel.Teacher" Role="Teacher" Multiplicity="*" />
         </Association>
+        <Association Name="FK__RoomStude__exam___6E01572D">
+          <End Type="ExamRoomAllocationModel.Exam" Role="Exam" Multiplicity="0..1" />
+          <End Type="ExamRoomAllocationModel.RoomStudent" Role="RoomStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exam">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoomStudent">
+              <PropertyRef Name="exam_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -859,6 +895,7 @@
           <EntitySetMapping Name="RoomStudents">
             <EntityTypeMapping TypeName="ExamRoomAllocationModel.RoomStudent">
               <MappingFragment StoreEntitySet="RoomStudents">
+                <ScalarProperty Name="exam_id" ColumnName="exam_id" />
                 <ScalarProperty Name="Session_Id" ColumnName="Session_Id" />
                 <ScalarProperty Name="Room_Id" ColumnName="Room_Id" />
                 <ScalarProperty Name="Student_Id" ColumnName="Student_Id" />
