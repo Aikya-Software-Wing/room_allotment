@@ -25,8 +25,8 @@ namespace ExamRoomAllocation.Controllers
         {
             TeacherToRoom assignExam = new TeacherToRoom();
 
-            IAllotmentDriver driver = new StudentCountBasedAllotmentDriver();
-            driver.DriveAllotmentAsync(db, new BestFitRoomAllotment(), new GreedyResultOptimizer()).Wait();
+            StudentHelpher stud = new StudentHelpher();
+            stud.Allot();
             assignExam.Index();
             return RedirectToAction("Index");
         }
