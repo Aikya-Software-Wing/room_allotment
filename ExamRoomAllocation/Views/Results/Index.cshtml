@@ -22,8 +22,20 @@
             @Html.ActionLink("Teacher", "Index", "Teacher")
             <br />
             @Html.ActionLink("Session", "Index", "Session")
+        </dd>
+    </dl>
+
+    <h4>Initiate : </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.ActionLink("First year allocation", "AllocateFirstYear", "Results")
+            @if (TempData["notice"] != null)
+             {
+                <p class="alert-success">@TempData["notice"]</p>
+             }
             <br />
-            @Html.ActionLink("Begin Allocation", "Allocate", "Results")
+            @Html.ActionLink("Senior year allocation", "AllocateSeniorYear", "Results")
             <br />
         </dd>
     </dl>
@@ -41,8 +53,9 @@
             <br />
         </dd>
         <dd>
-            @Html.ActionLink("Status", "AllocationDetails","Results")
+            @Html.ActionLink("Status", "AllocationDetails", "Results")
             <br />
         </dd>
     </dl>
 </div>
+
