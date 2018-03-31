@@ -24,7 +24,6 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult AllocateFirstYear()
         {
             TeacherToRoom assignExam = new TeacherToRoom();
-
             StudentHelpher stud = new StudentHelpher();
             stud.Allot();
             assignExam.Index();
@@ -34,8 +33,10 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult AllocateSeniorYear()
         {
+            TeacherToRoom assignExam = new TeacherToRoom();
             IAllotmentDriver driver = new StudentCountBasedAllotmentDriver();
             driver.DriveAllotmentAsync(db, new BestFitRoomAllotment(), new GreedyResultOptimizer()).Wait();
+            assignExam.Index();
             TempData["notice"] = "Success!";
             return RedirectToAction("Index");
         }

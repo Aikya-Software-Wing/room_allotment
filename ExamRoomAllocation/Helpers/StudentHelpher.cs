@@ -40,13 +40,8 @@ namespace ExamRoomAllocation.Helpers
                     foreach (var exam in exams)
                     {
                         stud1 = exam.Students.ToList();
-                        foreach (var stud in exam.Students.ToList())
-                        {
-                            if (db.RoomStudents.Where(x => x.Student_Id == stud.Id && x.exam_id == exam.Id && x.Session_Id == session.Id).Count() != 0)
-                            {
-                                stud1.Remove(stud);
-                            }
-                        }
+                        List<Student> temp = db.Students.Where(x => x.RoomStudents.Where(t => t.exam_id == exam.Id && t.Session_Id == session.Id).Count() == 0).ToList();
+                        stud1.RemoveAll(x => temp.Contains(x) == false);
                         if (room.Capacity != capacity)
                         {
                             if (room.RoomStudents.Where(x => x.Exam.Code == exam.Code).Count() < room.Capacity / 2)
@@ -113,24 +108,14 @@ namespace ExamRoomAllocation.Helpers
                 if (exam1 != null)
                 {
                     stud1 = exam1.Students.ToList();
-                    foreach (var stud in exam1.Students.ToList())
-                    {
-                        if (db.RoomStudents.Where(x => x.Student_Id == stud.Id && x.exam_id == exam1.Id && x.Session_Id == session.Id).Count() != 0)
-                        {
-                            stud1.Remove(stud);
-                        }
-                    }
+                    List<Student> temp = db.Students.Where(x => x.RoomStudents.Where(t => t.exam_id == exam1.Id && t.Session_Id == session.Id).Count() == 0).ToList();
+                    stud1.RemoveAll(x => temp.Contains(x) == false);
                 }
                 if (exam2 != null)
                 {
                     stud2 = exam2.Students.ToList();
-                    foreach (var stud in exam2.Students.ToList())
-                    {
-                        if (db.RoomStudents.Where(x => x.Student_Id == stud.Id && x.exam_id == exam2.Id && x.Session_Id == session.Id).Count() != 0)
-                        {
-                            stud2.Remove(stud);
-                        }
-                    }
+                    List<Student> temp = db.Students.Where(x => x.RoomStudents.Where(t => t.exam_id == exam2.Id && t.Session_Id == session.Id).Count() == 0).ToList();
+                    stud2.RemoveAll(x => temp.Contains(x) == false);
                 }
                 int capacity = (room.Capacity.GetValueOrDefault() - db.RoomStudents.Where(x => x.Room_Id == room.Id && x.Session_Id == session.Id).ToList().Count()) / 2;
                 if (room.RoomStatus == 1 && capacity != 0  )
