@@ -144,7 +144,6 @@ namespace ExamRoomAllocation.Models
 
         [Required]
         [Display(Name ="Priority Level")]
-        [RegularExpression("([0-9]*)", ErrorMessage = "Must be in between 0-9")]
         public int TeacherPriority;
     }
 }
