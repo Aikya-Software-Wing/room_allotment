@@ -1,8 +1,7 @@
 ﻿using ExamRoomAllocation.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+
 
 namespace ExamRoomAllocation.Helpers
 {
@@ -13,11 +12,13 @@ namespace ExamRoomAllocation.Helpers
         {
             for (int i = 0; i < capacity; i++)
             {
-                RoomStudent temp = new RoomStudent();
-                temp.Exam = exam1;
-                temp.Session = session;
-                temp.Student = stud1.First();
-                temp.Room = room;
+                RoomStudent temp = new RoomStudent
+                {
+                    Exam = exam1,
+                    Session = session,
+                    Student = stud1.First(),
+                    Room = room
+                };
                 room.RoomStudents.Add(temp);
                 if (room.Exams.Contains(exam1) == false)
                     room.Exams.Add(exam1); 
@@ -26,6 +27,7 @@ namespace ExamRoomAllocation.Helpers
 
             }
         }
+       
         private void RandomAllot(Session session)
         {
             List<Exam> exams = session.Exams.ToList();
