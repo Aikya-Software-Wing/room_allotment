@@ -51,11 +51,13 @@ namespace ExamRoomAllocation.Helpers
                     }
                 }
             }
-
-            return allPossibleAllotmentsForExam
-                .OrderByDescending(x => x.NumberOfStudents)
-                .ThenByDescending(x => x.ExamIndexInRoom)
-                .First();
+            if (allPossibleAllotmentsForExam.Count() != 0)
+                return allPossibleAllotmentsForExam
+                    .OrderByDescending(x => x.NumberOfStudents)
+                    .ThenByDescending(x => x.ExamIndexInRoom)
+                    .First();
+            else
+                return null;
         }
 
         /// <summary>
@@ -72,9 +74,13 @@ namespace ExamRoomAllocation.Helpers
                 foreach (var exam in session.Exams.ToList())
                 {
                     Allotment allotment = FindBestFitForExam(exam, roomsAvailable, allotments);
-                    allotment.Room.Exams.Add(allotment.Exam);
-                    allotments.Add(allotment);
-                    studentsToAllot -= allotment.NumberOfStudents;
+
+                    if (allotment != null)
+                    {
+                        allotment.Room.Exams.Add(allotment.Exam);
+                        allotments.Add(allotment);
+                        studentsToAllot -= allotment.NumberOfStudents;
+                    }
                 }
             } while (studentsToAllot > 0);
 

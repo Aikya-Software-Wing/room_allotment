@@ -75,15 +75,15 @@ namespace ExamRoomAllocation.Helpers
             }
         }
 
-        private void Assist(List<Teacher> TeacherNotInSamedept, List<Teacher> TeacherAssignedInTheSameDate, List<Exam> ExaminRoom, Session session, Room room,int duties)
+        private int Assist(List<Teacher> TeacherNotInSamedept, List<Teacher> TeacherAssignedInTheSameDate, List<Exam> ExaminRoom, Session session, Room room,double duties)
         {
             foreach (var Teacher in TeacherNotInSamedept)
             {
-                if (Teacher.TeacherRooms.Where(t => t.Room.Id == room.Id && t.Session.Id == session.Id).Count() == 0 && Teacher.TeacherPriority ==1)
+                if (Teacher.TeacherRooms.Where(t=>t.Session.Id == session.Id).Count() == 0 &&Teacher.TeacherRooms.Where(t=>t.Room.Id== room.Id).Count() ==0 && Teacher.TeacherPriority ==1)
                 {
                     //  if (!(TeacherAssignedInTheSameDate.Contains(Teacher)))
                     // {
-                    int Count = Teacher.Exams.Count();
+                    int Count = Teacher.TeacherRooms.Count();
                     if (Count <= duties)
                     {
                         TeacherRoom Tr1 = new TeacherRoom();
@@ -97,11 +97,12 @@ namespace ExamRoomAllocation.Helpers
                         Teacher.TeacherRooms.Add(Tr1);
                         db.SaveChanges();
                         TeacherAssignedInTheSameDate.Add(Teacher);
-                        break;
+                        return 0;
                     }
                     // }
                 }
             }
+            return 1;
         }
 
         private void Relieve(Session session,Room room,List<Teacher> TeacherNotInSamedept,List<Teacher> TeacherAssignedInTheSameDate,List<Exam> ExaminRoom)
@@ -138,10 +139,10 @@ namespace ExamRoomAllocation.Helpers
 
             while (DateTime.Compare(StartDate, EndDate) <= 0)
             {
-
+                int check;
                 List<Teacher> TeacherAssignedInTheSameDate = new List<Teacher>();
                 List<Session> Sessions = ListOfSessions(StartDate);
-                int duties = (db.Rooms.Count() * db.Sessions.ToList().Count()) / db.Teachers.Where(t => t.TeacherPriority == 1).ToList().Count();
+                double duties = Math.Floor((double)(db.Rooms.Count() * db.Sessions.ToList().Count()) / db.Teachers.Where(t => t.TeacherPriority == 1).ToList().Count());
                 foreach (var session in Sessions.ToList())
                 {
                     List<Room> RoomConductingExamInSession = db.Rooms.Where(x => x.RoomStudents.Where(t=>t.Session_Id == session.Id).Count() !=0).ToList();
@@ -152,12 +153,15 @@ namespace ExamRoomAllocation.Helpers
                         List<Teacher> TeacherNotInSamedept = TeacherNotInSameDept(ExaminRoom);
                         Relieve(session, room, TeacherNotInSamedept,TeacherAssignedInTheSameDate,ExaminRoom);
                         TeacherNotInSamedept.OrderByDescending(e => e.TeacherPriority).OrderBy(e => e.Experience);
-                        Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room,duties);
-
+                        check = Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room,duties);
+                        if (check == 1)
+                            Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room, duties + 1);
                         int studentsInRoom = db.RoomStudents.Where(r => r.Session_Id == session.Id && r.Room_Id == room.Id).Count();
                         if (studentsInRoom > 32)
                         {
-                           Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room,duties);
+                          check = Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room,duties);
+                            if (check == 1)
+                                Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room, duties + 1);
                         }
                         RoomConductingExamInSession.RemoveAll(r => r.No == room.No);
                     }
