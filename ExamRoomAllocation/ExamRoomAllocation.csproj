@@ -194,7 +194,7 @@
     <Compile Include="Helpers\BestFitRoomAllotment.cs" />
     <Compile Include="Helpers\GreedyResultOptimizer.cs" />
     <Compile Include="Helpers\StudentCountBasedAllotmentDriver.cs" />
-    <Compile Include="Helpers\StudentHelpher.cs" />
+    <Compile Include="Helpers\StudentHelper.cs" />
     <Compile Include="Helpers\TeacherToRoom.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
     <Compile Include="Interfaces\IAllotmentDriver.cs" />

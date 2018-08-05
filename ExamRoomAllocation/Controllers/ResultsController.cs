@@ -24,7 +24,7 @@ namespace ExamRoomAllocation.Controllers
         public ActionResult AllocateFirstYear()
         {
             TeacherToRoom assignExam = new TeacherToRoom();
-            StudentHelpher stud = new StudentHelpher();
+            StudentHelper stud = new StudentHelper();
             stud.Allot();
             assignExam.Index();
             TempData["notice"] = "Success!";

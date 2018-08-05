@@ -17,10 +17,10 @@ namespace ExamRoomAllocation.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Exam()
         {
+            this.RoomStudents = new HashSet<RoomStudent>();
             this.Rooms = new HashSet<Room>();
             this.Students = new HashSet<Student>();
             this.Teachers = new HashSet<Teacher>();
-            this.RoomStudents = new HashSet<RoomStudent>();
         }
     
         public string Code { get; set; }
@@ -34,12 +34,12 @@ namespace ExamRoomAllocation.Models
         public virtual Department Department { get; set; }
         public virtual Session Session { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RoomStudent> RoomStudents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Room> Rooms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Student> Students { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Teacher> Teachers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RoomStudent> RoomStudents { get; set; }
     }
 }

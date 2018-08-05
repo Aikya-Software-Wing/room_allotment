@@ -23,7 +23,7 @@ namespace ExamRoomAllocation.Models
     
         public string Id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> Experience { get; set; }
+        public Nullable<int> Duties { get; set; }
         public Nullable<int> Designation_Id { get; set; }
         public int TeacherPriority { get; set; }
         public int Department_Id { get; set; }

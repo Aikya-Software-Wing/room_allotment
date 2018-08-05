@@ -4,34 +4,34 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e3af7008c164462690482949d02b1f07" Name="Diagram1" ZoomLevel="88">
+      <Diagram DiagramId="e3af7008c164462690482949d02b1f07" Name="Diagram1" ZoomLevel="76">
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Department" Width="1.5" PointX="0.75" PointY="3.25" />
-        <EntityTypeShape EntityType="ExamRoomAllocationModel.Designation" Width="1.5" PointX="3" PointY="3.75" />
-        <EntityTypeShape EntityType="ExamRoomAllocationModel.Exam" Width="1.5" PointX="3" PointY="6.875" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.Designation" Width="1.5" PointX="3" PointY="11.75" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.Exam" Width="1.5" PointX="3" PointY="6.75" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Room" Width="1.5" PointX="5.25" PointY="3.125" />
-        <EntityTypeShape EntityType="ExamRoomAllocationModel.RoomStudent" Width="1.5" PointX="10.5" PointY="5.25" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.RoomStudent" Width="1.5" PointX="7.5" PointY="7.125" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Session" Width="1.5" PointX="0.75" PointY="7.5" />
         <EntityTypeShape EntityType="ExamRoomAllocationModel.Stream" Width="1.5" PointX="1.5" PointY="0.75" />
-        <EntityTypeShape EntityType="ExamRoomAllocationModel.Student" Width="1.5" PointX="8.25" PointY="7.375" />
-        <EntityTypeShape EntityType="ExamRoomAllocationModel.Teacher" Width="1.5" PointX="5.25" PointY="7.125" />
-        <EntityTypeShape EntityType="ExamRoomAllocationModel.TeacherRoom" Width="1.5" PointX="7.5" PointY="3.375" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__Teacher__Departm__3A4CA8FD" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.Student" Width="1.5" PointX="5.25" PointY="7.375" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.Teacher" Width="1.5" PointX="5.25" PointY="11.125" />
+        <EntityTypeShape EntityType="ExamRoomAllocationModel.TeacherRoom" Width="1.5" PointX="10.5" PointY="7.375" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__Teacher__Departm__5535A963" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Department_dbo_Stream_Stream_Id1" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Exam_dbo_Department_Id" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Room_dbo_Department_Department_Id" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Student_dbo_Department_Id" />
         <AssociationConnector Association="ExamRoomAllocationModel.FK_dbo_Teacher_dbo_Designation_Designation_Id1" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__Exam__SessionId__3D2915A8" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__RoomStude__Room___0E391C95" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Room___09746778" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__RoomStude__Sessi__0F2D40CE" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__RoomStude__Stude__0D44F85C" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Sessi__0A688BB1" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Teach__0880433F" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__Exam__SessionId__4AB81AF0" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK_RoomStudent_Exam" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__RoomStude__Room___4F7CD00D" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Room___59063A47" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__RoomStude__Sessi__5070F446" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__RoomStude__Stude__5165187F" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Sessi__59FA5E80" />
+        <AssociationConnector Association="ExamRoomAllocationModel.FK__TeacherRo__Teach__5AEE82B9" />
         <AssociationConnector Association="ExamRoomAllocationModel.RoomExams" />
         <AssociationConnector Association="ExamRoomAllocationModel.StudentExams" />
         <AssociationConnector Association="ExamRoomAllocationModel.TeacherExams" />
-        <AssociationConnector Association="ExamRoomAllocationModel.FK__RoomStude__exam___6E01572D" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

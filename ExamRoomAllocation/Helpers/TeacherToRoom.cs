@@ -152,7 +152,6 @@ namespace ExamRoomAllocation.Helpers
                         List<Exam> ExaminRoom = ExamInRoom(room.Id,session.Id);
                         List<Teacher> TeacherNotInSamedept = TeacherNotInSameDept(ExaminRoom);
                         Relieve(session, room, TeacherNotInSamedept,TeacherAssignedInTheSameDate,ExaminRoom);
-                        TeacherNotInSamedept.OrderByDescending(e => e.TeacherPriority).OrderBy(e => e.Experience);
                         check = Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room,duties);
                         if (check == 1)
                             Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room, duties + 1);

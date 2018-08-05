@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ExamRoomAllocation.Helpers
 {
-    public class StudentHelpher
+    public class StudentHelper
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
         private void UpdateRoomStudents(Session session, Room room, Exam exam1, List<Student> stud1, int capacity)

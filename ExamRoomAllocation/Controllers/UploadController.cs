@@ -147,7 +147,7 @@ namespace ExcelImport.Controllers
                             else
                             {
                                 data.Add("<ul>");
-                                if (b.No == null ) data.Add("<li> No is required</li>");
+                                if (b.No == null ) data.Add("<li> Number is required</li>");
                                 if (b.Department_Id == null ) data.Add("<li> deptId is required</li>");
                                 if (b.Capacity == null) data.Add("<li>capacity is required</li>");
                                 if (b.Block == "" || b.Block == null) data.Add("<li>Block is required</li>");
@@ -180,14 +180,14 @@ namespace ExcelImport.Controllers
                     {
                         try
                         {
-                            if (c.Id != null && c.Name != "" && c.Experience != null && c.Designation_Id != null )
+                            if (c.Id != null && c.Name != "" && c.Duties != null && c.Designation_Id != null )
                             {
                                 Teacher TU = new Teacher();
                                 TU.Id = c.Id;
                                 TU.Name = c.Name;
                                 TU.Department_Id = c.Department_Id;
                                 TU.Designation_Id = c.Designation_Id;
-                                TU.Experience = c.Experience;
+                                TU.Duties = c.Duties;
                                 TU.TeacherPriority = c.TeacherPriority;
                                 db.Teachers.Add(TU);
                                 db.SaveChanges();
@@ -198,7 +198,7 @@ namespace ExcelImport.Controllers
                                 if (c.Id == null) data.Add("<li> ID is required</li>");
                                 if (c.Name == null||c.Name=="") data.Add("<li> name is required</li>");
                                 if (c.Designation_Id == null) data.Add("<li>designationid  is required</li>");
-                                if (c.Experience == null ) data.Add("<li>Experience is required</li>");
+                                if (c.Duties == null ) data.Add("<li>Experience is required</li>");
                                
 
                                 data.Add("</ul>");

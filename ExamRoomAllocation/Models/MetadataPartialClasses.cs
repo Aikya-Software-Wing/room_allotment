@@ -138,9 +138,9 @@ namespace ExamRoomAllocation.Models
         public string Name;
 
         [Required]
-        [Display(Name ="Experience")]
-        [RegularExpression("([0-9][0-9]*)", ErrorMessage = "Must be in between 0-100")]
-        public Nullable<int> Experience;        
+        [Display(Name ="Duties")]
+        [RegularExpression("([0-9][0-9]*)", ErrorMessage = "Must be in between 0-8")]
+        public Nullable<int> Duties;        
 
         [Required]
         [Display(Name ="Priority Level")]
