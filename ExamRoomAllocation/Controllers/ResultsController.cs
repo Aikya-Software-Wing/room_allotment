@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace ExamRoomAllocation.Controllers
 {
+    [Authorize]
     public class ResultsController : Controller
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();

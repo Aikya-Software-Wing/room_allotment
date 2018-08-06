@@ -16,6 +16,7 @@ using System.Data.SqlClient;
 
 namespace ExcelImport.Controllers
 {
+    [Authorize]
     public class UploadController : Controller
     {
         private ExamRoomAllocationEntities db= new ExamRoomAllocationEntities();

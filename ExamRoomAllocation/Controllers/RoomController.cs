@@ -12,6 +12,7 @@ using ExamRoomAllocation.Interfaces;
 
 namespace ExamRoomAllocation.Controllers
 {
+    [Authorize]
     public class RoomController : Controller
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();

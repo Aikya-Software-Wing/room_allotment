@@ -8,8 +8,9 @@ using ExamRoomAllocation.Models;
 
 namespace ExamRoomAllocation.Controllers
 {
+    [Authorize]
     public class ExamController : Controller
-    {
+    {        
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 
         // GET: Exam
