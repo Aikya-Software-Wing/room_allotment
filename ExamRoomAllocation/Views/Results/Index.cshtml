@@ -3,32 +3,7 @@
 }
 
 <div>
-    <h4>Input : </h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dd>
-            @Html.ActionLink("Stream", "Index", "Stream")
-            <br />
-            @Html.ActionLink("Department", "Index", "Department")
-            <br />
-            @Html.ActionLink("Designation", "Index", "Designation")
-            <br />
-            @Html.ActionLink("Exam", "Index", "Exam")
-            <br />
-            @Html.ActionLink("Room", "Index", "Room")
-            <br />
-            @Html.ActionLink("Student", "Index", "Student")
-            <br />
-            @Html.ActionLink("Teacher", "Index", "Teacher")
-            <br />
-            @Html.ActionLink("Session", "Index", "Session")
-            <br />
-            @Html.ActionLink("Upload","Index","Upload")
-           
-        </dd>
-    </dl>
-
-    <h4>Initiate : </h4>
+    <h4>Begin Allocation Process : </h4>
     <hr />
     <dl class="dl-horizontal">
         <dd>
@@ -39,6 +14,10 @@
              }
             <br />
             @Html.ActionLink("Senior year allocation", "AllocateSeniorYear", "Results")
+            @if (TempData["notice"] != null)
+             {
+                <p class="alert-success">@TempData["notice"]</p>
+             }
             <br />
         </dd>
     </dl>
@@ -47,6 +26,10 @@
     <hr />
 
     <dl class="dl-horizontal">
+        <dd>
+            @Html.ActionLink("Exam List", "Index", "Exam")
+            <br />
+        </dd>
         <dd>
             @Html.ActionLink("Rooms", "RoomsIndex")
             <br />

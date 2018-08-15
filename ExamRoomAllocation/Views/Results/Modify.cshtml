@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Modify";
+}
+<div>
+    <h4>Manually Input Details: </h4>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.ActionLink("Stream", "Index", "Stream")
+            <br />
+            @Html.ActionLink("Department", "Index", "Department")
+            <br />
+            @Html.ActionLink("Designation", "Index", "Designation")
+            <br />
+            @Html.ActionLink("Exam", "Index", "Exam")
+            <br />
+            @Html.ActionLink("Room", "Index", "Room")
+            <br />
+            @Html.ActionLink("Students", "Index", "Students")
+            <br />
+            @Html.ActionLink("Teacher", "Index", "Teacher")
+            <br />
+            @Html.ActionLink("Session", "Index", "Session")
+            <br />
+        </dd>
+    </dl>
+
+    <h4>Input via excel sheets: </h4>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.ActionLink("Upload", "Index", "Upload")
+        </dd>
+    </dl>
+</div>

@@ -22,6 +22,11 @@ namespace ExamRoomAllocation.Controllers
             return View();
         }
 
+        public ActionResult Modify()
+        {
+            return View();
+        }
+
         public ActionResult AllocateFirstYear()
         {
             TeacherToRoom assignExam = new TeacherToRoom();
