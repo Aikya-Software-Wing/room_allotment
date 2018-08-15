@@ -9,6 +9,16 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@functions
+{
+        public string roomStatus(int s)
+        {
+            if (s == 1)
+                return "full";
+            return "not full";
+        }
+}
 <table class="table">
     <tr>
         <th>
@@ -41,7 +51,7 @@
             @Html.DisplayFor(modelItem => item.Capacity)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.RoomStatus)
+            @roomStatus(item.RoomStatus)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Department.Name)

@@ -11,5 +11,6 @@ namespace ExamRoomAllocation.ViewModel
         public string TeacherName { get; set; }
         public List<string> SessionList { get; set; }
         public System.DateTime Date { get; set; }
+        public List<string> Rooms { get; set; }
     }
 }

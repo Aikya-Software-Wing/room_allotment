@@ -21,7 +21,7 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // GET: Exam/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -73,7 +73,7 @@ namespace ExamRoomAllocation.Controllers
             return View(exam);
         }
         // GET: Exam/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -108,7 +108,7 @@ namespace ExamRoomAllocation.Controllers
         }
 
         // GET: Exam/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -125,7 +125,7 @@ namespace ExamRoomAllocation.Controllers
         // POST: Exam/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(int? id)
         {
             Exam exam = db.Exams.Find(id);
             db.Exams.Remove(exam);

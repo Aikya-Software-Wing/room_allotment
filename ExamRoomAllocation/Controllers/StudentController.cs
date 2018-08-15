@@ -11,7 +11,7 @@ using ExamRoomAllocation.Models;
 namespace ExamRoomAllocation.Controllers
 {
     [Authorize]
-    public class StudentsController : Controller
+    public class StudentController : Controller
     {
         private ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
 

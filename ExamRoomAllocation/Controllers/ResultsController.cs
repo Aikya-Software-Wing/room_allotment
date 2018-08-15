@@ -138,12 +138,16 @@ namespace ExamRoomAllocation.Controllers
             var teacherDetails = db.TeacherRooms.Where(t => t.Teacher_Id == id).ToList();
             teacherViewModel.TeacherName = teacher.Name;
             var SessionList = new List<string>();
+            var RoomsList = new List<string>();
             foreach (var t in teacherDetails)
             {
                 SessionList.Add(t.Session.Name);
+                var roomString = t.Room.Block + '-' + t.Room.No;
+                RoomsList.Add(roomString);
             }
             teacherViewModel.SessionList = SessionList;
             teacherViewModel.TeacherId = id;
+            teacherViewModel.Rooms = RoomsList;
             return View(teacherViewModel);
         }
 
