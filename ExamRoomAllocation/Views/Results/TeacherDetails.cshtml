@@ -1,7 +1,6 @@
 ﻿@model ExamRoomAllocation.ViewModel.TeacherViewModel
 <br />
 <br />
-
 <p>
     @Html.ActionLink("Back to List", "TeacherIndex", new { id = Model.TeacherId })
 </p>
@@ -12,28 +11,29 @@
 }
 
 @functions{
-        public string SessionTime(string session)
+    public string SessionTime(string session)
+    {
+        string time;
+        if (session.EndsWith("1"))
         {
-            string time;
-            if (session.EndsWith("1"))
-            {
-                time = "9:00 AM";
-            }
-            else
-            {
-                time = "2:00 PM";
-            }
-            Html.Display(time);
-            return time;
+            time = "9:00 AM";
         }
+        else
+        {
+            time = "2:00 PM";
+        }
+        Html.Display(time);
+        return time;
+    }
 
-        public string Date(string session)
-        {
-            Html.Display(session);
-            return session;
-        }
+    public string Date(string session)
+    {
+        Html.Display(session);
+        return session;
+    }
 }
-    <table class="table">
+<div class="Grid">
+    <table class="table" id="tbl">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
@@ -46,8 +46,8 @@
             </th>
         </tr>
         @{ var index = 0;
-           var rooms = Model.Rooms.ToList();       
-         }
+            var rooms = Model.Rooms.ToList();
+        }
         @foreach (var session in Model.SessionList.ToList())
         {
             <tr>
@@ -63,7 +63,42 @@
             </tr>
         }
     </table>
-
+</div>
 <p>
     @Html.ActionLink("Back to List", "TeacherIndex", new { id = Model.TeacherId })
 </p>
+
+<a href="#" id="test" onClick="javascript:fnExcelReport();">download</a>
+<script>
+    function fnExcelReport() {
+        var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+        tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+
+        tab_text = tab_text + '<x:Name>Test Sheet</x:Name>';
+
+        tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+        tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+        tab_text = tab_text + "<table border='1px'>";
+        tab_text = tab_text + $('#tbl').html();
+        tab_text = tab_text + '</table></body></html>';
+
+        var data_type = 'data:application/vnd.ms-excel';
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+            if (window.navigator.msSaveBlob) {
+                var blob = new Blob([tab_text], {
+                    type: "application/csv;charset=utf-8;"
+                });
+                navigator.msSaveBlob(blob, 'Test file.xls');
+            }
+        } else {
+            $('#test').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+            $('#test').attr('download', 'Test file.xls');
+        }
+
+    }
+</script>

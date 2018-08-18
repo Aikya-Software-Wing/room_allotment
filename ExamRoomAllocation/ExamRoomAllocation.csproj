@@ -55,6 +55,21 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="jsreport.Binary, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jsreport.Binary.1.10.0\lib\net45\jsreport.Binary.dll</HintPath>
+    </Reference>
+    <Reference Include="jsreport.Client, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jsreport.Client.2.0.2\lib\net45\jsreport.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="jsreport.Local, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jsreport.Local.1.1.2\lib\net45\jsreport.Local.dll</HintPath>
+    </Reference>
+    <Reference Include="jsreport.Shared, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jsreport.Shared.1.0.1\lib\net45\jsreport.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="jsreport.Types, Version=1.8.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jsreport.Types.1.8.3\lib\net45\jsreport.Types.dll</HintPath>
+    </Reference>
     <Reference Include="LinqToExcel, Version=1.11.0.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
       <HintPath>..\packages\LinqToExcel.1.11.0\lib\LinqToExcel.dll</HintPath>
     </Reference>
@@ -89,9 +104,8 @@
     <Reference Include="Microsoft.Owin.Security.Twitter, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Remotion, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
       <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.dll</HintPath>
@@ -105,6 +119,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -186,7 +204,7 @@
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StreamController.cs" />
-    <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -268,6 +286,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.html2excel.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -399,9 +418,6 @@
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Teacher\Edit.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
-    <Content Include="Views\Student\Delete.cshtml" />
-    <Content Include="Views\Student\Details.cshtml" />
-    <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Session\Create.cshtml" />
     <Content Include="Views\Session\Delete.cshtml" />
     <Content Include="Views\Session\Details.cshtml" />
@@ -427,12 +443,10 @@
     <Content Include="Views\Room\Details.cshtml" />
     <Content Include="Views\Room\Edit.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
-    <Content Include="Views\Student\Create.cshtml" />
     <Content Include="Views\Exam\Create.cshtml" />
     <Content Include="Views\Exam\Details.cshtml" />
     <Content Include="Views\Exam\Edit.cshtml" />
     <Content Include="Views\Exam\Index.cshtml" />
-    <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Results\Index.cshtml" />
     <Content Include="Views\Results\RoomsIndex.cshtml" />
     <Content Include="Views\Results\RoomSession.cshtml" />
@@ -448,9 +462,11 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Upload\Index.cshtml" />
     <Content Include="Views\Exam\Delete.cshtml" />
+    <Content Include="Views\Results\Modify.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Download\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
