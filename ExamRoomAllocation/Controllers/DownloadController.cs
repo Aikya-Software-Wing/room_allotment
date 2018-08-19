@@ -35,9 +35,32 @@ namespace ExamRoomAllocation.Controllers
                 Session session = db.Sessions.Where(s => s.Id == tr.Session_Id).First();
                 dt.Rows.Add(teacher.Name, room.No,room.Block, session.Name);
             }
+            int i = 0;
+            List<DataTable> dt1 = new List<DataTable>();
+            foreach (var session in db.Sessions.ToList())
+            {
+                DataTable f1 = new DataTable("Session" + i);
+                f1.Columns.AddRange(new DataColumn[2] { new DataColumn("StudentUSN"),
+                                            new DataColumn("Room No."),
+                                             });
+                var RoomStud = db.RoomStudents.ToList().OrderBy(t => t.Room_Id).Where(t => t.Session_Id == session.Id);
+
+                foreach (var rs in RoomStud)
+                {
+                    f1.Rows.Add(rs.Student_Id, rs.Room_Id);
+                }
+                dt1.Add(f1);
+                i++;
+            }
             using (XLWorkbook wb = new XLWorkbook())
             {
                 wb.Worksheets.Add(dt);
+                foreach (var temp in dt1)
+                {
+                    wb.Worksheets.Add(temp);
+                    
+                    
+                }
                 using (MemoryStream stream = new MemoryStream())
                 {
                     wb.SaveAs(stream);
