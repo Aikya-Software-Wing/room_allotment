@@ -23,14 +23,17 @@ namespace ExamRoomAllocation.Controllers
         {
             ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
             DataTable dt = new DataTable("Grid");
-            dt.Columns.AddRange(new DataColumn[3] { new DataColumn("TeacherId"),
-                                            new DataColumn("RoomId"),
-                                            new DataColumn("SessionId") });
+            dt.Columns.AddRange(new DataColumn[4] { new DataColumn("Teacher Name"),
+                                            new DataColumn("Room No."),
+                                            new DataColumn("Block"),
+                                            new DataColumn("Session") });
             var TeacherRooms = db.TeacherRooms.ToList().OrderBy(t=>t.Teacher_Id);
             foreach (var tr in TeacherRooms)
             {
-                Teacher teacher = db.Teachers.Where(t => t.Id == tr.Teacher_Id).First(); 
-                dt.Rows.Add(teacher.Name, tr.Room_Id, tr.Session_Id);
+                Teacher teacher = db.Teachers.Where(t => t.Id == tr.Teacher_Id).First();
+                Room room = db.Rooms.Where(r => r.Id == tr.Room_Id).First();
+                Session session = db.Sessions.Where(s => s.Id == tr.Session_Id).First();
+                dt.Rows.Add(teacher.Name, room.No,room.Block, session.Name);
             }
             using (XLWorkbook wb = new XLWorkbook())
             {
