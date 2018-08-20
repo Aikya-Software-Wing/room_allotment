@@ -8,10 +8,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using System.IO;
-using System.Web;
-using ClosedXML.Excel;
-using System.Data;
 
 namespace ExamRoomAllocation.Controllers
 {
@@ -136,23 +132,57 @@ namespace ExamRoomAllocation.Controllers
 
         public ActionResult TeacherIndex()
         {
+            var teachers = db.Teachers.ToList();
+            return View(teachers);
+        }
+
+        public ActionResult TeacherDetails(string id)
+        {
             TeacherViewModel teacherViewModel = new TeacherViewModel();
-            var teachers = db.TeacherRooms.OrderBy(s => s.Session.Name).ToList();
+            var teacher = db.Teachers.Find(id);
+            var teacherDetails = db.TeacherRooms.Where(t => t.Teacher_Id == id).ToList();
+            teacherViewModel.TeacherName = teacher.Name;
             var SessionList = new List<string>();
             var RoomsList = new List<string>();
-            var NamesList = new List<string>();
-            var examTimes = new List<string>();
-            foreach (var t in teachers)
+            foreach (var t in teacherDetails)
             {
                 SessionList.Add(t.Session.Name);
-                NamesList.Add(t.Teacher.Name);
                 var roomString = t.Room.Block + '-' + t.Room.No;
                 RoomsList.Add(roomString);
             }
-            teacherViewModel.Sessions = SessionList;
+            teacherViewModel.SessionList = SessionList;
+            teacherViewModel.TeacherId = id;
             teacherViewModel.Rooms = RoomsList;
-            teacherViewModel.Names = NamesList;
             return View(teacherViewModel);
+        }
+
+        public ActionResult EditTeacherDetails(string Teacher_id)
+        {
+            if (Teacher_id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Teacher teacher = db.Teachers.Find(Teacher_id);
+            if (teacher == null)
+            {
+                return HttpNotFound();
+            }
+            return View(teacher);
+        }
+
+        // POST: Department/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTeacherDetails([Bind(Include = "RoomId,SessionId")] TeacherRoom teacher)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(teacher).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.SessionId = new SelectList(db.Streams, "Id", "Name", teacher.Session_Id);
+            return View(teacher);
         }
 
         public ActionResult AllocationDetails()
@@ -167,57 +197,5 @@ namespace ExamRoomAllocation.Controllers
             ViewData["totalDuties"] = totalDuties;
             return View(exams);
         }
-
-        public FileResult Export()
-        {
-            ExamRoomAllocationEntities db = new ExamRoomAllocationEntities();
-            DataTable dt = new DataTable("Grid");
-            dt.Columns.AddRange(new DataColumn[4] { new DataColumn("Teacher Name"),
-                                            new DataColumn("Room No."),
-                                            new DataColumn("Block"),
-                                            new DataColumn("Session") });
-            var TeacherRooms = db.TeacherRooms.ToList().OrderBy(t => t.Teacher_Id);
-            foreach (var tr in TeacherRooms)
-            {
-                Teacher teacher = db.Teachers.Where(t => t.Id == tr.Teacher_Id).First();
-                Room room = db.Rooms.Where(r => r.Id == tr.Room_Id).First();
-                Session session = db.Sessions.Where(s => s.Id == tr.Session_Id).First();
-                dt.Rows.Add(teacher.Name, room.No, room.Block, session.Name);
-            }
-            int i = 0;
-            List<DataTable> dt1 = new List<DataTable>();
-            foreach (var session in db.Sessions.ToList())
-            {
-                DataTable f1 = new DataTable("Session" + i);
-                f1.Columns.AddRange(new DataColumn[2] { new DataColumn("StudentUSN"),
-                                            new DataColumn("Room No."),
-                                             });
-                var RoomStud = db.RoomStudents.ToList().OrderBy(t => t.Room_Id).Where(t => t.Session_Id == session.Id);
-
-                foreach (var rs in RoomStud)
-                {
-                    f1.Rows.Add(rs.Student_Id, rs.Room_Id);
-                }
-                dt1.Add(f1);
-                i++;
-            }
-            using (XLWorkbook wb = new XLWorkbook())
-            {
-                wb.Worksheets.Add(dt);
-                foreach (var temp in dt1)
-                {
-                    wb.Worksheets.Add(temp);
-
-
-                }
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    wb.SaveAs(stream);
-                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Report.xlsx");
-                }
-            }
-
-        }
-
     }
 }

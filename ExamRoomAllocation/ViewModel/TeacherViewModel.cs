@@ -7,9 +7,10 @@ namespace ExamRoomAllocation.ViewModel
 {
     public class TeacherViewModel
     {
-        public List<string> Names { get; set; }
-        public List<string> Sessions { get; set; }
-        public List<string> Rooms { get; set; }
+        public string TeacherId { get; set; }
+        public string TeacherName { get; set; }
+        public List<string> SessionList { get; set; }
         public System.DateTime Date { get; set; }
+        public List<string> Rooms { get; set; }
     }
 }

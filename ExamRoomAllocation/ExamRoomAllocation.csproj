@@ -207,6 +207,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DesignationController.cs" />
@@ -465,6 +466,7 @@
     <Content Include="Views\Results\RoomSession.cshtml" />
     <Content Include="Views\Results\RoomDetails.cshtml" />
     <Content Include="Views\Results\TeacherIndex.cshtml" />
+    <Content Include="Views\Results\TeacherDetails.cshtml" />
     <Content Include="Views\Results\AllocationDetails.cshtml" />
     <Content Include="Views\Students\Create.cshtml" />
     <Content Include="Views\Students\Delete.cshtml" />
@@ -475,6 +477,7 @@
     <Content Include="Views\Upload\Index.cshtml" />
     <Content Include="Views\Exam\Delete.cshtml" />
     <Content Include="Views\Results\Modify.cshtml" />
+    <Content Include="Views\Download\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
