@@ -1,28 +1,67 @@
-﻿@model IEnumerable<ExamRoomAllocation.Models.Teacher>
+﻿@model ExamRoomAllocation.ViewModel.TeacherViewModel
+<br />
+<br />
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Department.Name)
-        </th>
-        <th></th>
-    </tr>
+<h4>Teachers Allocation</h4>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Department.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "TeacherDetails", new { id = item.Id })
-        </td>
-    </tr>
+@functions{
+    public string SessionTime(string session)
+    {
+        string time;
+        if (session.EndsWith("1"))
+        {
+            time = "9:00 AM";
+        }
+        else
+        {
+            time = "2:00 PM";
+        }
+        Html.Display(time);
+        return time;
+    }
+
+    public string Date(string session)
+    {
+        Html.Display(session);
+        return session;
+    }
 }
-
-</table>
+<div class="Grid">
+    <table class="table" id="tbl">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Names)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sessions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rooms)
+            </th>
+        </tr>
+        @{ var index = 0;
+            var rooms = Model.Rooms.ToList();
+            var teachers = Model.Names.ToList();
+        }
+        @foreach (var session in Model.Sessions.ToList())
+        {
+            <tr>
+                <td>
+                    @teachers[index]
+                </td>
+                <td>
+                    @Date(session.Substring(0, 5))
+                </td>
+                <td>
+                    @SessionTime(session)
+                </td>
+                <td>
+                    @rooms[index]
+                </td>
+            </tr>
+        }
+    </table>
+</div>

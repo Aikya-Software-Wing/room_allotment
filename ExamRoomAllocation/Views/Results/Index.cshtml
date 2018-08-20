@@ -41,6 +41,13 @@
         <dd>
             @Html.ActionLink("Status", "AllocationDetails", "Results")
             <br />
+            <br />
+        </dd>
+        <dd>
+          @using (Html.BeginForm("Export", "Results", FormMethod.Post))
+            {
+                <input type="submit" value="Download ALL Allocation Details" class="btn btn-default" />
+            }
         </dd>
     </dl>
 </div>
