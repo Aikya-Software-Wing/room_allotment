@@ -54,8 +54,8 @@ namespace ExamRoomAllocation.Helpers
         {
             try
             {
-                List<Teacher> temp = db.Teachers.Where(t=>t.TeacherPriority != 0).ToList();
-                List<Teacher> temp1 = db.Teachers.Where(t => t.TeacherPriority != 0).ToList();
+                List<Teacher> temp = db.Teachers.Where(t=>t.TeacherPriority != 0).OrderBy(t=>t.Duties).ToList();
+                List<Teacher> temp1 = db.Teachers.Where(t => t.TeacherPriority != 0).OrderBy(t=>t.Duties).ToList();
                 foreach (var exam in Examsinroom)
                 {
                     temp.RemoveAll(t => t.Department_Id == exam.DepartmentId);
@@ -75,16 +75,42 @@ namespace ExamRoomAllocation.Helpers
             }
         }
 
-        private int Assist(List<Teacher> TeacherNotInSamedept, List<Teacher> TeacherAssignedInTheSameDate, List<Exam> ExaminRoom, Session session, Room room,double duties)
+        private int Assist(List<Teacher> TeacherNotInSamedept, List<Teacher> TeacherAssignedInTheSameDate, List<Exam> ExaminRoom, Session session, Room room)
         {
-            foreach (var Teacher in TeacherNotInSamedept)
+            foreach (var Teacher in TeacherNotInSamedept.OrderByDescending(t=> t.Duties))
             {
                 if (Teacher.TeacherRooms.Where(t=>t.Session.Id == session.Id).Count() == 0 &&Teacher.TeacherRooms.Where(t=>t.Room.Id== room.Id).Count() ==0 && Teacher.TeacherPriority ==1)
                 {
                     //  if (!(TeacherAssignedInTheSameDate.Contains(Teacher)))
                     // {
                     int Count = Teacher.TeacherRooms.Count();
-                    if (Count <= duties)
+                    if (Count < Teacher.Duties)
+                    {
+                        TeacherRoom Tr1 = new TeacherRoom();
+                        foreach (var exam in ExaminRoom)
+                        {
+                            Teacher.Exams.Add(exam);
+                        }
+                        Tr1.Session_Id = session.Id;
+                        Tr1.Room_Id = room.Id;
+                        Tr1.Teacher_Id = Teacher.Id;
+                        Teacher.TeacherRooms.Add(Tr1);
+                        db.SaveChanges();
+                        TeacherAssignedInTheSameDate.Add(Teacher);
+                        return 0;
+                    }
+                    // }
+                }
+
+            }
+            foreach (var Teacher in TeacherNotInSamedept.OrderByDescending(t => t.Duties))
+            {
+                if (Teacher.TeacherRooms.Where(t => t.Session.Id == session.Id).Count() == 0 && Teacher.TeacherPriority == 1)
+                {
+                    //  if (!(TeacherAssignedInTheSameDate.Contains(Teacher)))
+                    // {
+                    int Count = Teacher.TeacherRooms.Count();
+                    if (Count < Teacher.Duties)
                     {
                         TeacherRoom Tr1 = new TeacherRoom();
                         foreach (var exam in ExaminRoom)
@@ -105,7 +131,7 @@ namespace ExamRoomAllocation.Helpers
             return 1;
         }
 
-        private void Relieve(Session session,Room room,List<Teacher> TeacherNotInSamedept,List<Teacher> TeacherAssignedInTheSameDate,List<Exam> ExaminRoom)
+       /* private void Relieve(Session session,Room room,List<Teacher> TeacherNotInSamedept,List<Teacher> TeacherAssignedInTheSameDate,List<Exam> ExaminRoom)
         {
             foreach(var Teacher in TeacherNotInSamedept)
             {
@@ -130,10 +156,14 @@ namespace ExamRoomAllocation.Helpers
                 }
             }
         }
+        */
+
         public int Index()
         {
+            db.Teachers.OrderBy(t => t.Duties);
+            db.SaveChanges();
             db.Exams.OrderBy(e => e.Date);
-
+            
             DateTime StartDate = db.Exams.Min(e => e.Date).GetValueOrDefault();
             DateTime EndDate = db.Exams.Max(e => e.Date).GetValueOrDefault();
 
@@ -151,16 +181,14 @@ namespace ExamRoomAllocation.Helpers
                         
                         List<Exam> ExaminRoom = ExamInRoom(room.Id,session.Id);
                         List<Teacher> TeacherNotInSamedept = TeacherNotInSameDept(ExaminRoom);
-                        Relieve(session, room, TeacherNotInSamedept,TeacherAssignedInTheSameDate,ExaminRoom);
-                        check = Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room,duties);
-                        if (check == 1)
-                            Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room, duties + 1);
+                       // Relieve(session, room, TeacherNotInSamedept,TeacherAssignedInTheSameDate,ExaminRoom);
+                        check = Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room);
+                        
                         int studentsInRoom = db.RoomStudents.Where(r => r.Session_Id == session.Id && r.Room_Id == room.Id).Count();
                         if (studentsInRoom > 32)
                         {
-                          check = Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room,duties);
-                            if (check == 1)
-                                Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room, duties + 1);
+                            check = Assist(TeacherNotInSamedept, TeacherAssignedInTheSameDate, ExaminRoom, session, room);
+
                         }
                         RoomConductingExamInSession.RemoveAll(r => r.No == room.No);
                     }
